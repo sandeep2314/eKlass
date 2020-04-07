@@ -45,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // login user
 
-
-
+                        userLogin();
 
                     }
                 }
@@ -85,18 +84,31 @@ public class MainActivity extends AppCompatActivity {
                 params.put("mobileNo", userMobileNo);
                 params.put("password", userPassword);
 
-                String reponse = null;
+                String response = null;
                 try
                 {
-                    reponse = requestHandler.sendPostRequest(URLs.LOGIN_URL ,params);
+                    response = requestHandler.sendPostRequest(URLs.LOGIN_URL ,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();
                 }
 
-                return reponse;
+                return response;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
             }
         }
+
+        UserLogin ul = new UserLogin();
+        ul.execute();
 
 
     }
