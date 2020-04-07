@@ -13,9 +13,11 @@ public class MainActivity extends AppCompatActivity {
 
         //findViewById(R.id.)
 
+
+
         class sandeep
         {
-
+            int age;
             public sandeep() {
             }
         }
