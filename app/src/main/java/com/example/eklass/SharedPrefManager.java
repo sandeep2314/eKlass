@@ -56,8 +56,7 @@ public class SharedPrefManager
 
         SharedPreferences sharedPreferences =
                                             mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        User theUser = new User(sharedPreferences.getString(KEY_MOBILENO, null));
-         return theUser;
+        return new User(sharedPreferences.getString(KEY_MOBILENO, null));
     }
 
     // this method will logout the user and will show main screen
