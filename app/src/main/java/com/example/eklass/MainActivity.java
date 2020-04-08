@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     EditText et_MobileNo, et_Password;
 
+    String deviceToken;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         et_MobileNo = (EditText) findViewById(R.id.etMobileNo);
         et_Password = (EditText) findViewById(R.id.etPassword);
 
+        //deviceId = this.getde
 
         // if the user is logged in it will go to mychildren activity
         if(SharedPrefManager.getInstance(this).isLoggedIn())
@@ -87,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
 
                 HashMap<String, String> params = new HashMap<>();
 
+
+
+
                 params.put("mobileNo", userMobileNo);
                 params.put("password", userPassword);
 
@@ -118,35 +124,37 @@ public class MainActivity extends AppCompatActivity {
                 // converting response to JSON object
                 try
                 {
-                    //JSONObject obj = new JSONObject(s);
-
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray array = jsonObject.getJSONArray("a");
 
                     boolean isError = true;
-                    String userMobileFromDB ;
-
+                    String userMobileFromDB="-1" ;
+                    String StudentId = "";
+                    String StudentName = "";
+                    String StudentClass = "";
 
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
 
-                        isError = o.getBoolean("Error");
-
+                        // if there is any record then login is succesfull
+                        isError = false;
                         userMobileFromDB = o.getString("MobileNo");
 
-
-
+                       StudentId =  o.getString("StudentMasterID");
+                       StudentName =  o.getString("StudentName");
+                       StudentClass = o.getString("StudentClass");
                     }
 
+                    Student myChild = new Student(StudentId, StudentName, StudentClass,userMobileNo );
 
-                    Log.w("", " 333 " + isError);
+                    Log.w("isError ", " 444 " + userMobileFromDB);
 
                     // if no error in response
 
                     if(!isError)
                     {
-                        User user = new User(userMobileNo);
+                        User user = new User(userMobileFromDB, myChild);
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
                         // starting the MyChildren activity
@@ -161,10 +169,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-
-
-
-                } catch (JSONException e)
+                }
+                catch (JSONException e)
                 {
                     e.printStackTrace();
                 }

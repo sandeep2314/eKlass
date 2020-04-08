@@ -6,10 +6,24 @@ public class User
     public String UserMobileNo;
     public String UserPassword;
     public String DeviceId;
+    public Student UserChild;
 
-    public User(String userMobileNo, String userPassword) {
+
+    public User(String userMobileNo, Student student) {
         UserMobileNo = userMobileNo;
-        UserPassword = userPassword;
+        UserChild = student;
+
+    }
+
+    public User(String userMobileNo) {
+        UserMobileNo = userMobileNo;
+
+
+    }
+
+    public Student getUserChild()
+    {
+        return UserChild;
     }
 
     public String getUserMobileNo() {
