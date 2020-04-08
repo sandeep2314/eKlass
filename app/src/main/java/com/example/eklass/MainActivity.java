@@ -6,8 +6,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -97,13 +103,73 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPreExecute() {
+            protected void onPreExecute()
+            {
                 super.onPreExecute();
             }
 
             @Override
-            protected void onPostExecute(String s) {
+            protected void onPostExecute(String s)
+            {
                 super.onPostExecute(s);
+
+                Log.w("sandeep", "response 222 " + s.toString());
+
+                // converting response to JSON object
+                try
+                {
+                    //JSONObject obj = new JSONObject(s);
+
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    boolean isError = true;
+                    String userMobileFromDB ;
+
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        isError = o.getBoolean("Error");
+
+                        userMobileFromDB = o.getString("MobileNo");
+
+
+
+                    }
+
+
+                    Log.w("", " 333 " + isError);
+
+                    // if no error in response
+
+                    if(!isError)
+                    {
+                        User user = new User(userMobileNo);
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+                        // starting the MyChildren activity
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), MyChildrenActivity.class));
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext()
+                                , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+
+                } catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+
             }
         }
 
