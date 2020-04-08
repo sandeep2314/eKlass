@@ -2,6 +2,7 @@ package com.example.eklass;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -34,9 +35,15 @@ public class MyChildrenActivity extends AppCompatActivity
 
         // setting the values to the textViews
 
-         txt_children.setText(user.getUserMobileNo());
+         txt_children.setText("Welcome Back: " + user.getUserMobileNo());
 
-
+         findViewById(R.id.btnLogout).setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 finish();
+                 SharedPrefManager.getInstance(getApplicationContext()).logout();
+             }
+         });
 
     }
 }
