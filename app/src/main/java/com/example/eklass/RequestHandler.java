@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -29,7 +30,7 @@ public class RequestHandler
 
         try
         {
-            HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
+            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
             conn.setReadTimeout(15000);
             conn.setConnectTimeout(15000);
@@ -95,7 +96,7 @@ public class RequestHandler
 
                 result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
                 result.append("=");
-                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
 
                 }
             catch (UnsupportedEncodingException e)
