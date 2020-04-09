@@ -37,7 +37,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
         // inflating and returning our View Holder
         LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
-        View view = layoutInflater.inflate(R.layout.activity_dashboard, null);
+        View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
 
         return new DashBoardViewHolder(view);
     }
