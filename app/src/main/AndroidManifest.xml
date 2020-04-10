@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MyChildrenActivity"></activity>
+        <activity android:name=".SchoolAttendanceActivity"></activity>
+        <activity android:name=".BusAttendanceActivity"></activity>
         <activity android:name=".MainActivity">
 
             <intent-filter>
