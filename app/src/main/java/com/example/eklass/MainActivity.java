@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     EditText et_MobileNo, et_Password;
-
     String deviceToken;
 
 
@@ -89,9 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-
-
-
 
                 params.put("mobileNo", userMobileNo);
                 params.put("password", userPassword);

@@ -26,7 +26,8 @@ public class SchoolAttendanceAdapter extends RecyclerView.Adapter<SchoolAttendan
     @Override
     public SchoolAttendanceHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
-        View view = layoutInflater.inflate(R.layout.layout_attendance, null);
+        //View view = layoutInflater.inflate(R.layout.layout_attendance, null);
+        View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
 
         return new SchoolAttendanceAdapter.SchoolAttendanceHolder(view);
     }
@@ -53,7 +54,8 @@ public class SchoolAttendanceAdapter extends RecyclerView.Adapter<SchoolAttendan
 
         public SchoolAttendanceHolder(@NonNull View itemView) {
             super(itemView);
-            this.tv_SchoolAttendance = itemView.findViewById(R.id.tvSchoolAttd);
+            //this.tv_SchoolAttendance = itemView.findViewById(R.id.tvSchoolAttd);
+            this.tv_SchoolAttendance = itemView.findViewById(R.id.tvFeatureName);
 
         }
     }

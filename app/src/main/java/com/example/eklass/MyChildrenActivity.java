@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,6 +74,24 @@ public class MyChildrenActivity extends AppCompatActivity
         DashboardAdapter dashboardAdapter = new DashboardAdapter(this, featureList);
 
         recyclerView.setAdapter(dashboardAdapter);
+
+
+
+
+
+        /*findViewById(R.id.tvFeatureName).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+                Toast.makeText(getApplicationContext()
+                        , "Card Clicked", Toast.LENGTH_SHORT).show();
+
+
+            }
+        });*/
+
+
 
 
     }

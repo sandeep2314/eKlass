@@ -1,10 +1,13 @@
 package com.example.eklass;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,9 +45,11 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         return new DashBoardViewHolder(view);
     }
 
+    String feature_name ;
+
     @Override
     public void onBindViewHolder(@NonNull DashboardAdapter.DashBoardViewHolder holder
-            , int position)
+            , final int position)
     {
         // getting the feature of the specified  position
         Feature feature = featureList.get(position);
@@ -52,6 +57,25 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
         // binding the data with the viewholder views
         holder.tv_FeatureName.setText(feature.getFeatureName());
 
+        holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(v.getContext(),  featureList.get(position).getFeatureName() + " Clicked ", Toast.LENGTH_LONG).show();
+
+                if(featureList.get(position).getFeatureName() == "School Attendance")
+                {
+                   // finish();
+                    mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
+
+                }
+
+                if(featureList.get(position).getFeatureName() == "Bus Attendance")
+                {
+                    mCtx.startActivity(new Intent(mCtx, BusAttendanceActivity.class));
+                }
+
+            }
+        });
 
 
     }
@@ -72,5 +96,18 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
 
 
+    }
+
+
+    public void OpenSchoolAttendance()
+    {
+        //Toast.makeText(mCtx,    "School Attendance Clicked ", Toast.LENGTH_LONG).show();
+
+    }
+
+
+    public void OpenBusAttendance()
+    {
+        Toast.makeText(mCtx,    "Bus Attendance Clicked ", Toast.LENGTH_LONG).show();
     }
 }
