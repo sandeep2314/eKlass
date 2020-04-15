@@ -42,10 +42,6 @@ public class BusAttendanceActivity extends AppCompatActivity {
         //attendancesList.add(new Attendance("Your Child has boarded the Bus"));
         //attendancesList = loadData();
 
-
-
-
-
         recyclerView = findViewById(R.id.rvSchoolAttendance);
         recyclerView.setHasFixedSize(true);
 
@@ -149,10 +145,6 @@ public class BusAttendanceActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-
-
-
             }
         }
 
@@ -175,7 +167,8 @@ public class BusAttendanceActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
-
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
                 Log.w("Sandeep444",response);
 
                 try {
@@ -219,8 +212,20 @@ public class BusAttendanceActivity extends AppCompatActivity {
             }
         };
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URLs.LOGIN_URL
+        HashMap<String, String> params = new HashMap<>();
+
+        params.put("studentMasterId", "50215");
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+
+        String theURL = URLs.BUSA_URL +"?" + paramsStr;
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
+
+
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
