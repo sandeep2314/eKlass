@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:orientation="vertical"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <androidx.cardview.widget.CardView
         android:layout_margin="10dp"
+
+        android:clickable="true"
+        android:id="@+id/cardViewFeature"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -23,10 +29,13 @@
                 android:layout_marginTop="10dp"
                 android:text="School Attendance"
 
+
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
             </TextView>
+
 
 
 
