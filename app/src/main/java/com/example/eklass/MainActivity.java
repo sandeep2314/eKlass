@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         et_MobileNo = (EditText) findViewById(R.id.etMobileNo);
         et_Password = (EditText) findViewById(R.id.etPassword);
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
             return;
         }
+
+
 
 
         findViewById(R.id.btnLogin).setOnClickListener(
@@ -59,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
                 }
 
         );
+
+       findViewById(R.id.txtRegister).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               finish();
+               startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+           }
+       });
+
+
 
 
     }
