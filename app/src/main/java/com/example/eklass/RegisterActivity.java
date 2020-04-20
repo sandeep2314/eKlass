@@ -42,12 +42,13 @@ public class RegisterActivity extends AppCompatActivity
         etPassword_Register = findViewById(R.id.etPassword_Register);
 
 
-        findViewById(R.id.txtRegister).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnRegister).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
                 RegisterUser();
+
 
             }
         });
@@ -77,6 +78,10 @@ public class RegisterActivity extends AppCompatActivity
                     Toast.makeText(getApplicationContext()
                             , "Registration Completed Successfully", Toast.LENGTH_LONG).show();
 
+                    // starting the login activity
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+
                 }
             };
 
@@ -94,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity
 
             params.put("rName", register_name);
             params.put("rMobileNo", register_MobileNo);
+            params.put("rPassword", register_Password);
             params.put("rPassword", register_Password);
 
             RequestHandler rh = new RequestHandler();

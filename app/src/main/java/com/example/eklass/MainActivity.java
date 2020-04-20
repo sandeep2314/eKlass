@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         if(SharedPrefManager.getInstance(this).isLoggedIn())
         {
             finish();
-            startActivity( new Intent(this, MyChildrenActivity.class));
+            //startActivity( new Intent(this, DashboardActivity.class));
+            startActivity( new Intent(this, ScanActivity.class));
 
             return;
         }
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
                         // login user
 
                         userLogin();
+
+                        //CustomerLogin();
 
                     }
                 }
@@ -168,7 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
                         // starting the MyChildren activity
                         finish();
-                        startActivity(new Intent(getApplicationContext(), MyChildrenActivity.class));
+                        //startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ScanActivity.class));
 
                     }
                     else
@@ -190,10 +194,126 @@ public class MainActivity extends AppCompatActivity {
 
         UserLogin ul = new UserLogin();
         ul.execute();
-
-
     }
 
+
+    private void CustomerLogin()
+    {
+        final String userMobileNo = et_MobileNo.getText().toString();
+        final  String userPassword = et_Password.getText().toString();
+
+        if(TextUtils.isEmpty(userMobileNo))
+        {
+            et_MobileNo.setError("Please Enter Your Mobile Number");
+            et_MobileNo.requestFocus();
+
+            return;
+        }
+
+
+        // if everything is fine
+
+        class CustomerLogin extends AsyncTask<Void, Void, String>
+        {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+
+                params.put("mobileNo", userMobileNo);
+                params.put("password", userPassword);
+
+                String response = null;
+                try
+                {
+                    response = requestHandler.sendPostRequest(URLs.CUSTOMERLOGIN_URL ,params);
+                } catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return response;
+            }
+
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+
+                Log.w("CustomerLogin", "response 666 " + s.toString());
+
+                // converting response to JSON object
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    boolean isError = true;
+                    String CustomerMobile_FromDB="-1" ;
+                    String CustomerId_FromDB = "";
+                    String CustomerName_FromDB = "";
+
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        // if there is any record then login is succesfull
+                        isError = false;
+                        CustomerMobile_FromDB = o.getString("MobileNo");
+
+                        CustomerId_FromDB =  o.getString("RID");
+                        CustomerName_FromDB =  o.getString("UserName");
+
+                    }
+
+                    //Student myChild = new Student(StudentId, StudentName, StudentClass,userMobileNo );
+                    Customer customer = new Customer(CustomerId_FromDB, CustomerName_FromDB
+                            , CustomerMobile_FromDB   );
+
+
+                    // if no error in response
+
+                    if(!isError)
+                    {
+                        User user = new User(CustomerMobile_FromDB, customer);
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+
+                        // starting the MyChildren activity
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext()
+                                , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+
+        CustomerLogin cl = new CustomerLogin();
+        cl.execute();
+    }
 
 
 

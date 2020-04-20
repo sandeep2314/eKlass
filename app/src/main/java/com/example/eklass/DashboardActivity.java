@@ -16,7 +16,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyChildrenActivity extends AppCompatActivity
+public class DashboardActivity extends AppCompatActivity
 {
 
     TextView txt_children;

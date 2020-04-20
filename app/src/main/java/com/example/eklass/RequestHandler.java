@@ -79,7 +79,7 @@ public class RequestHandler
     }
 
     // this method converts HashMaps into query string
-    private String getPostDataString(HashMap<String, String> params)
+    public String getPostDataString(HashMap<String, String> params)
     {
         StringBuilder result = new StringBuilder();
 
