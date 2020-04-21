@@ -1,6 +1,7 @@
 package com.example.eklass;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,18 +23,27 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.util.HashMap;
+
 
 public class ScanActivity extends AppCompatActivity {
     // view objects
 
     private Button btnScan;
-    private TextView txtName, txtAddress, txtLatitude, txtLongitude;
+    private TextView txtQRName, txtQRAddress, txtLatitude, txtLongitude;
 
     LocationManager locationManager;
     String latitude,longitude;
@@ -50,8 +61,8 @@ public class ScanActivity extends AppCompatActivity {
         // view objects
 
         btnScan = findViewById(R.id.btnScan_activity_scan);
-        txtName = findViewById(R.id.txtName_activity_scan);
-        txtAddress = findViewById(R.id.txtAdress_activity_scan);
+        txtQRName = findViewById(R.id.txtName_activity_scan);
+        txtQRAddress = findViewById(R.id.txtAdress_activity_scan);
         txtLatitude = findViewById(R.id.txtLatitude_activity_scan);
         txtLongitude = findViewById(R.id.txtLongitude_activity_scan);
 
@@ -92,7 +103,16 @@ public class ScanActivity extends AppCompatActivity {
                 qrScan.setOrientationLocked(true);
                 qrScan.setCaptureActivity(CaptureActivityPortrait.class);
                 qrScan.initiateScan();
-                                //GetLocation();
+
+                try
+                {
+                    SaveScan();
+                }
+                catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+                //GetLocation();
             }
         });
 
@@ -115,8 +135,8 @@ public class ScanActivity extends AppCompatActivity {
 
                     JSONObject obj = new JSONObject(result.getContents());
 
-                    txtName.setText(obj.getString("name"));
-                    txtAddress.setText(obj.getString("address"));
+                    txtQRName.setText(obj.getString("name"));
+                    txtQRAddress.setText(obj.getString("address"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -223,6 +243,7 @@ public class ScanActivity extends AppCompatActivity {
 
     private void getLocation() {
 
+
         //Check Permissions again
 
         if (ActivityCompat.checkSelfPermission(ScanActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ScanActivity.this,
@@ -277,6 +298,71 @@ public class ScanActivity extends AppCompatActivity {
         }
 
     }
+
+
+    private void SaveScan() throws MalformedURLException {
+        final String staff_mobileNo = SharedPrefManager.getInstance(getApplicationContext()).getUser().UserMobileNo;
+        final String txtQR_Name = txtQRName.getText().toString();
+        final String txtQR_Address = txtQRAddress.getText().toString();
+        final String txt_latitude = txtLatitude.getText().toString();
+        final String txt_longitude = txtLongitude.getText().toString();
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving Scan...");
+        progressDialog.show();
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Scan444",response);
+
+                Toast.makeText(getApplicationContext()
+                        , "Scan Saved Successfully", Toast.LENGTH_LONG).show();
+
+
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
+
+
+        RequestHandler rh = new RequestHandler();
+
+        HashMap<String, String> params = new HashMap<>();
+
+        params.put("sMobileNo", staff_mobileNo);
+        params.put("sQRName", txtQR_Name);
+        params.put("sQRAddress", txtQR_Address);
+        params.put("sLatitude", txt_latitude);
+        params.put("sLongitude", txt_longitude);
+
+
+        String paramsStr = rh.getPostDataString(params);
+        String theURL = URLs.SAVESCAN_URL +"?" + paramsStr;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+
+
 
 
 }
