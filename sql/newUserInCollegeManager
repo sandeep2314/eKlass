@@ -24,7 +24,7 @@ select * from tblStudentMaster where userID=3
 select * from tblStudentMaster where classid = 24
 
 
-select StudentName, classId, MobileF from tblStudentMaster 
+select StudentName, classId, MobileF from tblStudentMaster
 where userId = 16
 and len(MobileF) > 10
 
@@ -37,30 +37,30 @@ update tblStudentMaster set ClassId =  where classId = 17 -- I
 select * from tblClassMaster where userId = 20
 
 Update tblStudentMaster s set classId = select classOrder from tblClassMaster c
-WHERE 
+WHERE
 
-drop view vwCls 
+drop view vwCls
 
-create view vwCls as 
+create view vwCls as
 select s.classMasterId
 , s.ClassName
-, s2.ClassOrder 
+, s2.ClassOrder
 from tblClassMaster s
 JOIN tblClassMaster s2 ON s.ClassName=s2.className
 where s.userID IN (3)
 and s2.userId=20
 
 
-UPDATE table1 
-SET table1.name = table2.name 
-FROM table1, table2 
-WHERE table1.id = table2.id 
+UPDATE table1
+SET table1.name = table2.name
+FROM table1, table2
+WHERE table1.id = table2.id
 AND table2.foobar ='stuff'
 
-update tblStudentMaster 
+update tblStudentMaster
 set tblStudentMaster.ClassId = vwCls.classMasterId
-FROM tblStudentMaster , vwCls 
-WHERE tblStudentMaster.classid = vwCls.classOrder 
+FROM tblStudentMaster , vwCls
+WHERE tblStudentMaster.classid = vwCls.classOrder
 AND tblStudentMaster.userId = 3
 
 
@@ -1559,13 +1559,13 @@ GO
 
 --DROP TABLE tblFee
 
-CREATE TABLE dbo.tblFee 
+CREATE TABLE dbo.tblFee
 (
 	FeeID [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
     PID           VARCHAR(20) NOT NULL,
     StudentName   VARCHAR(100),
-    FeeHead 	  VARCHAR(100),	
-	FeeHead 	  VARCHAR(40),	
+    FeeHead 	  VARCHAR(100),
+	FeeHead 	  VARCHAR(40),
 	FeeAmount     float,
 	Discount      float,
 	FeeAfterDiscount float,
@@ -1574,7 +1574,7 @@ CREATE TABLE dbo.tblFee
     MobileNo      VARCHAR(50),
     ClassName     VARCHAR(50),
     [CreatedAt] [datetime] NULL DEFAULT (getdate())
- 
+
 )
 GO
 
@@ -1606,9 +1606,9 @@ VALUES('Pulkit', '123'
 
 go
 
--- AccountsDB, 
+-- AccountsDB,
 --ALTER TABLE tblUserInfo ADD SMSUser VARCHAR(50)
---ALTER TABLE tblUserInfo ADD SMSPassword VARCHAR(50) 
+--ALTER TABLE tblUserInfo ADD SMSPassword VARCHAR(50)
 --ALTER TABLE tblUserInfo ADD SMSDelivery int default 90
 
 
@@ -1687,7 +1687,7 @@ CREATE TABLE tbltrackgps (
   Speed decimal NOT NULL,
 Course varchar(16) DEFAULT NULL,
 Accstatus varchar(16) DEFAULT NULL,
-bats int, 
+bats int,
 AIN1 varchar(16) DEFAULT NULL,
 Rfid  varchar(16) DEFAULT NULL,
 Odo  varchar(16) DEFAULT NULL,
@@ -1701,7 +1701,7 @@ DIN1  varchar(11) DEFAULT NULL,
 vehiclenum varchar(45) DEFAULT NULL,
 GpsStatus varchar(2) DEFAULT NULL,
 CreatedAt DATETIME DEFAULT getdate()
-  ) 
+  )
 
 
 
@@ -1760,4 +1760,56 @@ CREATE TABLE tblRouteMaster(
 	[FYear] [int] NOT NULL,
 	CreatedAt DATETIME DEFAULT getdate()
 	)
+
+--DROp TABLE tblRegister
+CREATE TABLE tblRegisterCompany(
+	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
+	CompanyName VARCHAR(100) NOT NULL,
+	MobileNo VARCHAR(20) NULL,
+	CompanyPassword VARCHAR(50) NULL,
+	DeviceToken VARCHAR(500) NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+--DROp TABLE tblScan
+CREATE TABLE tblScan(
+	ScanId [int] IDENTITY(1,1) NOT NULL,
+	LocationId int NULL,
+	StaffId int NOT NULL,
+	Latitude VARCHAR(20) NULL,
+	Longitude VARCHAR(20) NULL,
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+-- 1 staff type is Guard
+--2 staff type is Manager
+--DROp TABLE tblStaff
+CREATE TABLE tblStaff(
+	StaffId [int] IDENTITY(1,1) NOT NULL,
+	StaffType INT NOT NULL DEFAULT 1,
+	MobileNo VARCHAR(15) NOT NULL,
+	StaffPassword VARCHAR(20) NOT NULL,
+	IsActive INT NOT NULL DEFAULT 1, -- 1 -- Staff is Active, 0 --- Staff not active
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+
+
+--DROp TABLE tblLocationQR
+CREATE TABLE tblLocationQR(
+	LocationId [int] IDENTITY(1,1) NOT NULL,
+	LocationName VARCHAR(15) NOT NULL,
+	Latitude VARCHAR(20) NULL,
+	Longitude VARCHAR(20) NULL,
+	ManagerId INT NOT NULL,
+    GuardId  INT NOT NULL,
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
 
