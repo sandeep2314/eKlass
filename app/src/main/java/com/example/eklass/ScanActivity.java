@@ -39,7 +39,7 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 
-public class ScanActivity extends AppCompatActivity {
+public class ScanActivity extends BaseActivity {
     // view objects
 
     private Button btnScan;
@@ -115,6 +115,17 @@ public class ScanActivity extends AppCompatActivity {
                 //GetLocation();
             }
         });
+
+
+
+        findViewById(R.id.btnScan_activity_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                SharedPrefManager.getInstance(getApplicationContext()).logout();
+            }
+        });
+
 
     }
 
