@@ -9,6 +9,12 @@ public class SharedPrefManager
     private static final String SHARED_PREF_NAME="eclasssharedpref";
     private static final String KEY_MOBILENO="keymobileno";
 
+    private static final String KEY_STAFFID="keystaffid";
+    private static final String KEY_STAFFTYPE="keystafftype";
+    private static final String KEY_STAFFNAME="keystaffname";
+    private static final String KEY_COMPANYID="keycompanyid";
+    private static final String KEY_COMPANYNAME="keycompanyname";
+
 
     private static SharedPrefManager mInstance;
 
@@ -36,6 +42,14 @@ public class SharedPrefManager
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_MOBILENO, user.UserMobileNo);
+        editor.putString(KEY_STAFFTYPE, user.StaffType);
+        editor.putString(KEY_STAFFID, user.getStaffId());
+        editor.putString(KEY_STAFFNAME, user.getStaffName());
+        editor.putString(KEY_COMPANYID, user.getCompanyId());
+        editor.putString(KEY_COMPANYNAME, user.getCompanyName());
+
+
+
         editor.apply();
 
     }
@@ -56,7 +70,19 @@ public class SharedPrefManager
 
         SharedPreferences sharedPreferences =
                                             mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
-        return new User(sharedPreferences.getString(KEY_MOBILENO, null));
+
+        User usr = new User(
+                sharedPreferences.getString(KEY_MOBILENO, null)
+                , sharedPreferences.getString(KEY_STAFFTYPE, null)
+                , sharedPreferences.getString(KEY_STAFFID, null)
+                , sharedPreferences.getString(KEY_STAFFNAME, null)
+                , sharedPreferences.getString(KEY_COMPANYID, null)
+                , sharedPreferences.getString(KEY_COMPANYNAME, null)
+
+        );
+
+        //return new User(sharedPreferences.getString(KEY_MOBILENO, null));
+        return usr;
     }
 
     // this method will logout the user and will show main screen
