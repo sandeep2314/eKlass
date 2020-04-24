@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -21,7 +23,8 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
 
 
-    EditText et_MobileNo, et_Password;
+    EditText et_MobileNo, et_Password, et_CompanyID;
+    RadioGroup radioGroup_Staff;
     String deviceToken;
 
 
@@ -31,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        et_MobileNo = (EditText) findViewById(R.id.etMobileNo);
-        et_Password = (EditText) findViewById(R.id.etPassword);
+        et_MobileNo = (EditText) findViewById(R.id.etMobileNo_activity_main);
+        et_Password = (EditText) findViewById(R.id.etPassword_activity_main);
+        et_CompanyID = findViewById(R.id.etCompanyId_activity_main);
+        radioGroup_Staff = findViewById(R.id.radioGroup_staff_activity_main);
 
         //deviceId = this.getde
 
@@ -40,31 +45,33 @@ public class MainActivity extends AppCompatActivity {
         if(SharedPrefManager.getInstance(this).isLoggedIn())
         {
             finish();
-            //startActivity( new Intent(this, DashboardActivity.class));
-            startActivity( new Intent(this, ScanActivity.class));
+            //if(staffType_fromDB.equalsIgnoreCase("admin"))
+
+            User usr = SharedPrefManager.getInstance(this).getUser();
+
+            Log.w("UserStaff ", "usr.getCompanyName 555 " + usr.getStaffType());
+
+            if(usr.getStaffType().equals("admin"))
+            {
+
+                startActivity( new Intent(this, DashboardActivity.class));
+            }
+            else
+            {
+                 startActivity( new Intent(this, ScanActivity.class));
+            }
 
             return;
         }
 
 
+        findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StaffLogin();
+            }
+        });
 
-
-        findViewById(R.id.btnLogin).setOnClickListener(
-                new View.OnClickListener(){
-
-                    @Override
-                    public void onClick(View v) {
-
-                        // login user
-
-                        userLogin();
-
-                        //CustomerLogin();
-
-                    }
-                }
-
-        );
 
        findViewById(R.id.txtRegister).setOnClickListener(new View.OnClickListener() {
            @Override
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     {
         final String userMobileNo = et_MobileNo.getText().toString();
         final  String userPassword = et_Password.getText().toString();
+        final String userComapanyId = et_CompanyID.getText().toString();
 
         if(TextUtils.isEmpty(userMobileNo))
         {
@@ -92,6 +100,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if(TextUtils.isEmpty(userPassword))
+        {
+            et_Password.setError("Please Enter Your Password");
+            et_Password.requestFocus();
+        }
+
+        if(TextUtils.isEmpty(userComapanyId))
+        {
+            et_CompanyID.setError("Please Enter Your Company ID Given By Your Admin");
+            et_CompanyID.requestFocus();
+        }
 
         // if everything is fine
 
@@ -107,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
                 params.put("mobileNo", userMobileNo);
                 params.put("password", userPassword);
+                params.put("companyId", userComapanyId);
 
                 String response = null;
                 try
@@ -140,10 +160,13 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray array = jsonObject.getJSONArray("a");
 
                     boolean isError = true;
-                    String userMobileFromDB="-1" ;
+
+                    String userMobileFromDB  = "";
                     String StudentId = "";
-                    String StudentName = "";
-                    String StudentClass = "";
+                    String StudentName= "";
+                    String StudentClass =  "";
+                    //
+                    String StaffType = "";
 
                     for(int i=0; i< array.length(); i++)
                     {
@@ -197,6 +220,154 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    private void StaffLogin()
+    {
+        final String  userMobileNo = et_MobileNo.getText().toString();
+        final  String userPassword = et_Password.getText().toString();
+        final String userCompanyId = et_CompanyID.getText().toString();
+        final String userIsAdmin = ((RadioButton) findViewById(radioGroup_Staff.getCheckedRadioButtonId())).getText().toString();
+
+        Log.w("sandeep", "444 userIsAdmin" + userIsAdmin);
+
+        if(TextUtils.isEmpty(userMobileNo))
+        {
+            et_MobileNo.setError("Please Enter Your Mobile Number");
+            et_MobileNo.requestFocus();
+
+            return;
+        }
+
+
+        // if everything is fine
+
+        class StaffLogin extends AsyncTask<Void, Void, String>
+        {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+
+                params.put("rMobileNo", userMobileNo);
+                params.put("rPassword", userPassword);
+                params.put("rCompanyId", userCompanyId);
+                //params.put("rIsAdmin", userIsAdmin);
+                params.put("rIsAdmin", "1");
+
+                String response = null;
+                try
+                {
+                    response = requestHandler.sendPostRequest(URLs.CUSTOMERLOGIN_URL ,params);
+                } catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return response;
+            }
+
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+
+                Log.w("sandeep", "response 222 " + s.toString());
+
+                // converting response to JSON object
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    boolean isError = true;
+                    String staffMobileNo_fromDB="-1" ;
+                    String staffId_fromDB = "";
+                    String staffName_fromDB = "";
+                    String companyName_fromDB = "";
+                    String companyId_fromDB = "";
+                    String staffType_fromDB = "admin";
+
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        // if there is any record then login is succesfull
+                        isError = false;
+
+                        staffId_fromDB =  o.getString("StaffId");
+                        staffName_fromDB =o.getString("StaffName");
+                        staffMobileNo_fromDB = o.getString("MobileNo");
+                        staffType_fromDB = o.getString("StaffType");
+                        companyId_fromDB =  o.getString("CompanyId");
+                        companyName_fromDB =  o.getString("CompanyName");
+
+                    }
+
+                    User user = new User(
+                            userMobileNo
+                            , staffType_fromDB
+                            , staffId_fromDB
+                            , staffName_fromDB
+                            , companyId_fromDB
+                            , companyName_fromDB
+
+                            );
+
+
+                    Log.w("staffType_fromDB ", " 444 " + staffType_fromDB);
+
+                    // if no error in response
+
+                    if(!isError)
+                    {
+
+                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+
+                        // starting the MyChildren activity
+                        finish();
+                        if(staffType_fromDB.equalsIgnoreCase("admin"))
+                        {
+                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        }
+                        else
+                        {
+                            startActivity(new Intent(getApplicationContext(), ScanActivity.class));
+                        }
+
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext()
+                                , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+
+        StaffLogin ul = new StaffLogin();
+        ul.execute();
+    }
+
+
     private void CustomerLogin()
     {
         final String userMobileNo = et_MobileNo.getText().toString();
@@ -208,6 +379,12 @@ public class MainActivity extends AppCompatActivity {
             et_MobileNo.requestFocus();
 
             return;
+        }
+
+        if(TextUtils.isEmpty(userPassword))
+        {
+            et_Password.setError("Please Enter Your Password");
+            et_Password.requestFocus();
         }
 
 
@@ -285,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(!isError)
                     {
-                        User user = new User(CustomerMobile_FromDB, customer);
+                        User user = new User(CustomerMobile_FromDB);
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
 
