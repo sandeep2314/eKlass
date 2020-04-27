@@ -1,4 +1,6 @@
 -- select top 1000 * from tblSMSSent order by smsid desc
+-- select * from tblUserINfo
+
 
 DECLARE @FDT DATETIME
 DECLARE @TDT DATETIME

@@ -1761,7 +1761,7 @@ CREATE TABLE tblRouteMaster(
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
---DROp TABLE tblRegister
+--DROp TABLE tblRegisterCompany
 CREATE TABLE tblRegisterCompany(
 	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
 	CompanyName VARCHAR(100) NOT NULL,
@@ -1788,6 +1788,7 @@ CREATE TABLE tblScan(
 --DROp TABLE tblStaff
 CREATE TABLE tblStaff(
 	StaffId [int] IDENTITY(1,1) NOT NULL,
+	StaffName VARCHAR(50) NOT NULL,
 	StaffType INT NOT NULL DEFAULT 1,
 	MobileNo VARCHAR(15) NOT NULL,
 	StaffPassword VARCHAR(20) NOT NULL,
@@ -1795,8 +1796,6 @@ CREATE TABLE tblStaff(
 	CompanyID [int] NOT NULL,
 	CreatedAt DATETIME DEFAULT getdate()
 	)
-
-
 
 
 --DROp TABLE tblLocationQR
@@ -1811,5 +1810,15 @@ CREATE TABLE tblLocationQR(
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
+--DROp TABLE tblSMSHUB
+CREATE TABLE tblSMSHUB(
+	SMSHUBId [int] IDENTITY(1,1) NOT NULL,
+	PurchaseDate DATETIME NOT NULL,
+	SMSPurchased INT NOT NULL,
+	AMOUNT INT NOT NULL,
+	SMSAccount VARCHAR(20) NOT NULL,
+	PresentSMSCount INT NOT NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
 
 
