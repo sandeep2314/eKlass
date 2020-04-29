@@ -18,6 +18,8 @@
         <activity android:name=".SchoolAttendanceActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".BusAttendanceActivity"></activity>
+        <activity android:name=".AddStaffActivity"></activity>
+        <activity android:name=".LocationActivity"></activity>
         <activity
             android:name=".ScanActivity">
 
