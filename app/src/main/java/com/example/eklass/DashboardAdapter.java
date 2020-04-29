@@ -2,7 +2,6 @@ package com.example.eklass;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.DashBoardViewHolder>
+public class DashboardAdapter extends
+        RecyclerView.Adapter<DashboardAdapter.DashBoardViewHolder>
 {
 
 
     // this context we will use to inflate the layout
     private Context mCtx;
-
     private List<Feature> featureList;
 
 
@@ -62,14 +61,14 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
             public void onClick(View v) {
                 //Toast.makeText(v.getContext(),  featureList.get(position).getFeatureName() + " Clicked ", Toast.LENGTH_LONG).show();
 
-                if(featureList.get(position).getFeatureName() == "School Attendance")
+                if(featureList.get(position).getFeatureName().equals("School Attendance"))
                 {
                    // finish();
                     mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
 
                 }
 
-                if(featureList.get(position).getFeatureName() == "Bus Attendance")
+                if(featureList.get(position).getFeatureName().equals("Bus Attendance"))
                 {
                     mCtx.startActivity(new Intent(mCtx, BusAttendanceActivity.class));
                 }
@@ -91,7 +90,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.Dash
 
         public DashBoardViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName);
+            this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
         }
 
 

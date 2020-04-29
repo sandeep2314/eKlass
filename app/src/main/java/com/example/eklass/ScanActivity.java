@@ -8,12 +8,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +47,9 @@ public class ScanActivity extends BaseActivity {
     // view objects
 
     private Button btnScan;
-    private TextView txtQRName, txtQRAddress, txtLatitude, txtLongitude;
+    public TextView txtQRName, txtQRAddress, txtLatitude, txtLongitude;
+
+    public String QRName, QRAddress;
 
     LocationManager locationManager;
     String latitude,longitude;
@@ -104,14 +110,17 @@ public class ScanActivity extends BaseActivity {
                 qrScan.setCaptureActivity(CaptureActivityPortrait.class);
                 qrScan.initiateScan();
 
-                try
+                //addScan();
+
+                //IntentIntegrator.parseActivityResult()
+
+                /*try
                 {
                     SaveScan();
-                }
-                catch (MalformedURLException e)
+                } catch (MalformedURLException e)
                 {
                     e.printStackTrace();
-                }
+                }*/
                 //GetLocation();
             }
         });
@@ -139,15 +148,24 @@ public class ScanActivity extends BaseActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
 
-            } else // if qr contains data
+            }
+            else // if qr contains data
             {
                 try {   // converting data to JSON
                     // {"name":"Sandeep", "address":"Shop 14"}
 
+                    Log.w("sandeep", " result.getContents()  " + result.getContents().toString());
                     JSONObject obj = new JSONObject(result.getContents());
 
+                    Log.w("sandeep", " 5555  " + obj.getString("name"));
                     txtQRName.setText(obj.getString("name"));
+                    QRName = obj.getString("name");
                     txtQRAddress.setText(obj.getString("address"));
+                    QRAddress = obj.getString("address");
+
+
+                    addScan();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,29 +214,9 @@ public class ScanActivity extends BaseActivity {
 
             // TODO: Consider calling
             //    Activity#requestPermissions
-            // here to request the missing permissions, and then overriding
-          /*  public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            {
-
-            }*/
-
-            // to handle the case where the user grants the permission. See the documentation
-            // for Activity#requestPermissions for more details.
-
-
-
-
             return;
         }
-       /* Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();*/
 
-       // txtLatitude.setText((int) latitude);
-        //txtLongitude.setText((int) longitude);
-
-        txtLatitude.setText((int) 40);
-        txtLongitude.setText((int) 59);
     }
 
 
@@ -311,13 +309,128 @@ public class ScanActivity extends BaseActivity {
     }
 
 
-    private void SaveScan() throws MalformedURLException {
+    private void addScan()
+    {
+        final  String companyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
+        final String  qrName =  txtQRName.getText().toString();
+        final String  WorkerStaffId = SharedPrefManager.getInstance(this).getUser().getStaffId();
+        //final  String userPassword = etStaffPassword.getText().toString();
+
+
+        Log.w("sandeep", "444 IsStaff = " + qrName);
+
+        // if everything is fine
+
+        class AddScan extends AsyncTask<Void, Void, String>
+        {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+
+                params.put("pQRName", QRName);
+                params.put("pGuardId", WorkerStaffId);
+                params.put("pLatitude", latitude);
+                params.put("pLongitude", longitude);
+                params.put("pCompanyId", companyId);
+
+                Log.w("sandeep", "pQRName 999 " + qrName);
+
+
+
+
+                String response = null;
+                try
+                {
+                    response = requestHandler.sendPostRequest(URLs.SAVESCAN_URL ,params);
+                } catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return response;
+            }
+
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+
+                Log.w("sandeep", "response 222 " + s);
+
+                // converting response to JSON object
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    boolean isError = true;
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        // if there is any record then login is succesfull
+                        isError = false;
+                        //isError = o.getString("IsSaved").equals("yes");
+
+
+                    }
+
+
+
+                    Log.w("staffType_fromDB ", " 444 " + s);
+
+                    // if no error in .response
+
+                    if(!isError)
+                    {
+
+                        // send SMS to Staff maobile with CompanyID and password to login
+                        Toast.makeText(getApplicationContext()
+                                , "Scan Added Successfully", Toast.LENGTH_LONG).show();
+
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext()
+                                , "Invalid Staf Details", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+
+        AddScan as = new AddScan();
+        as.execute();
+    }
+
+
+    private void SaveScanOld() throws MalformedURLException {
         final String staff_mobileNo = SharedPrefManager.getInstance(getApplicationContext()).getUser().UserMobileNo;
+
         final String txtQR_Name = txtQRName.getText().toString();
         final String txtQR_Address = txtQRAddress.getText().toString();
-        final String txt_latitude = txtLatitude.getText().toString();
-        final String txt_longitude = txtLongitude.getText().toString();
+        final String txt_latitude =  latitude; //txtLatitude.getText().toString();
+        final String txt_longitude = longitude; //txtLongitude.getText().toString();
 
+        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Saving Scan...");
@@ -354,21 +467,24 @@ public class ScanActivity extends BaseActivity {
 
         HashMap<String, String> params = new HashMap<>();
 
-        params.put("sMobileNo", staff_mobileNo);
-        params.put("sQRName", txtQR_Name);
-        params.put("sQRAddress", txtQR_Address);
-        params.put("sLatitude", txt_latitude);
-        params.put("sLongitude", txt_longitude);
+        Log.w("sandeep", "txtQR_Name  " + QRName);
+
+        params.put("pMobileNo", staff_mobileNo);
+        params.put("pQRName", txtQR_Name);
+        params.put("pQRAddress", txtQR_Address);
+        params.put("pLatitude", txt_latitude);
+        params.put("pLongitude", txt_longitude);
+        params.put("pCompanyId", CompanyId);
 
 
         String paramsStr = rh.getPostDataString(params);
         String theURL = URLs.SAVESCAN_URL +"?" + paramsStr;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        requestQueue.add(stringRequest);*/
 
     }
 

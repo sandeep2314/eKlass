@@ -226,7 +226,16 @@ public class MainActivity extends AppCompatActivity {
         final String  userMobileNo = et_MobileNo.getText().toString();
         final  String userPassword = et_Password.getText().toString();
         final String userCompanyId = et_CompanyID.getText().toString();
-        final String userIsAdmin = ((RadioButton) findViewById(radioGroup_Staff.getCheckedRadioButtonId())).getText().toString();
+        final String userIsAdmin; // = ((RadioButton) findViewById(radioGroup_Staff.getCheckedRadioButtonId())).getText().toString();
+
+        /*RadioButton rdManager = findViewById(R.id.radioBtnManager_activity_staff);
+
+        final  String IsStaff;
+        // 1 is worker, 2 is Manager
+        IsStaff = rdManager.isChecked()?"2":"1";
+*/
+        RadioButton rdAdmin = findViewById(R.id.radioAdmin_activity_main);
+        userIsAdmin = rdAdmin.isChecked()?"1":"2";
 
         Log.w("sandeep", "444 userIsAdmin" + userIsAdmin);
 
@@ -254,13 +263,13 @@ public class MainActivity extends AppCompatActivity {
                 params.put("rMobileNo", userMobileNo);
                 params.put("rPassword", userPassword);
                 params.put("rCompanyId", userCompanyId);
-                //params.put("rIsAdmin", userIsAdmin);
-                params.put("rIsAdmin", "1");
+                params.put("rIsAdmin", userIsAdmin);
+                //params.put("rIsAdmin", "1");
 
                 String response = null;
                 try
                 {
-                    response = requestHandler.sendPostRequest(URLs.CUSTOMERLOGIN_URL ,params);
+                    response = requestHandler.sendPostRequest(URLs.GUARD_LOGIN_URL ,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();
@@ -331,19 +340,26 @@ public class MainActivity extends AppCompatActivity {
                     if(!isError)
                     {
 
+                        Toast.makeText(getApplicationContext()
+                                , "Login Successful..", Toast.LENGTH_SHORT).show();
+
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
 
                         // starting the MyChildren activity
                         finish();
-                        if(staffType_fromDB.equalsIgnoreCase("admin"))
+                        // admin log in
+                        if(staffType_fromDB.equalsIgnoreCase("-1"))
                         {
                             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
                         }
-                        else
+                        else if(staffType_fromDB.equalsIgnoreCase("1"))
                         {
                             startActivity(new Intent(getApplicationContext(), ScanActivity.class));
                         }
-
+                        else if(staffType_fromDB.equalsIgnoreCase("2"))
+                        {
+                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        }
 
                     }
                     else
@@ -406,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
                 String response = null;
                 try
                 {
-                    response = requestHandler.sendPostRequest(URLs.CUSTOMERLOGIN_URL ,params);
+                    response = requestHandler.sendPostRequest(URLs.GUARD_LOGIN_URL,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();

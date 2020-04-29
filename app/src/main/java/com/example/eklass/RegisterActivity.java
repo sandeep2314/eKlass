@@ -100,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity
             params.put("rName", register_name);
             params.put("rMobileNo", register_MobileNo);
             params.put("rPassword", register_Password);
-            params.put("rPassword", register_Password);
+
 
             RequestHandler rh = new RequestHandler();
             String paramsStr = rh.getPostDataString(params);

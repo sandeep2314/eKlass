@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,9 +57,26 @@ public class DashboardActivity extends AppCompatActivity
          });
 
 
+         findViewById(R.id.btnAddStaff_activity_mychildren).setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 finish();
+                 //startActivity( new Intent(this, DashboardActivity.class));
+                 //startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+                 startActivity(new Intent(getApplicationContext(), AddStaffActivity.class));
+             }
+         });
+
+         findViewById(R.id.btnAddLocation_activity_mychildren).setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 finish();
+                 startActivity(new Intent(getApplicationContext(), LocationActivity.class));
+             }
+         });
 
 
-        recyclerView =  findViewById(R.id.rv);
+        recyclerView =  findViewById(R.id.rvDashboard_activity_mychildren);
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -78,18 +93,6 @@ public class DashboardActivity extends AppCompatActivity
 
 
 
-
-        /*findViewById(R.id.tvFeatureName).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                finish();
-                Toast.makeText(getApplicationContext()
-                        , "Card Clicked", Toast.LENGTH_SHORT).show();
-
-
-            }
-        });*/
 
 
 
