@@ -9,16 +9,18 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please Enter Your Name"
+        android:hint="Name"
         android:inputType="text"
         android:id="@+id/etName_Register">
 
     </EditText>
 
+
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please Enter Your Mobile Number"
+        android:hint="Mobile Number"
         android:inputType="number"
         android:id="@+id/etMobileNo_Register">
 
@@ -27,14 +29,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Please Enter Your Password"
-        android:inputType="number"
+        android:hint="Password"
+        android:inputType="text"
         android:id="@+id/etPassword_Register">
 
     </EditText>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register Now"
         android:id="@+id/btnRegister">

@@ -18,7 +18,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etMobileNo"
+            android:id="@+id/etMobileNo_activity_main"
             android:inputType="number"
             android:hint="Mobile Number"
             android:layout_marginBottom="10dp"
@@ -30,16 +30,58 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etPassword"
-            android:hint="Admission No"
+            android:id="@+id/etPassword_activity_main"
+            android:hint="Password"
             android:inputType="text"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp">
 
         </EditText>
 
-        <Button
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etCompanyId_activity_main"
+            android:hint="CompanyId"
+            android:inputType="text"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+        </EditText>
+
+        <RadioGroup
+
+            android:id="@+id/radioGroup_staff_activity_main"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RadioButton
+
+            android:id="@+id/radioStaff_activity_main"
             android:layout_width="wrap_content"
+            android:checked="true"
+            android:text="Staff"
+            android:layout_height="wrap_content">
+
+        </RadioButton>
+
+
+        <RadioButton
+
+            android:id="@+id/radioAdmin_activity_main"
+            android:layout_width="wrap_content"
+            android:text="Admin"
+            android:layout_height="wrap_content">
+
+        </RadioButton>
+    </RadioGroup>
+
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnLogin"
             android:text="Login"
