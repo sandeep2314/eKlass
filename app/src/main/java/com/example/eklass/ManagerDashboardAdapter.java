@@ -63,8 +63,27 @@ public class ManagerDashboardAdapter
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(),  featureList.get(position).getFeatureName() + " Clicked ", Toast.LENGTH_LONG).show();
 
-                    // finish();
-                     mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
+                    /*Intent intent = new Intent (v.getContext(), DutyActivity.class);
+                    v.getContext().startActivity(intent);
+
+
+                    Intent intent = new Intent("message_subject_intent");
+                    intent.putExtra("name" , String.valueOf(messageSubject.getname()));
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+*/
+
+                    Intent i = new Intent(v.getContext(), DutyActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("guardID", 5);
+                    v.getContext().startActivity(i);
+
+                     //finish();
+                     //mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
+                    //mCtx.startActivity(new Intent(mCtx, DutyActivity.class));
+
+
+
 
 
                 }
@@ -94,11 +113,15 @@ public class ManagerDashboardAdapter
         {
             //Toast.makeText(mCtx,    "School Attendance Clicked ", Toast.LENGTH_LONG).show();
 
+
+            ////mCtx.startActivity(new Intent(mCtx, DutyActivity.class));
+
         }
 
 
         public void OpenBusAttendance()
         {
+
             Toast.makeText(mCtx,    "Bus Attendance Clicked ", Toast.LENGTH_LONG).show();
         }
 }
