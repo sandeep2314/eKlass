@@ -22,7 +22,6 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-
     EditText et_MobileNo, et_Password, et_CompanyID;
     RadioGroup radioGroup_Staff;
     String deviceToken;
@@ -32,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         et_MobileNo = (EditText) findViewById(R.id.etMobileNo_activity_main);
         et_Password = (EditText) findViewById(R.id.etPassword_activity_main);
@@ -52,13 +50,22 @@ public class MainActivity extends AppCompatActivity {
             Log.w("UserStaff ", "usr.getCompanyName 555 " + usr.getStaffType());
 
             if(usr.getStaffType().equals("admin"))
+
             {
 
+                //startActivity( new Intent(this, DashboardActivity.class));
                 startActivity( new Intent(this, DashboardActivity.class));
             }
-            else
+            // mamager
+            else if(usr.getStaffType().equals("2"))
             {
-                 startActivity( new Intent(this, ScanActivity.class));
+                 startActivity( new Intent(this, ManagerDashboardActivity.class));
+            }
+
+            // worker
+            else if(usr.getStaffType().equals("1"))
+            {
+                startActivity( new Intent(this, ScanActivity.class));
             }
 
             return;
@@ -356,9 +363,11 @@ public class MainActivity extends AppCompatActivity {
                         {
                             startActivity(new Intent(getApplicationContext(), ScanActivity.class));
                         }
+                        // manager login
                         else if(staffType_fromDB.equalsIgnoreCase("2"))
                         {
-                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                            //startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                            startActivity(new Intent(getApplicationContext(), ManagerDashboardActivity.class));
                         }
 
                     }
