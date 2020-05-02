@@ -40,12 +40,15 @@ public class DutyActivity extends BaseActivity
         setContentView(R.layout.activity_duty);
 
         //RecyclerView recyclerView;
-
         recyclerView =  findViewById(R.id.rvDuty);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         guardID = getIntent().getStringExtra("guardID");
+
+        Log.w("guardID" ,  "guardID222 " + guardID);
+
+
 
         dutyList = new ArrayList<>();
 
@@ -124,7 +127,7 @@ public Duty(Integer dutyId, String dutyDateTime, Integer QRId
 
         HashMap<String, String> params = new HashMap<>();
 
-        params.put("pStaffId", guardId);
+        params.put("pStaffId", guardID);
         params.put("pCompanyId", CompanyId);
 
 
