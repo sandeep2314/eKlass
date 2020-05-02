@@ -49,42 +49,25 @@ public class ManagerDashboardAdapter
         String feature_name ;
 
         @Override
-        public void onBindViewHolder(@NonNull ManagerDashboardAdapter.DashBoardViewHolder holder
+        public void onBindViewHolder(@NonNull final ManagerDashboardAdapter.DashBoardViewHolder holder
             , final int position)
         {
             // getting the feature of the specified  position
-            Staff worker = workerList.get(position);
+            final Staff worker = workerList.get(position);
 
             // binding the data with the viewholder views
             holder.tv_FeatureName.setText(worker.getStaffName());
+            holder.tv_guardID.setText(worker.getStaffId());
+
 
             holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Toast.makeText(v.getContext(),  featureList.get(position).getFeatureName() + " Clicked ", Toast.LENGTH_LONG).show();
-
-                    /*Intent intent = new Intent (v.getContext(), DutyActivity.class);
-                    v.getContext().startActivity(intent);
-
-
-                    Intent intent = new Intent("message_subject_intent");
-                    intent.putExtra("name" , String.valueOf(messageSubject.getname()));
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-*/
 
                     Intent i = new Intent(v.getContext(), DutyActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("guardID", 5);
+                    i.putExtra("guardID",worker.getStaffId() );
                     v.getContext().startActivity(i);
-
-                     //finish();
-                     //mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
-                    //mCtx.startActivity(new Intent(mCtx, DutyActivity.class));
-
-
-
-
 
                 }
             });
@@ -100,11 +83,14 @@ public class ManagerDashboardAdapter
 
         public class DashBoardViewHolder extends RecyclerView.ViewHolder
         {
-            TextView tv_FeatureName;
+            TextView tv_FeatureName, tv_guardID, tv_locationName;
 
             public DashBoardViewHolder(@NonNull View itemView) {
                 super(itemView);
                 this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
+                this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
+                //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
+
             }
         }
 
@@ -112,7 +98,6 @@ public class ManagerDashboardAdapter
         public void OpenSchoolAttendance()
         {
             //Toast.makeText(mCtx,    "School Attendance Clicked ", Toast.LENGTH_LONG).show();
-
 
             ////mCtx.startActivity(new Intent(mCtx, DutyActivity.class));
 
