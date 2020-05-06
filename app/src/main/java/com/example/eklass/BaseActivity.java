@@ -1,22 +1,38 @@
 package com.example.eklass;
 
+import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static int themeNo = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        if(themeNo == 1)
+            setTheme(R.style.Theme_AppCompat);
+        else
+            setTheme(R.style.Theme_AppCompat_Light);
+
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("SuperVisor");
+
 
     }
 
@@ -26,10 +42,13 @@ public class BaseActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
-
         User usr = SharedPrefManager.getInstance(this).getUser();
 
         Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
+
+
+
+
 
         if(usr.getStaffType().equals("1"))
         {
@@ -38,7 +57,6 @@ public class BaseActivity extends AppCompatActivity {
            MenuItem showStaff  = menu.findItem(R.id.menuShowStaff);
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
-
 
            if(addStaff != null) {
                addStaff.setVisible(false);
@@ -49,10 +67,7 @@ public class BaseActivity extends AppCompatActivity {
                Log.w("Sandeep Menu", "usr.getStaffType() 444 " + usr.getStaffType());
            }
             Log.w("Sandeep Menu", "usr.getStaffType() 555 " + usr.getStaffType());
-
-
         }
-
 
         return true;
     }
@@ -62,6 +77,15 @@ public class BaseActivity extends AppCompatActivity {
 
         switch (item.getItemId())
         {
+            case R.id.menuChangeThemeLight:
+                if (themeNo == 1)
+                    themeNo = 2;
+                else
+                    themeNo = 1;
+
+                recreate();
+                return true;
+
             case R.id.menuAddStaff:
                 finish();
                 startActivity( new Intent(this, AddStaffActivity.class));
