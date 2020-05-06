@@ -1,5 +1,6 @@
 package com.example.eklass;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,51 +14,52 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class LocationActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
 
     EditText etLocationName, etManagerId, etGuardId;
-
-    public String[] manager_ids;// = { "1", "2", "3", "4", "5"};
-    public String[] worker_ids;
+    //public List<String> staffList;
+    public String[] managerids;
+    public String[] workerids;
+    Spinner spinner_manager;
+    ArrayAdapter arrayAdapter_manager;
+    Spinner spinner_worker;
+    ArrayAdapter arrayAdapter_worker;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addlocation);
 
-      etLocationName = findViewById(R.id.etLocationName_activity_location);
-      etManagerId = findViewById(R.id.etManagerID_activity_location);
-      etGuardId = findViewById(R.id.etGuardID_activity_location);
+        etLocationName = findViewById(R.id.etLocationName_activity_location);
+        etManagerId = findViewById(R.id.etManagerID_activity_location);
+        etGuardId = findViewById(R.id.etGuardID_activity_location);
 
         // Getting the instance of Spinner and
+        spinner_manager = findViewById(R.id.spinner_manager_activity_addLocation);
+        spinner_worker = findViewById(R.id.spinner_worker_activity_location);
         // applying onItemSelectedListner to it
-        Spinner spinner_manager = findViewById(R.id.spinner_manager_activity_addLocation);
-        Spinner spinner_worker = findViewById(R.id.spinner_worker_activity_location);
-
         spinner_manager.setOnItemSelectedListener(this);
         spinner_worker.setOnItemSelectedListener(this);
 
-        //String[] manager = { "India", "USA", "China", "Japan", "Other"};
-        String[] manager = fillStaff("manager");
+        loadData2();
 
-        String[] workers = fillStaff("worker");
-
-        ArrayAdapter arrayAdapter_manager = new ArrayAdapter(this
-                , R.layout.support_simple_spinner_dropdown_item, manager);
-
-        ArrayAdapter arrayAdapter_worker = new ArrayAdapter(this,
-                               R.layout.support_simple_spinner_dropdown_item, workers );
-
-
-        spinner_manager.setAdapter(arrayAdapter_manager);
-        spinner_worker.setAdapter(arrayAdapter_worker);
 
      findViewById(R.id.btnSaveLocation_activity_location).setOnClickListener(new View.OnClickListener() {
          @Override
@@ -70,7 +72,7 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
     }
 
-    private void addLocation()
+    public void addLocation()
     {
         final  String userCompantId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
         final String  locationName = etLocationName.getText().toString();
@@ -131,7 +133,7 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
             {
                 super.onPostExecute(s);
 
-                Log.w("sandeep", "response 222 " + userCompantId);
+                Log.w("sandeep", "response 222 " + s);
 
                 // converting response to JSON object
                 try
@@ -188,23 +190,22 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
         String item = parent.getItemAtPosition(position).toString();
         String selected_value = "0";
 
+
         String item2;
 
         if(parent.getId()==R.id.spinner_manager_activity_addLocation) {
             item2 = "Manager";
-            selected_value=manager_ids[position];
+
+            selected_value = managerids[position];
             etManagerId.setText(selected_value);
         }
         else if(parent.getId()==R.id.spinner_worker_activity_location) {
             item2 = "Worker";
-            selected_value=worker_ids[position];
+            selected_value = workerids[position].toString();
             etGuardId.setText(selected_value);
         }
         else
             item2="Other";
-
-
-
 
         Toast.makeText(parent.getContext()
                 , item2 + "  " + item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
@@ -215,114 +216,101 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
     }
 
-    public String[] fillStaff(String manager_worker)
+
+    private void loadData2()
     {
+        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
 
-        final String [] staffs = { "M1", "M2", "M3", "M4", "Other"};
-        final String [] staffs_ids = { "M1", "M2", "M3", "M4", "Other"};
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("loading data...");
+        progressDialog.show();
 
-        final String staffType ;
-
-        if(manager_worker.equals("manager"))
-            staffType = "2";
-        else
-            staffType = "1";
-
-        final  String userCompantId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
-
-        Log.w("sandeep", "444 IsStaff = " + userCompantId);
-
-        class FillStaff extends AsyncTask<Void, Void, String>
-        {
-
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
-            protected String doInBackground(Void... voids) {
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Sandeep444",response);
 
-                RequestHandler requestHandler = new RequestHandler();
-                HashMap<String, String> params = new HashMap<>();
-
-                params.put("pCompanyId", userCompantId);
-                params.put("pStaffType", staffType);
-
-                String response = null;
-                try
-                {
-                    response = requestHandler.sendPostRequest(URLs.GET_STAFF_URL ,params);
-                } catch (MalformedURLException e)
-                {
-                    e.printStackTrace();
-                }
-
-                return response;
-            }
-
-            @Override
-            protected void onPreExecute()
-            {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s)
-            {
-                super.onPostExecute(s);
-
-                Log.w("sandeep", "response 222 " + userCompantId);
-
-                // converting response to JSON object
-                try
-                {
-                    JSONObject jsonObject = new JSONObject(s);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
-                    boolean isError = true;
+                    List<String> managerList;
+                    managerList = new ArrayList<>();
+                    List<String> workerList;
+                    workerList = new ArrayList<>();
+
+                    List<String> managerIDsList;
+                    List<String> workerIDsList;
+                    managerIDsList = new ArrayList<>();
+                    workerIDsList = new ArrayList<>();
 
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
 
-                        // if there is any record then login is succesfull
-                        isError = false;
-
-                        staffs[i] = o.getString("StaffName");
-                        staffs_ids[i] = o.getString("staffID");
-
+                        if(o.getString("StaffType").equals("2"))
+                        {
+                            managerIDsList.add(o.getString("staffID"));
+                            managerList.add(o.getString("StaffName"));
+                        }
+                        if(o.getString("StaffType").equals("1"))
+                        {
+                            workerIDsList.add(o.getString("staffID"));
+                            workerList.add(o.getString("StaffName"));
+                        }
                     }
 
-                    if(!isError)
-                    {
+                    Util util = new Util();
 
-                        // send SMS to Staff maobile with CompanyID and password to login
-                        Toast.makeText(getApplicationContext()
-                                , "Loaded Staff Successfully", Toast.LENGTH_LONG).show();
+                    String[] managers = util.ConvertListToStringArray(managerList);
+                    String[] workers = util.ConvertListToStringArray(workerList);
+                     managerids = util.ConvertListToStringArray(managerIDsList);
+                     workerids = util.ConvertListToStringArray(workerIDsList);
 
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext()
-                                , "No Staff Present", Toast.LENGTH_SHORT).show();
+                    arrayAdapter_manager = new ArrayAdapter(getApplicationContext()
+                            , R.layout.support_simple_spinner_dropdown_item, managers);
 
-                    }
+                    arrayAdapter_worker = new ArrayAdapter(getApplicationContext(),
+                               R.layout.support_simple_spinner_dropdown_item, workers );
 
-                }
-                catch (JSONException e)
-                {
+                    spinner_manager.setAdapter(arrayAdapter_manager);
+                    spinner_worker.setAdapter(arrayAdapter_worker);
+
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
             }
-        }
+        };
 
-        FillStaff fillStaff = new FillStaff();
-        fillStaff.execute();
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
 
-        if(manager_worker.equals("manager"))
-            manager_ids = staffs_ids;
-        else
-            worker_ids = staffs_ids;
+        HashMap<String, String> params = new HashMap<>();
 
-        return staffs;
+        params.put("pCompanyId", CompanyId);
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+        String theURL = URLs.GET_STAFF_URL +"?" + paramsStr;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
 
     }
+
+
 
 }
