@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.text.method.LinkMovementMethod;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -35,9 +37,7 @@ public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdap
 
     }
 
-    ShowLocationsAdapter(){
-
-    }
+    ShowLocationsAdapter(){}
 
     @NonNull
     private OnItemCheckListener onItemCheckListener;
@@ -61,77 +61,65 @@ public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdap
         // binding the data with the viewholder views
         holder.tv_FeatureName.setText("     " + theLocation.getLocationId());
        // holder.tv_guardID.setText(theLocation.getLocationId());
+        //holder.tvUpdate.setMovementMethod(LinkMovementMethod.getInstance());
 
-
-        if (!itemStateArray.get(position, false)) {
-            holder.ckb.setChecked(false);}
-        else {
-            holder.ckb.setChecked(true);
-        }
-
-    //    holder.ckb.setText(String.valueOf(locationList.get(position)));
-
-
-        holder.ckb.setOnClickListener(new View.OnClickListener() {
+        holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //holder.ckb.setChecked(! holder.ckb.isChecked());
+                Toast.makeText(mCtx, "tbnUpdate Clicked", Toast.LENGTH_LONG).show();
 
-                int adapterPosition = position;
-                if (!itemStateArray.get(adapterPosition, false)) {
-                    holder.ckb.setChecked(true);
-                    itemStateArray.put(adapterPosition, true);
-                    onItemCheckListener.onItemCheck(adapterPosition,theLocation);
-                }
-                else  {
-                    holder.ckb.setChecked(false);
-                    itemStateArray.put(adapterPosition, false);
-                    onItemCheckListener.onItemUncheck(adapterPosition, theLocation);
-                }
-
-
-                /*
-                if (holder.ckb.isChecked())
-                {
-                    onItemCheckListener.onItemCheck(theLocation);
-                } else
-                {
-                    onItemCheckListener.onItemUncheck(theLocation);
-                }*/
+                Intent i = new Intent(v.getContext(), LocationActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("guardID",theLocation.getLocationId() );
+                i.putExtra("isUpdate","yes" );
+                i.putExtra("locationName",theLocation.getLocationName() );
+                v.getContext().startActivity(i);
 
             }
         });
 
-     /*   holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
+        if (!itemStateArray.get(position, false))
+            {
+            holder.ckb.setChecked(false);
+            }
+        else
+            {
+            holder.ckb.setChecked(true);
+            }
+
+        //holder.ckb.setText("Select ");
+
+        holder.ckb.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                //holder.ckb.setChecked(! holder.ckb.isChecked());
 
-                *//*holder.tv_FeatureName.setTextColor(ContextCompat.getColor(mCtx
-                        , R.color.colorBlueGreen));
-*//*
-
-                ((LocationViewHolder) holder).ckb.setChecked(
-                        !((LocationViewHolder) holder).ckb.isChecked());
-                if (((LocationViewHolder) holder).ckb.isChecked())
+            int adapterPosition = position;
+            if (!itemStateArray.get(adapterPosition, false))
                 {
-                    onItemCheckListener.onItemCheck(theLocation);
-                } else
+                holder.ckb.setChecked(true);
+                itemStateArray.put(adapterPosition, true);
+                onItemCheckListener.onItemCheck(adapterPosition,theLocation);
+                }
+            else
                 {
-                    onItemCheckListener.onItemUncheck(theLocation);
+                holder.ckb.setChecked(false);
+                itemStateArray.put(adapterPosition, false);
+                onItemCheckListener.onItemUncheck(adapterPosition, theLocation);
                 }
 
-            *//*    Intent i = new Intent(v.getContext(), DutyActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("guardID",theLocation.getLocationId() );
-                v.getContext().startActivity(i);
-*//*
             }
-        });*/
+        });
+
 
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount()
+    {
+        if(locationList == null)
+            return 0;
         return locationList.size();
     }
 
@@ -146,8 +134,9 @@ public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdap
     }
 
 
-    public class LocationViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_FeatureName, tv_guardID, tv_locationName;
+    public class LocationViewHolder extends RecyclerView.ViewHolder
+    {
+        TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate;
         CheckBox ckb;
 
         public LocationViewHolder(@NonNull View itemView)
@@ -156,13 +145,10 @@ public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdap
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
             this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
+            this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+
 
         }
-
-        /*public void setOnClickListener(View.OnClickListener onClickListener) {
-            itemView.setOnClickListener(onClickListener);
-
-        }*/
 
 
     }
