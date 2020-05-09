@@ -1,8 +1,10 @@
 package com.example.eklass;
 
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
@@ -37,15 +39,15 @@ public class ShowLocationsActivity extends BaseActivity
     public Button btnDelete;
 
     Util util = new Util();
-    private List<LocationQR> currentSelectedItems = new ArrayList<>();
+    private List<String> currentSelectedItems1 = new ArrayList<>();
+
+    SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
-
-
 
         TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
         util.SetHeadings(getApplicationContext(), pageHeading, "My Locations", BaseActivity.themeNo);
@@ -119,18 +121,33 @@ public class ShowLocationsActivity extends BaseActivity
                     {
 
                         @Override
-                        public void onItemCheck(LocationQR item) {
-                            currentSelectedItems.add(item);
+                        public void onItemCheck(int pos, LocationQR item) {
+
+                            //currentSelectedItems.add(item);
+                            currentSelectedItems.put(pos, true);
+                            currentSelectedItems1.add(item.getLocationId());
+
                             Toast.makeText(getApplicationContext()
-                                    , "onItemCheck " + currentSelectedItems.size()
+                                    , "onItemCheck " + currentSelectedItems1.toString()
                             , Toast.LENGTH_LONG).show();
                         }
 
                         @Override
-                        public void onItemUncheck(LocationQR item) {
-                            currentSelectedItems.remove(item);
+                        public void onItemUncheck(int pos, LocationQR item) {
+                            //currentSelectedItems.remove(item);
+/*
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                currentSelectedItems.removeAt(pos);
+                            }
+
+        */
+                            currentSelectedItems.delete(pos);
+                            currentSelectedItems1.remove(item.getLocationId());
+
+
                             Toast.makeText(getApplicationContext()
-                                    , "onItemUn-Check " + currentSelectedItems.size()
+                                    , "onItemUn-Check "
+                                            + currentSelectedItems1.toString()
                                     , Toast.LENGTH_LONG).show();
                         }
                     });
