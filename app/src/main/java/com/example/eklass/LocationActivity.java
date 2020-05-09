@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +41,9 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
     ArrayAdapter arrayAdapter_manager;
     Spinner spinner_worker;
     ArrayAdapter arrayAdapter_worker;
+    Boolean isUpdate = false;
+
+    Button btnSaveLocation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
         etLocationName = findViewById(R.id.etLocationName_activity_location);
         etManagerId = findViewById(R.id.etManagerID_activity_location);
         etGuardId = findViewById(R.id.etGuardID_activity_location);
+        btnSaveLocation = findViewById(R.id.btnSaveLocation_activity_location);
 
         // Getting the instance of Spinner and
         spinner_manager = findViewById(R.id.spinner_manager_activity_addLocation);
@@ -60,17 +64,31 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
         loadData2();
 
+        String update  = getIntent().getStringExtra("isUpdate");
+        if(update!= null)
+            isUpdate = update.equals("yes");
+
+        if(isUpdate)
+        {
+            etLocationName.setText(getIntent().getStringExtra("locationName"));
+            btnSaveLocation.setText("Update Location");
+
+
+        }
 
      findViewById(R.id.btnSaveLocation_activity_location).setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
 
-             addLocation();
+
+                addLocation();
 
          }
      });
 
     }
+
+
 
     public void addLocation()
     {
@@ -111,9 +129,15 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
 
                 String response = null;
+
+                String urlLocation = URLs.ADD_LOCATION_URL;
+
+                if(isUpdate)
+                    urlLocation = URLs.UPDATE_LOCATION_URL;
+
                 try
                 {
-                    response = requestHandler.sendPostRequest(URLs.ADDLOCATION_URL ,params);
+                    response = requestHandler.sendPostRequest(urlLocation ,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();
