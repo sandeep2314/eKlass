@@ -2,12 +2,16 @@ package com.example.eklass;
 
 import android.app.TaskStackBuilder;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,22 +21,30 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public static int themeNo = 1;
+    Util util = new Util();
+    public static int themeNo = Util.BLACK_THEME;
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // black theme = 1
+        // grey theme = 2
 
-        if(themeNo == 1)
-            setTheme(R.style.Theme_AppCompat);
-        else
+
+        if (themeNo == Util.BLACK_THEME) {
+             setTheme(R.style.Theme_AppCompat);
+
+        } else {
             setTheme(R.style.Theme_AppCompat_Light);
+        }
 
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("SuperVisor");
-
 
     }
 
@@ -44,11 +56,14 @@ public class BaseActivity extends AppCompatActivity {
 
         User usr = SharedPrefManager.getInstance(this).getUser();
 
+        MenuItem btnSave = menu.findItem(R.id.menuSave);
+
+        if(themeNo == Util.BLACK_THEME)
+            btnSave.setIcon(R.drawable.ic_save_white_24dp);
+        else
+            btnSave.setIcon(R.drawable.ic_save_green_24dp);
+
         Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
-
-
-
-
 
         if(usr.getStaffType().equals("1"))
         {
@@ -57,6 +72,8 @@ public class BaseActivity extends AppCompatActivity {
            MenuItem showStaff  = menu.findItem(R.id.menuShowStaff);
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
+           MenuItem  generateQRCode = menu.findItem(R.id.menuGenerateQRCode);
+
 
            if(addStaff != null) {
                addStaff.setVisible(false);
@@ -75,15 +92,29 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+
+
         switch (item.getItemId())
         {
+            case  R.id.menuSave:
+
+                return true;
             case R.id.menuChangeThemeLight:
-                if (themeNo == 1)
-                    themeNo = 2;
+                if (themeNo == Util.BLACK_THEME)
+                    themeNo = Util.WHITE_THEME;
                 else
-                    themeNo = 1;
+                    themeNo = Util.BLACK_THEME;
 
                 recreate();
+                return true;
+
+            case R.id.menuGenerateQRCode:
+
+                String generatedPathName = util.GenerateLocationQRCode(getApplicationContext());
+
+                Toast.makeText(getApplicationContext()
+                        , "QRCodes Generated at.."+generatedPathName
+                        , Toast.LENGTH_LONG).show();
                 return true;
 
             case R.id.menuAddStaff:
@@ -91,15 +122,24 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, AddStaffActivity.class));
                 return true;
             case R.id.menuShowStaff:
+
                 finish();
                 startActivity( new Intent(this, ManagerDashboardActivity.class));
                 return true;
             case  R.id.menuAddLocations:
                 finish();
                 startActivity( new Intent(this, LocationActivity.class));
-            case R.id.menuShowLocations:
-                Toast.makeText(this, "Show Locations Clicked", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.menuShowLocations:
+                finish();
+                startActivity( new Intent(this, ShowLocationsActivity.class));
+                return true;
+            case R.id.menuCheckAll:
+                CheckBox ckb = findViewById(R.id.ckb_layout_Dashboard);
+                if(ckb != null)
+                    util.CheckAll(ckb);
+                return true;
+
             case R.id.menuLogOut:
                 Toast.makeText(this, "Log out Clicked", Toast.LENGTH_SHORT).show();
                 finish();
@@ -107,7 +147,12 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
 
             default: return super.onOptionsItemSelected(item);
+
+
+
         }
+
+
 
     }
 
