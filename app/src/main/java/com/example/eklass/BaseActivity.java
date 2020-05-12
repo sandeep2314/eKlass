@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,24 +20,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class BaseActivity extends AppCompatActivity {
 
     Util util = new Util();
-    public static int themeNo = Util.BLACK_THEME;
+    static  int themeNo;
 
 
 
+    MenuItem btnSave;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        // black theme = 1
-        // grey theme = 2
 
+        User usr = SharedPrefManager.getInstance(this).getUser();
 
-        if (themeNo == Util.BLACK_THEME) {
-             setTheme(R.style.Theme_AppCompat);
+        int themeNo = usr.getUserTheme();
 
-        } else {
+        if (themeNo == Util.BLACK_THEME)
+        {
+            setTheme(R.style.Theme_AppCompat);
+        }
+        else
+        {
             setTheme(R.style.Theme_AppCompat_Light);
         }
 
@@ -56,16 +64,31 @@ public class BaseActivity extends AppCompatActivity {
 
         User usr = SharedPrefManager.getInstance(this).getUser();
 
-        MenuItem btnSave = menu.findItem(R.id.menuSave);
+         btnSave = menu.findItem(R.id.menuSave);
 
         if(themeNo == Util.BLACK_THEME)
             btnSave.setIcon(R.drawable.ic_save_white_24dp);
         else
             btnSave.setIcon(R.drawable.ic_save_green_24dp);
 
+        if(this.getClass().getSimpleName().equals("AddStaffActivity")
+                || this.getClass().getSimpleName().equals("LocationActivity"))
+        {
+            btnSave.setVisible(true);
+        }
+        else
+        {
+            btnSave.setVisible(false);
+        }
+
+
+
+
+
         Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
 
-        if(usr.getStaffType().equals("1"))
+        //hide menus when worker
+        if(usr.getStaffType().equals(Util.USER_TYPE_WORKER))
         {
            //MenuItem addStaff =   findViewById(R.id.menuAddStaff);
            MenuItem addStaff =   menu.findItem(R.id.menuAddStaff);
@@ -73,7 +96,6 @@ public class BaseActivity extends AppCompatActivity {
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
            MenuItem  generateQRCode = menu.findItem(R.id.menuGenerateQRCode);
-
 
            if(addStaff != null) {
                addStaff.setVisible(false);
@@ -83,6 +105,7 @@ public class BaseActivity extends AppCompatActivity {
 
                Log.w("Sandeep Menu", "usr.getStaffType() 444 " + usr.getStaffType());
            }
+
             Log.w("Sandeep Menu", "usr.getStaffType() 555 " + usr.getStaffType());
         }
 
@@ -92,19 +115,51 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-
+        User usr = SharedPrefManager.getInstance(this).getUser();
 
         switch (item.getItemId())
         {
             case  R.id.menuSave:
+                if(this.getClass().getSimpleName().equals("AddStaffActivity"))
+                {
+                    // call save Staff
 
-                return true;
+                    try {
+                        Method method = this.getClass().getMethod("addStaff");
+                        method.invoke(this);
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+                if(this.getClass().getSimpleName().equals("LocationActivity"))
+                {
+                    // call save Location
+                    try {
+                        this.getClass().getMethod("addLocation()");
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            return true;
             case R.id.menuChangeThemeLight:
-                if (themeNo == Util.BLACK_THEME)
+                if (themeNo == Util.BLACK_THEME) {
                     themeNo = Util.WHITE_THEME;
-                else
-                    themeNo = Util.BLACK_THEME;
+                    usr.setUserTheme(Util.WHITE_THEME);
 
+                }
+                else {
+                    themeNo = Util.BLACK_THEME;
+                    usr.setUserTheme(Util.BLACK_THEME);
+                }
+                SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
                 recreate();
                 return true;
 
@@ -133,11 +188,6 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menuShowLocations:
                 finish();
                 startActivity( new Intent(this, ShowLocationsActivity.class));
-                return true;
-            case R.id.menuCheckAll:
-                CheckBox ckb = findViewById(R.id.ckb_layout_Dashboard);
-                if(ckb != null)
-                    util.CheckAll(ckb);
                 return true;
 
             case R.id.menuLogOut:
