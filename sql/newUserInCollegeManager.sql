@@ -1,5 +1,5 @@
 
-
+/*
 
 select * from vwCls
 
@@ -1772,11 +1772,11 @@ CREATE TABLE tblRegisterCompany(
 	)
 
 
---DROp TABLE tblScan
+-- DROp TABLE tblScan
 CREATE TABLE tblScan(
 	ScanId [int] IDENTITY(1,1) NOT NULL,
-	LocationId int NULL,
-	StaffId int NOT NULL,
+	QRID INT NULL,
+	GuardId INT NOT NULL,
 	Latitude VARCHAR(20) NULL,
 	Longitude VARCHAR(20) NULL,
 	CompanyID [int] NOT NULL,
@@ -1810,6 +1810,7 @@ CREATE TABLE tblLocationQR(
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
+
 --DROp TABLE tblSMSHUB
 CREATE TABLE tblSMSHUB(
 	SMSHUBId [int] IDENTITY(1,1) NOT NULL,
@@ -1820,5 +1821,40 @@ CREATE TABLE tblSMSHUB(
 	PresentSMSCount INT NOT NULL,
   	CreatedAt DATETIME DEFAULT getdate()
 	)
+
+--DROp TABLE tblSMSBill
+CREATE TABLE tblSMSBill(
+	BillId [int] IDENTITY(1,1) NOT NULL,
+    BillMonth VARCHAR(50) NOT NULL,
+    TotalSMSSent INT NOT NULL,
+   	BillNo VARCHAR(10) NOT NULL,
+    BillDate DATETIME NOT NULL,
+    BillSentDate DATETIME NULL,
+	BillAMOUNT INT NOT NULL,
+    BillRemarks VARCHAR(100) Null,
+	PaymentDate DATETIME NOT NULL,
+	PaymentRcd INT NOT NULL,
+    PaymentRcdFrom Varchar(50) NOT NULL,
+
+	SMSAccount VARCHAR(20) NOT NULL,
+	PresentSMSCount INT NOT NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+-- DROP TABLE tblStaffLocation
+CREATE TABLE tblStaffLocation(
+	SLId [int] IDENTITY(1,1) NOT NULL,
+    LocationID INT NOT NULL,
+    ManagerID INT NOT NULL,
+   	WorkerID INT NOT NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
+	
+
+
+
+
+*/
 
 
