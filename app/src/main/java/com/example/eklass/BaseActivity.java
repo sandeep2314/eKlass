@@ -207,6 +207,11 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, AddDesignationActivity.class));
                 return true;
 
+            case R.id.menuShowDesignations:
+                finish();
+                startActivity( new Intent(this, ShowDesignationActivity.class));
+                return true;
+
             case R.id.menuLogOut:
                 Toast.makeText(this, "Log out Clicked", Toast.LENGTH_SHORT).show();
                 finish();
