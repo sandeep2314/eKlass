@@ -28,15 +28,12 @@ public class BaseActivity extends AppCompatActivity {
     Util util = new Util();
     static  int themeNo;
 
-
-
-    MenuItem btnSave;
+    MenuItem btnSave, btnDelete;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         User usr = SharedPrefManager.getInstance(this).getUser();
-
         int themeNo = usr.getUserTheme();
 
         if (themeNo == Util.BLACK_THEME)
@@ -53,7 +50,6 @@ public class BaseActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("SuperVisor");
-
     }
 
     @Override
@@ -65,25 +61,24 @@ public class BaseActivity extends AppCompatActivity {
         User usr = SharedPrefManager.getInstance(this).getUser();
 
          btnSave = menu.findItem(R.id.menuSave);
+         btnDelete = menu.findItem(R.id.menuDelete);
 
-        if(themeNo == Util.BLACK_THEME)
+        if(themeNo == Util.BLACK_THEME) {
             btnSave.setIcon(R.drawable.ic_save_white_24dp);
-        else
+            btnDelete.setIcon(R.drawable.ic_delete_white_24dp);
+        }
+        else {
             btnSave.setIcon(R.drawable.ic_save_green_24dp);
-
-        if(this.getClass().getSimpleName().equals("AddStaffActivity")
-                || this.getClass().getSimpleName().equals("LocationActivity"))
-        {
-            btnSave.setVisible(true);
-        }
-        else
-        {
-            btnSave.setVisible(false);
+            btnDelete.setIcon(R.drawable.ic_delete_black_24dp);
         }
 
+        btnSave.setVisible((this.getClass().getSimpleName().equals("AddStaffActivity")
+                || this.getClass().getSimpleName().equals("AddDesignationActivity")
+                || this.getClass().getSimpleName().equals("LocationActivity")));
 
-
-
+        // delete icon
+        btnDelete.setVisible((this.getClass().getSimpleName().equals("ManagerDashboardActivity")
+                    || this.getClass().getSimpleName().equals("ShowLocationsActivity")));
 
         Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
 
@@ -96,6 +91,7 @@ public class BaseActivity extends AppCompatActivity {
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
            MenuItem  generateQRCode = menu.findItem(R.id.menuGenerateQRCode);
+
 
            if(addStaff != null) {
                addStaff.setVisible(false);
@@ -120,13 +116,30 @@ public class BaseActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case  R.id.menuSave:
-                if(this.getClass().getSimpleName().equals("AddStaffActivity"))
-                {
-                    // call save Staff
+                    // call addStaff
+
+                    Method method = null;
+
+                    String methodName="";
 
                     try {
-                        Method method = this.getClass().getMethod("addStaff");
-                        method.invoke(this);
+                        if(this.getClass().getSimpleName().equals("AddStaffActivity")) {
+                            //method = this.getClass().getMethod("addStaff");
+                            methodName = "addStaff";
+                        }
+                        else if(this.getClass().getSimpleName().equals("LocationActivity"))
+                        {
+                            methodName = "addLocation";
+                        }
+                        else if(this.getClass().getSimpleName().equals("AddDesignationActivity"))
+                        {
+                            methodName = "addDesignation";
+                        }
+
+                        method = this.getClass().getMethod(methodName);
+
+                        if(method != null)
+                            method.invoke(this);
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     } catch (IllegalAccessException e) {
@@ -135,18 +148,17 @@ public class BaseActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-
-                }
-                if(this.getClass().getSimpleName().equals("LocationActivity"))
+                /*if(this.getClass().getSimpleName().equals("LocationActivity"))
                 {
                     // call save Location
                     try {
                         this.getClass().getMethod("addLocation()");
+
                     } catch (NoSuchMethodException e) {
                         e.printStackTrace();
                     }
 
-                }
+                }*/
 
             return true;
             case R.id.menuChangeThemeLight:
@@ -188,6 +200,11 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menuShowLocations:
                 finish();
                 startActivity( new Intent(this, ShowLocationsActivity.class));
+                return true;
+
+            case R.id.menuAddDesignations:
+                finish();
+                startActivity( new Intent(this, AddDesignationActivity.class));
                 return true;
 
             case R.id.menuLogOut:
