@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".AddStaffActivity"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -39,37 +40,20 @@
             android:layout_height="wrap_content">
         </EditText>
 
-        <RadioGroup
-            android:id="@+id/radioGroup_addstaff_activity_staff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:text="Worker"
-                android:id="@+id/radioBtnGuard_activity_staff"
-                android:checked="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            </RadioButton>
-
-            <RadioButton
-                android:text="Manager"
-                android:id="@+id/radioBtnManager_activity_staff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-            </RadioButton>
-
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btnAddStaff_activity_staff"
-            android:text="Add Staff"
+        <Spinner
+            android:id="@+id/spinner_designation_activity_addstaff"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        </Button>
+        </Spinner>
+
+        <EditText
+            android:id="@+id/etDesignation_activity_addstaff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </EditText>
+
 
     </LinearLayout>
 
