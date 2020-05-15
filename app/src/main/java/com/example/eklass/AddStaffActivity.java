@@ -1,31 +1,45 @@
 package com.example.eklass;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AddStaffActivity extends BaseActivity
+        implements AdapterView.OnItemSelectedListener
 {
 
-    EditText etStaffName, etStaffPassword, etStaffMobile;
-    RadioGroup rdGroupStaffType;
-
-
+    EditText etStaffName, etStaffPassword, etStaffMobile, etDesignation;
+    public String[] designationIds;
+    Spinner spinner_designation;
+    ArrayAdapter arrayAdapter_designation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,37 +49,51 @@ public class AddStaffActivity extends BaseActivity
         etStaffName = findViewById(R.id.etStaffName_activity_staff);
         etStaffMobile = findViewById(R.id.etStaffMobileNo_activity_staff);
         etStaffPassword= findViewById(R.id.etStaffPassword_activity_staff);
-        rdGroupStaffType = findViewById(R.id.radioGroup_staff_activity_main);
+        etDesignation = findViewById(R.id.etDesignation_activity_addstaff);
 
-        findViewById(R.id.btnAddStaff_activity_staff).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // add new staff to database
-                addStaff();
-            }
-        });
+        spinner_designation = findViewById(R.id.spinner_designation_activity_addstaff);
+        spinner_designation.setOnItemSelectedListener(this);
+
+        // add designations to spinner
+        loadData2();
+
 
     }
 
-    private void addStaff()
+    public void addStaff()
     {
-        final  String userCompantId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
-        final String  userName = etStaffName.getText().toString();
-        final String  userMobileNo = etStaffMobile.getText().toString();
-        final  String userPassword = etStaffPassword.getText().toString();
-        RadioButton rdManager = findViewById(R.id.radioBtnManager_activity_staff);
+        User usr = SharedPrefManager.getInstance(this).getUser();
 
-        final  String IsStaff;
-        // 1 is worker, 2 is Manager
-        IsStaff = rdManager.isChecked()?"2":"1";
+        final String companyId = usr.getCompanyId();
+        final String  staffName = etStaffName.getText().toString();
+        final String  staffMobileNo = etStaffMobile.getText().toString();
+        final String staffPassword = etStaffPassword.getText().toString();
+        final String staffDesignation = etDesignation.getText().toString();
 
-        Log.w("sandeep", "444 IsStaff = " + IsStaff);
-
-        if(TextUtils.isEmpty(userMobileNo))
+        if(TextUtils.isEmpty(staffName))
         {
-            etStaffMobile.setError("Please Enter Your Mobile Number");
-            etStaffMobile.requestFocus();
+            etStaffName.setError("Please Enter Staff Name");
+            etStaffName.requestFocus();
+            return;
+        }
 
+        if(TextUtils.isEmpty(staffMobileNo))
+        {
+            etStaffMobile.setError("Please Enter Staff Mobile No.");
+            etStaffMobile.requestFocus();
+            return;
+        }
+
+        if(TextUtils.isEmpty(staffPassword))
+        {
+            etStaffPassword.setError("Please Create a Staff Password");
+            etStaffPassword.requestFocus();
+            return;
+        }
+
+        if(TextUtils.isEmpty(staffDesignation))
+        {
+            spinner_designation.requestFocus();
             return;
         }
 
@@ -79,14 +107,13 @@ public class AddStaffActivity extends BaseActivity
             protected String doInBackground(Void... voids) {
 
                 RequestHandler requestHandler = new RequestHandler();
-
                 HashMap<String, String> params = new HashMap<>();
 
-                params.put("pCompanyId", userCompantId);
-                params.put("pMobileNo", userMobileNo);
-                params.put("pPassword", userPassword);
-                params.put("pStaffName", userName);
-                params.put("pIsStaff", IsStaff);
+                params.put("pCompanyId", companyId);
+                params.put("pMobileNo", staffMobileNo);
+                params.put("pPassword", staffPassword);
+                params.put("pStaffName", staffName);
+                params.put("pDesignationId", staffDesignation);
 
                 String response = null;
                 try
@@ -129,38 +156,19 @@ public class AddStaffActivity extends BaseActivity
                         isError = false;
                         //isError = o.getString("IsSaved").equals("yes");
 
-
                     }
 
-
-
-                    Log.w("staffType_fromDB ", " 444 " + s);
-
                     // if no error in .response
-
                     if(!isError)
                     {
-
                         // send SMS to Staff maobile with CompanyID and password to login
                         Toast.makeText(getApplicationContext()
-                                , "Staff Added Sucessfully", Toast.LENGTH_LONG).show();
-
-        /*                etStaffName.setText("");
-                        etStaffMobile.setText("");
-                        etStaffPassword.setText("");
-
-                        etStaffName.requestFocus();
-*/
-
+                                , "Staff Added Successfully", Toast.LENGTH_LONG).show();
                     }
                     else
                     {
                          Toast.makeText(getApplicationContext()
-                                , "Invalid Staf Details", Toast.LENGTH_SHORT).show();
-
-                         etStaffMobile.setText(userMobileNo);
-
-
+                                , "Some Error Occurred", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -168,13 +176,106 @@ public class AddStaffActivity extends BaseActivity
                 {
                     e.printStackTrace();
                 }
-
-
             }
         }
 
         AddStaff as = new AddStaff();
         as.execute();
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String item = parent.getItemAtPosition(position).toString();
+        String selected_value = "0";
+
+        if(parent.getId()==R.id.spinner_designation_activity_addstaff) {
+            selected_value = designationIds[position];
+            etDesignation.setText(selected_value);
+        }
+
+        Toast.makeText(parent.getContext()
+                ,  item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
+    private void loadData2()
+    {
+        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("loading data...");
+        progressDialog.show();
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Sandeep444",response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    List<String> designationList;
+                    designationList = new ArrayList<>();
+
+                    List<String> designationIDsList;
+                    designationIDsList = new ArrayList<>();
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        designationIDsList.add(o.getString("DId"));
+                            designationList.add(o.getString("DName"));
+
+                    }
+
+                    Util util = new Util();
+                    String[] designations = util.ConvertListToStringArray(designationList);
+                    designationIds = util.ConvertListToStringArray(designationIDsList);
+                    arrayAdapter_designation = new ArrayAdapter(getApplicationContext()
+                            , R.layout.support_simple_spinner_dropdown_item, designations);
+
+                    spinner_designation.setAdapter(arrayAdapter_designation);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("pCompanyId", CompanyId);
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+        String theURL = URLs.GET_DESIGNATION_URL +"?" + paramsStr;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
 
