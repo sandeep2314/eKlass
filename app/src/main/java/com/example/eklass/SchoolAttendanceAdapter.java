@@ -55,7 +55,7 @@ public class SchoolAttendanceAdapter extends RecyclerView.Adapter<SchoolAttendan
         public SchoolAttendanceHolder(@NonNull View itemView) {
             super(itemView);
             //this.tv_SchoolAttendance = itemView.findViewById(R.id.tvSchoolAttd);
-            this.tv_SchoolAttendance = itemView.findViewById(R.id.tvFeatureName);
+            this.tv_SchoolAttendance = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
 
         }
     }

@@ -12,8 +12,14 @@ public class SharedPrefManager
     private static final String KEY_STAFFID="keystaffid";
     private static final String KEY_STAFFTYPE="keystafftype";
     private static final String KEY_STAFFNAME="keystaffname";
+
+    private static final String KEY_DESIGNATIONID="keydesignationid";
+    private static final String KEY_DESIGNATIONNAME="keydesignationname";
+
     private static final String KEY_COMPANYID="keycompanyid";
     private static final String KEY_COMPANYNAME="keycompanyname";
+
+    private static final String KEY_THEME="keytheme";
 
 
     private static SharedPrefManager mInstance;
@@ -45,10 +51,14 @@ public class SharedPrefManager
         editor.putString(KEY_STAFFTYPE, user.StaffType);
         editor.putString(KEY_STAFFID, user.getStaffId());
         editor.putString(KEY_STAFFNAME, user.getStaffName());
+
+        editor.putString(KEY_DESIGNATIONID, user.getDesignationId());
+        editor.putString(KEY_DESIGNATIONNAME, user.getDesignationName());
+
+
         editor.putString(KEY_COMPANYID, user.getCompanyId());
         editor.putString(KEY_COMPANYNAME, user.getCompanyName());
-
-
+        editor.putInt(KEY_THEME,  user.getUserTheme());
 
         editor.apply();
 
@@ -76,9 +86,13 @@ public class SharedPrefManager
                 , sharedPreferences.getString(KEY_STAFFTYPE, null)
                 , sharedPreferences.getString(KEY_STAFFID, null)
                 , sharedPreferences.getString(KEY_STAFFNAME, null)
+
+                , sharedPreferences.getString(KEY_DESIGNATIONID, null)
+                , sharedPreferences.getString(KEY_DESIGNATIONNAME, null)
+
                 , sharedPreferences.getString(KEY_COMPANYID, null)
                 , sharedPreferences.getString(KEY_COMPANYNAME, null)
-
+                , sharedPreferences.getInt(KEY_THEME, Util.WHITE_THEME)
         );
 
         //return new User(sharedPreferences.getString(KEY_MOBILENO, null));

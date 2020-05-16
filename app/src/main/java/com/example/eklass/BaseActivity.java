@@ -1,18 +1,11 @@
 package com.example.eklass;
 
-import android.app.TaskStackBuilder;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,10 +67,10 @@ public class BaseActivity extends AppCompatActivity {
 
         btnSave.setVisible((this.getClass().getSimpleName().equals("AddStaffActivity")
                 || this.getClass().getSimpleName().equals("AddDesignationActivity")
-                || this.getClass().getSimpleName().equals("LocationActivity")));
+                || this.getClass().getSimpleName().equals("AddLocationActivity")));
 
         // delete icon
-        btnDelete.setVisible((this.getClass().getSimpleName().equals("ManagerDashboardActivity")
+        btnDelete.setVisible((this.getClass().getSimpleName().equals("ShowStaffActivity")
                     || this.getClass().getSimpleName().equals("ShowLocationsActivity")));
 
         Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
@@ -91,7 +84,6 @@ public class BaseActivity extends AppCompatActivity {
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
            MenuItem  generateQRCode = menu.findItem(R.id.menuGenerateQRCode);
-
 
            if(addStaff != null) {
                addStaff.setVisible(false);
@@ -127,7 +119,7 @@ public class BaseActivity extends AppCompatActivity {
                             //method = this.getClass().getMethod("addStaff");
                             methodName = "addStaff";
                         }
-                        else if(this.getClass().getSimpleName().equals("LocationActivity"))
+                        else if(this.getClass().getSimpleName().equals("AddLocationActivity"))
                         {
                             methodName = "addLocation";
                         }
@@ -148,7 +140,7 @@ public class BaseActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                /*if(this.getClass().getSimpleName().equals("LocationActivity"))
+                /*if(this.getClass().getSimpleName().equals("AddLocationActivity"))
                 {
                     // call save Location
                     try {
@@ -191,11 +183,11 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menuShowStaff:
 
                 finish();
-                startActivity( new Intent(this, ManagerDashboardActivity.class));
+                startActivity( new Intent(this, ShowStaffActivity.class));
                 return true;
             case  R.id.menuAddLocations:
                 finish();
-                startActivity( new Intent(this, LocationActivity.class));
+                startActivity( new Intent(this, AddLocationActivity.class));
                 return true;
             case R.id.menuShowLocations:
                 finish();

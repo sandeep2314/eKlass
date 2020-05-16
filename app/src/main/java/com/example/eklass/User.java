@@ -14,8 +14,12 @@ public class User
     public String StaffType;
     public String StaffId;
     public String StaffName;
+
+    public String DesignationId;
+    public String DesignationName;
     public String CompanyId;
     public String CompanyName;
+    public int UserTheme;
 
 
     public Staff UserStaff;
@@ -74,13 +78,30 @@ public class User
         return DeviceId;
     }
 
-    public User(String userMobileNo, String staffType, String staffId, String staffName, String companyId, String companyName) {
+    public User(String userMobileNo, String staffType, String staffId
+            , String staffName
+            , String designationId
+            , String designationName
+            , String companyId
+            , String companyName
+            , int userTheme) {
         UserMobileNo = userMobileNo;
         StaffType = staffType;
         StaffId = staffId;
         StaffName = staffName;
+        DesignationId = designationId;
+        DesignationName = designationName;
         CompanyId = companyId;
         CompanyName = companyName;
+        UserTheme = userTheme;
+    }
+
+    public String getDesignationId() {
+        return DesignationId;
+    }
+
+    public String getDesignationName() {
+        return DesignationName;
     }
 
     public String getStaffType() {
@@ -101,5 +122,13 @@ public class User
 
     public String getCompanyName() {
         return CompanyName;
+    }
+
+    public int getUserTheme() {
+        return UserTheme;
+    }
+
+    public void setUserTheme(int userTheme) {
+        UserTheme = userTheme;
     }
 }

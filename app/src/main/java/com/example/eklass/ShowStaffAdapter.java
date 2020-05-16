@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ManagerDashboardAdapter
-        extends RecyclerView.Adapter<ManagerDashboardAdapter.DashBoardViewHolder>
+public class ShowStaffAdapter
+        extends RecyclerView.Adapter<ShowStaffAdapter.ShowStaffViewHolder>
 
     {
 
@@ -22,20 +21,20 @@ public class ManagerDashboardAdapter
         private Context mCtx;
         //private List<Feature> featureList;
 
-        private List<Staff> workerList;
+        private List<Staff> staffList;
 
 
         // constructor
-    public ManagerDashboardAdapter(Context mCtx, List<Staff> workers)
+    public ShowStaffAdapter(Context mCtx, List<Staff> staff)
         {
             this.mCtx = mCtx;
-            this.workerList = workers;
+            this.staffList = staff;
         }
 
 
         @NonNull
         @Override
-        public ManagerDashboardAdapter.DashBoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent
+        public ShowStaffViewHolder onCreateViewHolder(@NonNull ViewGroup parent
             , int viewType)
         {
 
@@ -43,21 +42,21 @@ public class ManagerDashboardAdapter
             LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
             View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
 
-            return new ManagerDashboardAdapter.DashBoardViewHolder(view);
+            return new ShowStaffViewHolder(view);
         }
 
         String feature_name ;
 
         @Override
-        public void onBindViewHolder(@NonNull final ManagerDashboardAdapter.DashBoardViewHolder holder
+        public void onBindViewHolder(@NonNull final ShowStaffViewHolder holder
             , final int position)
         {
             // getting the feature of the specified  position
-            final Staff worker = workerList.get(position);
+            final Staff staff = staffList.get(position);
 
             // binding the data with the viewholder views
-            holder.tv_FeatureName.setText(worker.getStaffName());
-            holder.tv_guardID.setText(worker.getStaffId());
+            holder.tv_FeatureName.setText("    " + staff.getStaffName());
+            holder.tv_guardID.setText("    " + staff.getStaffId());
 
 
             holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
@@ -66,26 +65,25 @@ public class ManagerDashboardAdapter
 
                     Intent i = new Intent(v.getContext(), DutyActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("guardID",worker.getStaffId() );
+                    i.putExtra("guardID",staff.getStaffId() );
                     v.getContext().startActivity(i);
 
                 }
             });
-
 
         }
 
         @Override
         public int getItemCount()
         {
-            return workerList.size();
+            return staffList.size();
         }
 
-        public class DashBoardViewHolder extends RecyclerView.ViewHolder
+        public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
             TextView tv_FeatureName, tv_guardID, tv_locationName;
 
-            public DashBoardViewHolder(@NonNull View itemView) {
+            public ShowStaffViewHolder(@NonNull View itemView) {
                 super(itemView);
                 this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
                 this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
@@ -95,18 +93,4 @@ public class ManagerDashboardAdapter
         }
 
 
-        public void OpenSchoolAttendance()
-        {
-            //Toast.makeText(mCtx,    "School Attendance Clicked ", Toast.LENGTH_LONG).show();
-
-            ////mCtx.startActivity(new Intent(mCtx, DutyActivity.class));
-
-        }
-
-
-        public void OpenBusAttendance()
-        {
-
-            Toast.makeText(mCtx,    "Bus Attendance Clicked ", Toast.LENGTH_LONG).show();
-        }
 }

@@ -1,8 +1,11 @@
 package com.example.eklass;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.SurfaceHolder;
@@ -22,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.zxing.WriterException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,12 +40,10 @@ public class ShowLocationsActivity extends BaseActivity
     public List<LocationQR> locationList;
     public ShowLocationsAdapter showLocationsAdapter;
 
-    public Button btnDelete;
-
     Util util = new Util();
     private List<String> currentSelectedItems1 = new ArrayList<>();
-
     SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
+    public TextView tvUpdate;
 
 
     @Override
@@ -57,23 +59,23 @@ public class ShowLocationsActivity extends BaseActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         locationList = new ArrayList<>();
 
-        btnDelete = findViewById(R.id.btnDelete_activity_managers_worker);
+
+        /*btnDelete = findViewById(R.id.btnDelete_activity_managers_worker);
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
                 // Get Checked boxes ids
-                String selectedIds = "3,4";
+                String selectedIds = TextUtils.join(", ", currentSelectedItems1) ;
 
-                int pos = recyclerView.getChildAdapterPosition(v);
-                Log.w("Sandeep", "recyclerView 222 "+pos);
+                util.DeleteRecord(getApplicationContext()
+                        , selectedIds, URLs.DEL_LOCATION_URL);
 
-                /*util.DeleteRecord(getApplicationContext()
-                        , selectedIds, URLs.DEL_LOCATION_URL);*/
+                Toast.makeText(getApplicationContext(), "Records Deleted.." + selectedIds, Toast.LENGTH_LONG).show();
 
-                loadData2();
+                recreate();
             }
-        });
+        });*/
 
         loadData2();
     }
@@ -104,8 +106,11 @@ public class ShowLocationsActivity extends BaseActivity
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
-                        location_fromDB =   new LocationQR(o.getString("LocationID")
+                        location_fromDB =   new LocationQR(
+                                o.getString("LocationID")
                                 , o.getString("LocationName")
+                                , o.getString("latitude")
+                                , o.getString("longitude")
 
                         );
                         locationList.add(location_fromDB);
@@ -135,15 +140,8 @@ public class ShowLocationsActivity extends BaseActivity
                         @Override
                         public void onItemUncheck(int pos, LocationQR item) {
                             //currentSelectedItems.remove(item);
-/*
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                currentSelectedItems.removeAt(pos);
-                            }
-
-        */
                             currentSelectedItems.delete(pos);
                             currentSelectedItems1.remove(item.getLocationId());
-
 
                             Toast.makeText(getApplicationContext()
                                     , "onItemUn-Check "
@@ -173,7 +171,7 @@ public class ShowLocationsActivity extends BaseActivity
         };
 
         HashMap<String, String> params = new HashMap<>();
-        //params.put("pStaffId", staffId);
+
         params.put("pCompanyId", CompanyId);
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);

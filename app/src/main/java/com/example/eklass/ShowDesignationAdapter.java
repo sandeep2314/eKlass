@@ -43,14 +43,24 @@ public class ShowDesignationAdapter
     public void onBindViewHolder(@NonNull final ShowDesignationAdapter.DesignationViewHolder holder, final int position) {
         final Designation designation = designationList.get(position);
         // binding the data with the viewholder views
-        holder.tv_FeatureName.setText("     " + designation.getDesignationId());
+
+        holder.tv_FeatureName.setText("   Id: "
+                        + designation.getDesignationId()
+                        + " Designation: "
+                        + designation.getDName()
+                            );
+        holder.tv_guardID.setText(" Hierarchy: "
+                        + designation.getHNo().toString()
+                        + " Dept: "
+                        + designation.getDept()
+                    );
 
         holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mCtx, "Update Clicked", Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(v.getContext(), LocationActivity.class);
+                Intent i = new Intent(v.getContext(), AddLocationActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 //i.putExtra("guardID",theLocation.getLocationId() );
                 i.putExtra("isUpdate","yes" );
@@ -125,7 +135,9 @@ public class ShowDesignationAdapter
         {
             super(itemView);
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
+            this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
             this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+            this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
 
 

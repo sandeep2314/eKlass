@@ -7,14 +7,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity
+public class DashboardActivity extends BaseActivity
 {
 
     TextView txt_children;
@@ -71,7 +70,7 @@ public class DashboardActivity extends AppCompatActivity
              @Override
              public void onClick(View v) {
                  finish();
-                 startActivity(new Intent(getApplicationContext(), LocationActivity.class));
+                 startActivity(new Intent(getApplicationContext(), AddLocationActivity.class));
              }
          });
 
@@ -89,12 +88,6 @@ public class DashboardActivity extends AppCompatActivity
         DashboardAdapter dashboardAdapter = new DashboardAdapter(this, featureList);
 
         recyclerView.setAdapter(dashboardAdapter);
-
-
-
-
-
-
 
 
     }

@@ -32,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.layout_register);
 
        // et_MobileNo = (EditText) findViewById(R.id.etMobileNo);

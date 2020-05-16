@@ -5,9 +5,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +71,7 @@ public class Util
     }
 
 
-    public void SetHeadings(Context ctx, TextView pageHeading
+    public void SetHeadings(Context ctx, TextView tvPageHeading
             , String pageName, int themeNo)
     {
         User user = SharedPrefManager.getInstance(ctx).getUser();
@@ -80,16 +85,16 @@ public class Util
         // grey theme = 2
         if(themeNo == BLACK_THEME)
         {
-            pageHeading.setTextColor(ContextCompat.getColor(ctx, R.color.colorBlueGreen));
+            tvPageHeading.setTextColor(ContextCompat.getColor(ctx, android.R.color.white));
         }
         else
         {
             // black font color
             //pageHeading.setTextColor(Color.parseColor("#000000"));
-            pageHeading.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
+            tvPageHeading.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
         }
 
-        pageHeading.setText(heading);
+        tvPageHeading.setText(heading);
 
     }
 
@@ -336,6 +341,152 @@ public class Util
 
     }
 
+
+
+/*
+    public void addStaff(final Context ctx, View v )
+    {
+        User usr = SharedPrefManager.getInstance(ctx).getUser();
+
+        TextView etStaffName = v.findViewById(R.id.etStaffName_activity_staff);
+        final TextView etStaffMobile = v.findViewById(R.id.etStaffMobileNo_activity_staff);
+        TextView etStaffPassword= v.findViewById(R.id.etStaffPassword_activity_staff);
+        final TextView rdGroupStaffType = v.findViewById(R.id.radioGroup_staff_activity_main);
+
+        final  String userCompantId = usr.getCompanyId();
+        final String  userName = etStaffName.getText().toString();
+        final String  userMobileNo = etStaffMobile.getText().toString();
+        final  String userPassword = etStaffPassword.getText().toString();
+
+        final  String IsStaff;
+        // 1 is worker, 2 is Manager
+        IsStaff = rdManager.isChecked()?"2":"1";
+
+        if(TextUtils.isEmpty(userMobileNo))
+        {
+            etStaffMobile.setError("Please Enter Your Mobile Number");
+            etStaffMobile.requestFocus();
+
+            return;
+        }
+
+
+        // if everything is fine
+
+        class AddStaff extends AsyncTask<Void, Void, String>
+        {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+
+                params.put("pCompanyId", userCompantId);
+                params.put("pMobileNo", userMobileNo);
+                params.put("pPassword", userPassword);
+                params.put("pStaffName", userName);
+                params.put("pIsStaff", IsStaff);
+
+                String response = null;
+                try
+                {
+                    response = requestHandler.sendPostRequest(URLs.ADDSTAFF_URL ,params);
+                } catch (MalformedURLException e)
+                {
+                    e.printStackTrace();
+                }
+
+                return response;
+            }
+
+            @Override
+            protected void onPreExecute()
+            {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s)
+            {
+                super.onPostExecute(s);
+
+                Log.w("sandeep", "response 222 " + s);
+
+                // converting response to JSON object
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(s);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    boolean isError = true;
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        // if there is any record then login is succesfull
+                        isError = false;
+                        //isError = o.getString("IsSaved").equals("yes");
+
+
+                    }
+
+
+
+                    Log.w("staffType_fromDB ", " 444 " + s);
+
+                    // if no error in .response
+
+                    if(!isError)
+                    {
+
+                        // send SMS to Staff maobile with CompanyID and password to login
+                        Toast.makeText(ctx
+                                , "Staff Added Sucessfully", Toast.LENGTH_LONG).show();
+
+        */
+/*                etStaffName.setText("");
+                        etStaffMobile.setText("");
+                        etStaffPassword.setText("");
+
+                        etStaffName.requestFocus();
+*//*
+
+
+                    }
+                    else
+                    {
+                        Toast.makeText(ctx
+                                , "Invalid Staf Details", Toast.LENGTH_SHORT).show();
+
+                        etStaffMobile.setText(userMobileNo);
+
+
+                    }
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+
+        AddStaff as = new AddStaff();
+        as.execute();
+    }
+*/
+
+    public String GetString(Object str)
+    {
+        if(str == null)
+            return "";
+        return str.toString();
+    }
 
 
 

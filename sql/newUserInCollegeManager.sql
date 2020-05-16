@@ -1761,55 +1761,6 @@ CREATE TABLE tblRouteMaster(
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
---DROp TABLE tblRegisterCompany
-CREATE TABLE tblRegisterCompany(
-	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
-	CompanyName VARCHAR(100) NOT NULL,
-	MobileNo VARCHAR(20) NULL,
-	CompanyPassword VARCHAR(50) NULL,
-	DeviceToken VARCHAR(500) NULL,
-	CreatedAt DATETIME DEFAULT getdate()
-	)
-
-
--- DROp TABLE tblScan
-CREATE TABLE tblScan(
-	ScanId [int] IDENTITY(1,1) NOT NULL,
-	QRID INT NULL,
-	GuardId INT NOT NULL,
-	Latitude VARCHAR(20) NULL,
-	Longitude VARCHAR(20) NULL,
-	CompanyID [int] NOT NULL,
-	CreatedAt DATETIME DEFAULT getdate()
-	)
-
--- 1 staff type is Guard
---2 staff type is Manager
---DROp TABLE tblStaff
-CREATE TABLE tblStaff(
-	StaffId [int] IDENTITY(1,1) NOT NULL,
-	StaffName VARCHAR(50) NOT NULL,
-	StaffType INT NOT NULL DEFAULT 1,
-	MobileNo VARCHAR(15) NOT NULL,
-	StaffPassword VARCHAR(20) NOT NULL,
-	IsActive INT NOT NULL DEFAULT 1, -- 1 -- Staff is Active, 0 --- Staff not active
-	CompanyID [int] NOT NULL,
-	CreatedAt DATETIME DEFAULT getdate()
-	)
-
-
---DROp TABLE tblLocationQR
-CREATE TABLE tblLocationQR(
-	LocationId [int] IDENTITY(1,1) NOT NULL,
-	LocationName VARCHAR(15) NOT NULL,
-	Latitude VARCHAR(20) NULL,
-	Longitude VARCHAR(20) NULL,
-	ManagerId INT NOT NULL,
-    GuardId  INT NOT NULL,
-	CompanyID [int] NOT NULL,
-	CreatedAt DATETIME DEFAULT getdate()
-	)
-
 
 --DROp TABLE tblSMSHUB
 CREATE TABLE tblSMSHUB(
@@ -1842,17 +1793,141 @@ CREATE TABLE tblSMSBill(
 	)
 
 
+
+----------  Begin SuperVisor -------
+
+--DROp TABLE tblRegisterCompany
+CREATE TABLE tblRegisterCompany(
+	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
+	CompanyName VARCHAR(100) NOT NULL,
+	MobileNo VARCHAR(20) NULL,
+	CompanyPassword VARCHAR(50) NULL,
+	DeviceToken VARCHAR(500) NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+-- DROp TABLE tblScan
+CREATE TABLE tblScan(
+	ScanId [int] IDENTITY(1,1) NOT NULL,
+	QRID INT NULL,
+	GuardId INT NOT NULL,
+	Latitude VARCHAR(20) NULL,
+	Longitude VARCHAR(20) NULL,
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+-- 1 staff type is Guard
+--2 staff type is Manager
+
+--DROp TABLE tblStaff
+CREATE TABLE tblStaff(
+	StaffId [int] IDENTITY(1,1) NOT NULL,
+	StaffName VARCHAR(50) NOT NULL,
+	DesignationId INT NOT NULL DEFAULT 1,
+	MobileNo VARCHAR(15) NOT NULL,
+	StaffPassword VARCHAR(20) NOT NULL,
+	IsActive INT NOT NULL DEFAULT 1, -- 1 -- Staff is Active, 0 --- Staff not active
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+--DROp TABLE tblLocationQR
+CREATE TABLE tblLocationQR(
+	LocationId [int] IDENTITY(1,1) NOT NULL,
+	LocationName VARCHAR(15) NOT NULL,
+	Latitude VARCHAR(20) NULL,
+	Longitude VARCHAR(20) NULL,
+	CompanyID [int] NOT NULL,
+	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
 -- DROP TABLE tblStaffLocation
 CREATE TABLE tblStaffLocation(
-	SLId [int] IDENTITY(1,1) NOT NULL,
+	slId [int] IDENTITY(1,1) NOT NULL,
     LocationID INT NOT NULL,
-    ManagerID INT NOT NULL,
-   	WorkerID INT NOT NULL,
+    WorkerID INT NOT NULL,
+	ManagerID INT NULL,
+	CompanyID INT NOT NULL,
   	CreatedAt DATETIME DEFAULT getdate()
 	)
 	
 
+-- DROP TABLE tblDesignationQR
+CREATE TABLE tblDesignationQR(
+	DId [int] IDENTITY(1,1) NOT NULL,
+    DName VARCHAR(50) NOT NULL,
+    HNo  INT NOT NULL,
+	Dept VARCHAR(50) NULL,
+    CompanyID INT NOT NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
 
+
+-- Select * from tblDesignationQR
+
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Guard', 1, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Supervisor', 2, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Incharge', 3, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Manager', 4, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Nurse', 1, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Shopkeeper', 2, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Resident', 1, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Co-Ordinator', 2, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Principal', 3, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Admin', 9, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Buissness Owner', 10, 1);
+
+
+
+select  StaffId, StaffName
+, DesignationID, DName
+, s.MobileNo, s.CompanyId, CompanyName
+from tblStaffLocation sl
+LEFT OUTER JOIN tblStaff s ON s.staffID = sl.workerID
+LEFT OUTER JOIN tblDesignationQR d ON d.DiD = s.DesignationID
+		-- AND did < 6
+LEFT OUTER JOIN tblRegisterCompany c on c.companyID = s.companyID
+WHERE sl.companyID = 1
+
+
+-- sql server
+WITH managers AS
+(
+SELECT  workerID
+FROM tblStaffLocation 
+WHERE ManagerID = 4
+AND companyID=1
+
+UNION ALL
+
+SELECT s.workerid
+FROM tblStaffLocation s 
+INNER JOIN Managers m ON s.managerID = m.workerID
+AND s.companyID=1
+)
+SELECT workerID, staffName WorkerName 
+, Did, DName, s.MobileNo, s.CompanyId, companyName 
+FROM managers m
+LEFT OUTER JOIN tblStaff s on s.staffid = m.workerid
+LEFT OUTER JOIN tblDesignationQR d ON d.Did = s.designationID
+LEFT OUTER JOIN tblRegisterCompany c ON c.companyID = s.companyID
+ORDER BY did desc
+
+
+
+
+-- mysql 
+
+WITH RECURSIVE cte_name AS (
+    initial_query  -- anchor member
+    UNION ALL
+    recursive_query -- recursive member that references to the CTE name
+)
+SELECT * FROM cte_name;
 
 
 */

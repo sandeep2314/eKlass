@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/menuSave"
+        android:title="Save"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:tooltipText="Save"
+
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/menuDelete"
+        android:title="Save"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:tooltipText="Save"
+
+        app:showAsAction="always">
+    </item>
+
+
+    <item
+        android:id="@+id/menuChangeThemeLight"
+        android:title="Change Theme"
+        android:icon="@drawable/ic_launcher_background"
+        app:showAsAction="collapseActionView">
+    </item>
+
+    <item
+        android:title="Generate QRCodes"
+        app:showAsAction="never"
+        android:id="@+id/menuGenerateQRCode">
+
+    </item>
+
+    <item
+        android:id="@+id/menuAddStaff"
+        android:title="Add Staff"
+        app:showAsAction="never">
+     </item>
+
+    <item
+        android:id="@+id/menuShowStaff"
+
+        android:title="Show Staff"
+        app:showAsAction="never">
+
+    </item>
+
+    <item
+        android:id="@+id/menuAddLocations"
+
+        android:title="Add Location"
+        app:showAsAction="never">
+
+    </item>
+
+
+    <item
+        android:id="@+id/menuShowLocations"
+
+        android:title="Show Locations"
+        app:showAsAction="never">
+
+    </item>
+    <item
+        android:id="@+id/menuAddDesignations"
+        android:title="Add Designation"
+        app:showAsAction="never">
+    </item>
+    <item
+        android:id="@+id/menuShowDesignations"
+        android:title="Show Designations"
+        app:showAsAction="never">
+    </item>
+
+    <item
+        android:id="@+id/menuLogOut"
+        android:icon="@drawable/ic_present_to_all_black_24dp"
+
+        android:title="Log Out">
+
+    </item>
+
+</menu>

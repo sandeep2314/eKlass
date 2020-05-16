@@ -14,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class DashboardAdapter extends
-        RecyclerView.Adapter<DashboardAdapter.DashBoardViewHolder>
+         RecyclerView.Adapter<DashboardAdapter.DashBoardViewHolder>
 {
 
 
     // this context we will use to inflate the layout
-    private Context mCtx;
-    private List<Feature> featureList;
+  private Context mCtx;
+  private List<Feature> featureList;
 
 
     // constructor

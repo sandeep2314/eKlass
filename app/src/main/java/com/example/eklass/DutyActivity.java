@@ -48,8 +48,6 @@ public class DutyActivity extends BaseActivity
 
         Log.w("guardID" ,  "guardID222 " + guardID);
 
-
-
         dutyList = new ArrayList<>();
 
         loadData2();

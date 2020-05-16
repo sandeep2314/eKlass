@@ -26,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroup_Staff;
     String deviceToken;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setTheme(R.style.Theme_AppCompat);
         setContentView(R.layout.activity_main);
 
         et_MobileNo = (EditText) findViewById(R.id.etMobileNo_activity_main);
@@ -37,37 +37,13 @@ public class MainActivity extends AppCompatActivity {
         et_CompanyID = findViewById(R.id.etCompanyId_activity_main);
         radioGroup_Staff = findViewById(R.id.radioGroup_staff_activity_main);
 
-        //deviceId = this.getde
-
         // if the user is logged in it will go to mychildren activity
         if(SharedPrefManager.getInstance(this).isLoggedIn())
         {
-            finish();
-            //if(staffType_fromDB.equalsIgnoreCase("admin"))
-
             User usr = SharedPrefManager.getInstance(this).getUser();
-
-            Log.w("UserStaff ", "usr.getCompanyName 555 " + usr.getStaffType());
-
-            if(usr.getStaffType().equals("admin"))
-
-            {
-
-                //startActivity( new Intent(this, DashboardActivity.class));
-                startActivity( new Intent(this, DashboardActivity.class));
-            }
+            finish();
             // mamager
-            else if(usr.getStaffType().equals("2"))
-            {
-                 startActivity( new Intent(this, ManagerDashboardActivity.class));
-            }
-
-            // worker
-            else if(usr.getStaffType().equals("1"))
-            {
-                startActivity( new Intent(this, ScanActivity.class));
-            }
-
+            startActivity( new Intent(this, ShowStaffActivity.class));
             return;
         }
 
@@ -75,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 StaffLogin();
             }
         });
@@ -88,145 +65,7 @@ public class MainActivity extends AppCompatActivity {
            }
        });
 
-
-
-
     }
-
-    private void userLogin()
-    {
-        final String userMobileNo = et_MobileNo.getText().toString();
-        final  String userPassword = et_Password.getText().toString();
-        final String userComapanyId = et_CompanyID.getText().toString();
-
-        if(TextUtils.isEmpty(userMobileNo))
-        {
-            et_MobileNo.setError("Please Enter Your Mobile Number");
-            et_MobileNo.requestFocus();
-
-            return;
-        }
-
-        if(TextUtils.isEmpty(userPassword))
-        {
-            et_Password.setError("Please Enter Your Password");
-            et_Password.requestFocus();
-        }
-
-        if(TextUtils.isEmpty(userComapanyId))
-        {
-            et_CompanyID.setError("Please Enter Your Company ID Given By Your Admin");
-            et_CompanyID.requestFocus();
-        }
-
-        // if everything is fine
-
-        class UserLogin extends AsyncTask<Void, Void, String>
-        {
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-
-                params.put("mobileNo", userMobileNo);
-                params.put("password", userPassword);
-                params.put("companyId", userComapanyId);
-
-                String response = null;
-                try
-                {
-                    response = requestHandler.sendPostRequest(URLs.LOGIN_URL ,params);
-                } catch (MalformedURLException e)
-                {
-                    e.printStackTrace();
-                }
-
-                return response;
-            }
-
-            @Override
-            protected void onPreExecute()
-            {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s)
-            {
-                super.onPostExecute(s);
-
-                Log.w("sandeep", "response 222 " + s.toString());
-
-                // converting response to JSON object
-                try
-                {
-                    JSONObject jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("a");
-
-                    boolean isError = true;
-
-                    String userMobileFromDB  = "";
-                    String StudentId = "";
-                    String StudentName= "";
-                    String StudentClass =  "";
-                    //
-                    String StaffType = "";
-
-                    for(int i=0; i< array.length(); i++)
-                    {
-                        JSONObject o = array.getJSONObject(i);
-
-                        // if there is any record then login is succesfull
-                        isError = false;
-                        userMobileFromDB = o.getString("MobileNo");
-
-                       StudentId =  o.getString("StudentMasterID");
-                       StudentName =  o.getString("StudentName");
-                       StudentClass = o.getString("StudentClass");
-                    }
-
-                    Student myChild = new Student(StudentId, StudentName, StudentClass,userMobileNo );
-
-                    Log.w("isError ", " 444 " + userMobileFromDB);
-
-                    // if no error in response
-
-                    if(!isError)
-                    {
-                        User user = new User(userMobileFromDB, myChild);
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
-                        // starting the MyChildren activity
-                        finish();
-                        //startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                        startActivity(new Intent(getApplicationContext(), ScanActivity.class));
-
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext()
-                                , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }
-
-        UserLogin ul = new UserLogin();
-        ul.execute();
-    }
-
-
 
     private void StaffLogin()
     {
@@ -242,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         IsStaff = rdManager.isChecked()?"2":"1";
 */
         RadioButton rdAdmin = findViewById(R.id.radioAdmin_activity_main);
-        userIsAdmin = rdAdmin.isChecked()?"1":"2";
+        userIsAdmin = rdAdmin.isChecked()?Util.USER_TYPE_ADMIN:Util.USER_TYPE_MANAGER;
 
         Log.w("sandeep", "444 userIsAdmin" + userIsAdmin);
 
@@ -253,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
             return;
         }
-
 
         // if everything is fine
 
@@ -304,71 +142,81 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray array = jsonObject.getJSONArray("a");
 
+
+
                     boolean isError = true;
                     String staffMobileNo_fromDB="-1" ;
                     String staffId_fromDB = "";
                     String staffName_fromDB = "";
+                    String designationId_fromDB = "1";
+                    String designationName_fromDB = "";
                     String companyName_fromDB = "";
                     String companyId_fromDB = "";
-                    String staffType_fromDB = "admin";
+                    String staffType_fromDB = "222";
 
+                    Log.w("sandeep", " 999 " + isError);
 
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
 
+                        Log.w("sandeep", " 000 " + isError);
                         // if there is any record then login is succesfull
                         isError = false;
 
                         staffId_fromDB =  o.getString("StaffId");
                         staffName_fromDB =o.getString("StaffName");
                         staffMobileNo_fromDB = o.getString("MobileNo");
-                        staffType_fromDB = o.getString("StaffType");
+                        designationId_fromDB = o.getString("DesignationID");
+
                         companyId_fromDB =  o.getString("CompanyId");
                         companyName_fromDB =  o.getString("CompanyName");
 
                     }
+                    Log.w("sandeep", " 111 " + isError);
+
+
+/*
+                    public User(String userMobileNo, String staffType, String staffId
+                        , String staffName
+                        , String designationId
+                        , String designationName
+                        , String companyId
+                        , String companyName
+                        , int userTheme) {
+*/
+
 
                     User user = new User(
-                            userMobileNo
+                            staffMobileNo_fromDB
                             , staffType_fromDB
                             , staffId_fromDB
                             , staffName_fromDB
+                            , designationId_fromDB
+                            , designationName_fromDB
                             , companyId_fromDB
                             , companyName_fromDB
-
+                            , Util.WHITE_THEME
                             );
-
-
-                    Log.w("staffType_fromDB ", " 444 " + staffType_fromDB);
 
                     // if no error in response
 
+                    Log.w("sandeep", " 333 " + isError);
                     if(!isError)
                     {
+
+                        Log.w("sandeep", " 444 " + isError);
 
                         Toast.makeText(getApplicationContext()
                                 , "Login Successful..", Toast.LENGTH_SHORT).show();
 
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
+                        Log.w("sandeep", " 555 " + isError);
 
-                        // starting the MyChildren activity
                         finish();
-                        // admin log in
-                        if(staffType_fromDB.equalsIgnoreCase("-1"))
-                        {
-                            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                        }
-                        else if(staffType_fromDB.equalsIgnoreCase("1"))
-                        {
-                            startActivity(new Intent(getApplicationContext(), ScanActivity.class));
-                        }
-                        // manager login
-                        else if(staffType_fromDB.equalsIgnoreCase("2"))
-                        {
-                            //startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-                            startActivity(new Intent(getApplicationContext(), ManagerDashboardActivity.class));
-                        }
+                        startActivity(new Intent(getApplicationContext()
+                                , ShowStaffActivity.class));
+
 
                     }
                     else
@@ -390,131 +238,6 @@ public class MainActivity extends AppCompatActivity {
 
         StaffLogin ul = new StaffLogin();
         ul.execute();
-    }
-
-
-    private void CustomerLogin()
-    {
-        final String userMobileNo = et_MobileNo.getText().toString();
-        final  String userPassword = et_Password.getText().toString();
-
-        if(TextUtils.isEmpty(userMobileNo))
-        {
-            et_MobileNo.setError("Please Enter Your Mobile Number");
-            et_MobileNo.requestFocus();
-
-            return;
-        }
-
-        if(TextUtils.isEmpty(userPassword))
-        {
-            et_Password.setError("Please Enter Your Password");
-            et_Password.requestFocus();
-        }
-
-
-        // if everything is fine
-
-        class CustomerLogin extends AsyncTask<Void, Void, String>
-        {
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-
-                params.put("mobileNo", userMobileNo);
-                params.put("password", userPassword);
-
-                String response = null;
-                try
-                {
-                    response = requestHandler.sendPostRequest(URLs.GUARD_LOGIN_URL,params);
-                } catch (MalformedURLException e)
-                {
-                    e.printStackTrace();
-                }
-
-                return response;
-            }
-
-            @Override
-            protected void onPreExecute()
-            {
-                super.onPreExecute();
-            }
-
-            @Override
-            protected void onPostExecute(String s)
-            {
-                super.onPostExecute(s);
-
-                Log.w("CustomerLogin", "response 666 " + s.toString());
-
-                // converting response to JSON object
-                try
-                {
-                    JSONObject jsonObject = new JSONObject(s);
-                    JSONArray array = jsonObject.getJSONArray("a");
-
-                    boolean isError = true;
-                    String CustomerMobile_FromDB="-1" ;
-                    String CustomerId_FromDB = "";
-                    String CustomerName_FromDB = "";
-
-
-                    for(int i=0; i< array.length(); i++)
-                    {
-                        JSONObject o = array.getJSONObject(i);
-
-                        // if there is any record then login is succesfull
-                        isError = false;
-                        CustomerMobile_FromDB = o.getString("MobileNo");
-
-                        CustomerId_FromDB =  o.getString("RID");
-                        CustomerName_FromDB =  o.getString("UserName");
-
-                    }
-
-                    //Student myChild = new Student(StudentId, StudentName, StudentClass,userMobileNo );
-                    Customer customer = new Customer(CustomerId_FromDB, CustomerName_FromDB
-                            , CustomerMobile_FromDB   );
-
-
-                    // if no error in response
-
-                    if(!isError)
-                    {
-                        User user = new User(CustomerMobile_FromDB);
-                        SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-
-
-                        // starting the MyChildren activity
-                        finish();
-                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
-
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext()
-                                , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
-
-                    }
-
-                }
-                catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }
-
-        CustomerLogin cl = new CustomerLogin();
-        cl.execute();
     }
 
 

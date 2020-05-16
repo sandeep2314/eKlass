@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".LocationActivity"
+    tools:context=".AddLocationActivity"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,46 +15,20 @@
         android:layout_height="wrap_content">
     </EditText>
 
-
     <EditText
-        android:id="@+id/etManagerID_activity_location"
+        android:id="@+id/etLatitude_activity_location"
         android:inputType="text"
-        android:hint="Manager ID"
+        android:hint="Latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </EditText>
 
     <EditText
-        android:id="@+id/etGuardID_activity_location"
+        android:id="@+id/etLongitude_activity_location"
         android:inputType="text"
-        android:hint="Worker ID"
+        android:hint="Longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </EditText>
-
-
-    <Button
-
-        android:id="@+id/btnSaveLocation_activity_location"
-        android:text="Save Location"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </Button>
-
-<!--
-
-    <com.example.eklass.searchablespinnermine.SearchableSpinner
-        app:hintText="Select Staff"
-        android:id="@+id/spinner_activity_addlocation"
-        android:layout_width="wrap_content"
-        android:entries="@array/colleges"
-        android:layout_height="wrap_content" >
-
-    </com.example.eklass.searchablespinnermine.SearchableSpinner>
--->
-
-    
-
 
 </LinearLayout>

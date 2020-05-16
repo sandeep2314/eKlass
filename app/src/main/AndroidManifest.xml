@@ -14,17 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ShowDesignationActivity"></activity>
+        <activity android:name=".AddDesignationActivity"></activity>
+        <activity android:name=".UpdateLocationActivity"></activity>
         <activity android:name=".DashboardActivity"></activity>
         <activity android:name=".SchoolAttendanceActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>
         <activity android:name=".BusAttendanceActivity"></activity>
         <activity android:name=".AddStaffActivity"></activity>
-        <activity android:name=".LocationActivity"></activity>
+        <activity android:name=".AddLocationActivity"></activity>
+        <activity android:name=".ShowStaffActivity"></activity>
+        <activity android:name=".DutyActivity"></activity>
+        <activity android:name=".ShowLocationsActivity"></activity>
         <activity
             android:name=".ScanActivity">
-
-
-
         </activity>
 
         <activity

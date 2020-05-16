@@ -8,15 +8,13 @@
 
 -- Disable SMS Send Button
 -- Abdul Aahad Memorial Public School, Kiratpur
-UPDATE AccountsDB.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=38
+--UPDATE AccountsDB.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=38
 
 -- Rainbow Public School, Bijnor,
-UPDATE AccountsDB.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=33
+--UPDATE AccountsDB.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=33
 
 -- Hashmi Academy, Chandpur,
-UPDATE AccountsDB_Hashmi_1819.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=15
-
-
+--UPDATE AccountsDB_Hashmi_1819.dbo.tblUserInfo SET SMSDelivery=10 WHERE UserInfoID=15
 
 
 DECLARE @FDT DATETIME

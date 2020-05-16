@@ -1,13 +1,11 @@
 -- select top 1000 * from tblSMSSent order by smsid desc
 -- select * from tblUserINfo
 
-
 DECLARE @FDT DATETIME
 DECLARE @TDT DATETIME
 
-SET @FDT = '2020-01-01'
-SET @TDT = '2020-05-01'
-
+SET @FDT = '2020-05-10'
+SET @TDT = '2020-06-16'
 
 SELECT s.UserID, sum(MSGcount) smsCount
 , UserName
@@ -25,7 +23,6 @@ and @TDT
 --and USERID=15
 GROUP BY s.USERID, u.UserName
 --ORDER BY SMSCount DESC
-
 
 UNION
 

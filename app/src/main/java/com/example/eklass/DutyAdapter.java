@@ -57,15 +57,6 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(v.getContext(),  featureList.get(position).getFeatureName() + " Clicked ", Toast.LENGTH_LONG).show();
-
-                // finish();
-                //mCtx.startActivity(new Intent(mCtx, SchoolAttendanceActivity.class));
-
-
-                // show  duty Latitude & Longitude on map
-
-
             }
         });
 

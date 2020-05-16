@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -31,102 +30,68 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class LocationActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
-
-    EditText etLocationName, etManagerId, etGuardId;
-    //public List<String> staffList;
+public class AddStaffLocationActivity extends BaseActivity
+        implements AdapterView.OnItemSelectedListener
+{
+    Spinner spinner_location, spinner_worker, spinner_manager;
+    ArrayAdapter arrayAdapter_location, arrayAdapter_manager, arrayAdapter_worker;
+    public String[] locationids;
     public String[] managerids;
     public String[] workerids;
-    Spinner spinner_manager;
-    ArrayAdapter arrayAdapter_manager;
-    Spinner spinner_worker;
-    ArrayAdapter arrayAdapter_worker;
+    EditText etLocationId, etManagerId, etWorkerId;
     Boolean isUpdate = false;
-
-    Button btnSaveLocation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addlocation);
+        setContentView(R.layout.activity_addstafflocation);
 
-        etLocationName = findViewById(R.id.etLocationName_activity_location);
-        etManagerId = findViewById(R.id.etManagerID_activity_location);
-        etGuardId = findViewById(R.id.etGuardID_activity_location);
-        btnSaveLocation = findViewById(R.id.btnSaveLocation_activity_location);
+        etLocationId = findViewById(R.id.etLocationId_activity_addStaffLocation);
+        etManagerId = findViewById(R.id.etManagerId_activity_addStaffLocation);
+        etWorkerId = findViewById(R.id.etWorkerId_activity_addStaffLocation);
 
-        // Getting the instance of Spinner and
-        spinner_manager = findViewById(R.id.spinner_manager_activity_addLocation);
-        spinner_worker = findViewById(R.id.spinner_worker_activity_location);
+        spinner_location = findViewById(R.id.spinner_manager_activity_addStaffLocation);
+        spinner_manager = findViewById(R.id.spinner_manager_activity_addStaffLocation);
+        spinner_worker = findViewById(R.id.spinner_worker_activity_addStaffLocation);
+
         // applying onItemSelectedListner to it
+
+        spinner_location.setOnItemSelectedListener(this);
         spinner_manager.setOnItemSelectedListener(this);
         spinner_worker.setOnItemSelectedListener(this);
 
         loadData2();
 
-        String update  = getIntent().getStringExtra("isUpdate");
-        if(update!= null)
-            isUpdate = update.equals("yes");
-
-        if(isUpdate)
-        {
-            etLocationName.setText(getIntent().getStringExtra("locationName"));
-            btnSaveLocation.setText("Update Location");
-
-
-        }
-
-     findViewById(R.id.btnSaveLocation_activity_location).setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-
-
-                addLocation();
-
-         }
-     });
-
     }
 
 
 
-    public void addLocation()
+    public void addStaffLocation()
     {
-        final  String userCompantId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
-        final String  locationName = etLocationName.getText().toString();
-        //final String  managerId= etManagerId.getText().toString();
+        User usr = SharedPrefManager.getInstance(this).getUser();
+
+        final  String companyId = usr.getCompanyId();
+        final String locationId = etLocationId.getText().toString();
         final String  managerId= etManagerId.getText().toString();
-        final String guardId = etGuardId.getText().toString();
-
-        Log.w("sandeep", "444 IsStaff = " + userCompantId);
-
-        if(TextUtils.isEmpty(locationName))
-        {
-            etLocationName.setError("Please Enter Your Mobile Number");
-            etLocationName.requestFocus();
-
-            return;
-        }
-
+        final String workerId = etWorkerId.getText().toString();
 
         // if everything is fine
 
-        class AddStaff extends AsyncTask<Void, Void, String>
+        class AddStaffLocation extends AsyncTask<Void, Void, String>
         {
 
             @Override
             protected String doInBackground(Void... voids) {
 
+
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
 
-
-                params.put("pLocationName", locationName);
+                params.put("pLocationId", locationId);
                 params.put("pManagerId", managerId);
-                params.put("pGuardId", guardId);
-                params.put("pCompanyId", userCompantId);
-
+                params.put("pGuardId", workerId);
+                params.put("pCompanyId", companyId);
 
                 String response = null;
 
@@ -180,17 +145,13 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
                         // send SMS to Staff maobile with CompanyID and password to login
                         Toast.makeText(getApplicationContext()
-                                , "Location Added Successfully", Toast.LENGTH_LONG).show();
+                                , "Staff Location added Successfully", Toast.LENGTH_LONG).show();
 
                     }
                     else
                     {
                         Toast.makeText(getApplicationContext()
-                                , "Invalid Staff Details", Toast.LENGTH_SHORT).show();
-
-                        etLocationName.setText(locationName);
-                        etManagerId.setText(managerId);
-                        etGuardId.setText(guardId);
+                                , "Invalid Details", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -204,42 +165,9 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
             }
         }
 
-        AddStaff as = new AddStaff();
+        AddStaffLocation as = new AddStaffLocation();
         as.execute();
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        String item = parent.getItemAtPosition(position).toString();
-        String selected_value = "0";
-
-
-        String item2;
-
-        if(parent.getId()==R.id.spinner_manager_activity_addLocation) {
-            item2 = "Manager";
-
-            selected_value = managerids[position];
-            etManagerId.setText(selected_value);
-        }
-        else if(parent.getId()==R.id.spinner_worker_activity_location) {
-            item2 = "Worker";
-            selected_value = workerids[position].toString();
-            etGuardId.setText(selected_value);
-        }
-        else
-            item2="Other";
-
-        Toast.makeText(parent.getContext()
-                , item2 + "  " + item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
 
     private void loadData2()
     {
@@ -261,47 +189,45 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
+                    List<String> locationList;
+                    locationList = new ArrayList<>();
+                    List<String> locationIDsList;
+                    locationIDsList = new ArrayList<>();
+
                     List<String> managerList;
                     managerList = new ArrayList<>();
-                    List<String> workerList;
-                    workerList = new ArrayList<>();
-
                     List<String> managerIDsList;
-                    List<String> workerIDsList;
                     managerIDsList = new ArrayList<>();
-                    workerIDsList = new ArrayList<>();
 
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
 
-                        if(o.getString("StaffType").equals("2"))
-                        {
+                            locationIDsList.add(o.getString("locationId"));
+                            locationList.add(o.getString("locationName"));
+
                             managerIDsList.add(o.getString("staffID"));
                             managerList.add(o.getString("StaffName"));
-                        }
-                        if(o.getString("StaffType").equals("1"))
-                        {
-                            workerIDsList.add(o.getString("staffID"));
-                            workerList.add(o.getString("StaffName"));
-                        }
+
                     }
 
                     Util util = new Util();
 
+                    String[] locations = util.ConvertListToStringArray(locationList);
                     String[] managers = util.ConvertListToStringArray(managerList);
-                    String[] workers = util.ConvertListToStringArray(workerList);
-                     managerids = util.ConvertListToStringArray(managerIDsList);
-                     workerids = util.ConvertListToStringArray(workerIDsList);
+
+                    locationids = util.ConvertListToStringArray(locationIDsList);
+                    managerids = util.ConvertListToStringArray(managerIDsList);
+
+                    arrayAdapter_manager = new ArrayAdapter(getApplicationContext()
+                            , R.layout.support_simple_spinner_dropdown_item, locations);
 
                     arrayAdapter_manager = new ArrayAdapter(getApplicationContext()
                             , R.layout.support_simple_spinner_dropdown_item, managers);
 
-                    arrayAdapter_worker = new ArrayAdapter(getApplicationContext(),
-                               R.layout.support_simple_spinner_dropdown_item, workers );
-
+                    spinner_location.setAdapter(arrayAdapter_location);
                     spinner_manager.setAdapter(arrayAdapter_manager);
-                    spinner_worker.setAdapter(arrayAdapter_worker);
+                    spinner_worker.setAdapter(arrayAdapter_manager);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -335,6 +261,13 @@ public class LocationActivity extends BaseActivity implements AdapterView.OnItem
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+    }
 
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
