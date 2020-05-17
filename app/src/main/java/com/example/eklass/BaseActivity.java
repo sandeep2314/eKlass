@@ -67,6 +67,7 @@ public class BaseActivity extends AppCompatActivity {
 
         btnSave.setVisible((this.getClass().getSimpleName().equals("AddStaffActivity")
                 || this.getClass().getSimpleName().equals("AddDesignationActivity")
+                || this.getClass().getSimpleName().equals("AddStaffLocationActivity")
                 || this.getClass().getSimpleName().equals("AddLocationActivity")));
 
         // delete icon
@@ -126,6 +127,10 @@ public class BaseActivity extends AppCompatActivity {
                         else if(this.getClass().getSimpleName().equals("AddDesignationActivity"))
                         {
                             methodName = "addDesignation";
+                        }
+                        else if(this.getClass().getSimpleName().equals("AddStaffLocationActivity"))
+                        {
+                            methodName = "addStaffLocation";
                         }
 
                         method = this.getClass().getMethod(methodName);
@@ -194,6 +199,14 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, ShowLocationsActivity.class));
                 return true;
 
+            case R.id.menuAddStaffLocation:
+                finish();
+                startActivity( new Intent(this, AddStaffLocationActivity.class));
+                return true;
+            case R.id.menuShowStaffLocation:
+                //finish();
+                //startActivity( new Intent(this, ShowL.class));
+                return true;
             case R.id.menuAddDesignations:
                 finish();
                 startActivity( new Intent(this, AddDesignationActivity.class));

@@ -14,14 +14,6 @@
         android:layout_height="wrap_content">
     </Spinner>
 
-    <EditText
-        android:id="@+id/etLocationId_activity_addStaffLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </EditText>
-
-
 
     <Spinner
         android:id="@+id/spinner_worker_activity_addStaffLocation"
@@ -31,11 +23,6 @@
         android:layout_height="wrap_content">
     </Spinner>
 
-    <EditText
-        android:id="@+id/etWorkerId_activity_addStaffLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </EditText>
 
     <Spinner
         android:id="@+id/spinner_manager_activity_addStaffLocation"
@@ -44,12 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </Spinner>
-
-    <EditText
-        android:id="@+id/etManagerId_activity_addStaffLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </EditText>
 
 
 

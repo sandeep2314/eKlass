@@ -68,6 +68,19 @@
         app:showAsAction="never">
 
     </item>
+
+    <item
+        android:id="@+id/menuAddStaffLocation"
+        android:title="Assign Staff To Location"
+        app:showAsAction="never">
+    </item>
+    <item
+        android:id="@+id/menuShowStaffLocation"
+        android:title="Show Staff-Location"
+        app:showAsAction="never">
+    </item>
+
+
     <item
         android:id="@+id/menuAddDesignations"
         android:title="Add Designation"

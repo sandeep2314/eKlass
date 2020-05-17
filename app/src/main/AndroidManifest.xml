@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".AddStaffLocationActivity"></activity>
         <activity android:name=".ShowDesignationActivity"></activity>
         <activity android:name=".AddDesignationActivity"></activity>
         <activity android:name=".UpdateLocationActivity"></activity>

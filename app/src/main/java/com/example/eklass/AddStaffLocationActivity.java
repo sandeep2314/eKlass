@@ -35,10 +35,12 @@ public class AddStaffLocationActivity extends BaseActivity
 {
     Spinner spinner_location, spinner_worker, spinner_manager;
     ArrayAdapter arrayAdapter_location, arrayAdapter_manager, arrayAdapter_worker;
+
     public String[] locationids;
     public String[] managerids;
-    public String[] workerids;
-    EditText etLocationId, etManagerId, etWorkerId;
+    public String[] hierarchies;
+    Integer selectedLocationId, selectedWorkerId, selectedManagerId;
+    Integer selectedWorkerHierarchy, selectedManagerHierarchy;
     Boolean isUpdate = false;
 
     @Override
@@ -46,11 +48,7 @@ public class AddStaffLocationActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addstafflocation);
 
-        etLocationId = findViewById(R.id.etLocationId_activity_addStaffLocation);
-        etManagerId = findViewById(R.id.etManagerId_activity_addStaffLocation);
-        etWorkerId = findViewById(R.id.etWorkerId_activity_addStaffLocation);
-
-        spinner_location = findViewById(R.id.spinner_manager_activity_addStaffLocation);
+        spinner_location = findViewById(R.id.spinner_location_activity_addStaffLocation);
         spinner_manager = findViewById(R.id.spinner_manager_activity_addStaffLocation);
         spinner_worker = findViewById(R.id.spinner_worker_activity_addStaffLocation);
 
@@ -64,18 +62,22 @@ public class AddStaffLocationActivity extends BaseActivity
 
     }
 
-
-
     public void addStaffLocation()
     {
         User usr = SharedPrefManager.getInstance(this).getUser();
 
         final  String companyId = usr.getCompanyId();
-        final String locationId = etLocationId.getText().toString();
-        final String  managerId= etManagerId.getText().toString();
-        final String workerId = etWorkerId.getText().toString();
-
         // if everything is fine
+        if(selectedManagerHierarchy < selectedWorkerHierarchy)
+        {
+            Toast.makeText(getApplicationContext()
+                    , "Please check... Designation hierarchy is Invalid"
+                    , Toast.LENGTH_LONG
+            ).show();
+
+            return;
+        }
+
 
         class AddStaffLocation extends AsyncTask<Void, Void, String>
         {
@@ -83,19 +85,17 @@ public class AddStaffLocationActivity extends BaseActivity
             @Override
             protected String doInBackground(Void... voids) {
 
-
                 RequestHandler requestHandler = new RequestHandler();
-
                 HashMap<String, String> params = new HashMap<>();
 
-                params.put("pLocationId", locationId);
-                params.put("pManagerId", managerId);
-                params.put("pGuardId", workerId);
+                params.put("pLocationId", selectedLocationId.toString());
+                params.put("pManagerId", selectedManagerId.toString());
+                params.put("pWorkerId", selectedWorkerId.toString());
                 params.put("pCompanyId", companyId);
 
                 String response = null;
 
-                String urlLocation = URLs.ADD_LOCATION_URL;
+                String urlLocation = URLs.ADD_STAFF_LOCATION_URL;
 
                 if(isUpdate)
                     urlLocation = URLs.UPDATE_LOCATION_URL;
@@ -199,15 +199,37 @@ public class AddStaffLocationActivity extends BaseActivity
                     List<String> managerIDsList;
                     managerIDsList = new ArrayList<>();
 
-                    for(int i=0; i< array.length(); i++)
+                    List<String> designationList;
+                    designationList = new ArrayList<>();
+
+                    List<String> hieracyList;
+                    hieracyList = new ArrayList<>();
+
+                   for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
 
-                            locationIDsList.add(o.getString("locationId"));
-                            locationList.add(o.getString("locationName"));
+                        if(o.getString("IsStaff").equals("Location"))
+                        {
+                            locationIDsList.add(o.getString("StaffId"));
+                            locationList.add(o.getString("StaffName"));
+                        }
+                        else {
+                            managerIDsList.add(o.getString("StaffId"));
+                            managerList.add(
+                                    o.getString("StaffName")
+                                    + "("
+                                    + o.getString("DName")
+                                    + "-"
+                                    + o.getString("HNo")
+                                    + ")"
 
-                            managerIDsList.add(o.getString("staffID"));
-                            managerList.add(o.getString("StaffName"));
+                            );
+
+                            designationList.add(o.getString("DName"));
+                            hieracyList.add(o.getString("HNo"));
+
+                        }
 
                     }
 
@@ -216,14 +238,16 @@ public class AddStaffLocationActivity extends BaseActivity
                     String[] locations = util.ConvertListToStringArray(locationList);
                     String[] managers = util.ConvertListToStringArray(managerList);
 
+
                     locationids = util.ConvertListToStringArray(locationIDsList);
                     managerids = util.ConvertListToStringArray(managerIDsList);
+                    hierarchies = util.ConvertListToStringArray(hieracyList);
 
-                    arrayAdapter_manager = new ArrayAdapter(getApplicationContext()
+                    arrayAdapter_location = new ArrayAdapter(getApplicationContext()
                             , R.layout.support_simple_spinner_dropdown_item, locations);
 
                     arrayAdapter_manager = new ArrayAdapter(getApplicationContext()
-                            , R.layout.support_simple_spinner_dropdown_item, managers);
+                                , R.layout.support_simple_spinner_dropdown_item, managers);
 
                     spinner_location.setAdapter(arrayAdapter_location);
                     spinner_manager.setAdapter(arrayAdapter_manager);
@@ -252,7 +276,7 @@ public class AddStaffLocationActivity extends BaseActivity
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-        String theURL = URLs.GET_STAFF_URL +"?" + paramsStr;
+        String theURL = URLs.GET_STAFF_LOCATION_MASTER_URL +"?" + paramsStr;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
 
@@ -263,6 +287,36 @@ public class AddStaffLocationActivity extends BaseActivity
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+        String item = parent.getItemAtPosition(position).toString();
+        String selected_value = "0";
+
+        if(parent.getId()==R.id.spinner_location_activity_addStaffLocation) {
+            selected_value = locationids[position];
+            if(locationids.length > 0)
+                selectedLocationId = Integer.parseInt(locationids[position]);
+
+        }
+
+        if(parent.getId()==R.id.spinner_worker_activity_addStaffLocation) {
+            selected_value = managerids[position];
+            if(hierarchies.length > 0)
+              selectedWorkerHierarchy = Integer.parseInt(hierarchies[position]);
+            if(managerids.length > 0)
+                selectedWorkerId = Integer.parseInt(managerids[position]);
+
+        }
+
+        if(parent.getId()==R.id.spinner_manager_activity_addStaffLocation) {
+            selected_value = managerids[position];
+            if(hierarchies.length > 0)
+              selectedManagerHierarchy = Integer.parseInt(hierarchies[position]);
+            if(managerids.length > 0)
+                selectedManagerId = Integer.parseInt(managerids[position]);
+        }
+
+        Toast.makeText(parent.getContext()
+                ,  item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
 
     }
 
