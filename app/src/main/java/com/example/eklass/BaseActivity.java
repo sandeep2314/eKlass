@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -43,6 +44,11 @@ public class BaseActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("SuperVisor");
+
+        if(this.getClass().getSimpleName().equals("ShowStaffActivity"))
+            actionBar.setDisplayHomeAsUpEnabled(false);
+
+
     }
 
     @Override
@@ -170,6 +176,15 @@ public class BaseActivity extends AppCompatActivity {
                 }
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
                 recreate();
+                return true;
+
+
+            case android.R.id.home:
+               // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_LONG).show();
+                finish();
+                //NavUtils.navigateUpFromSameTask(this);
+                finish();
+                startActivity( new Intent(this, ShowStaffActivity.class));
                 return true;
 
             case R.id.menuGenerateQRCode:
