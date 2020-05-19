@@ -15,8 +15,11 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,24 +43,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
-public class ScanActivity extends BaseActivity {
+public class ScanActivity extends BaseActivity
+        implements AdapterView.OnItemSelectedListener
+{
     // view objects
 
     private Button btnScan;
-    public TextView txtQRName, txtQRAddress, txtLatitude, txtLongitude;
-
-    public String QRName, QRAddress;
-
+    public TextView txtQRName, txtLatitude, txtLongitude;
+    public String QRName;
     LocationManager locationManager;
     String latitude,longitude;
-
-    //qr code scanner object
     private IntentIntegrator qrScan;
-
     private static  final int REQUEST_LOCATION=1;
+    Spinner spinner_location;
+    ArrayAdapter arrayAdapter_location;
+    public String[] locationids;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,16 +73,17 @@ public class ScanActivity extends BaseActivity {
 
         btnScan = findViewById(R.id.btnScan_activity_scan);
         txtQRName = findViewById(R.id.txtName_activity_scan);
-        txtQRAddress = findViewById(R.id.txtAdress_activity_scan);
         txtLatitude = findViewById(R.id.txtLatitude_activity_scan);
         txtLongitude = findViewById(R.id.txtLongitude_activity_scan);
+        spinner_location = findViewById(R.id.spinner_location_activity_scan);
+
+        loadData2();
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
 
         ActivityCompat.requestPermissions(this,new String[]
                 {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-
 
         // attaching onClick listener
 
@@ -123,7 +129,8 @@ public class ScanActivity extends BaseActivity {
 
         if (result != null) {
             //if qrcode has nothing in it
-            if (result.getContents() == null) {
+            if (result.getContents() == null)
+            {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_LONG).show();
 
             }
@@ -138,8 +145,6 @@ public class ScanActivity extends BaseActivity {
 
                     QRName = result.getContents();
                     txtQRName.setText(QRName);
-                    txtQRAddress.setText(QRName);
-                    QRAddress = QRName;
 
                     addScan();
 
@@ -150,12 +155,7 @@ public class ScanActivity extends BaseActivity {
                     // dislay whatever data is there
 
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
-
-                    Log.w("Sandeep", "result.getContents()" + result.getContents());
-
                 }
-
-
             }
 
 
@@ -267,6 +267,7 @@ public class ScanActivity extends BaseActivity {
                 params.put("pGuardId", WorkerStaffId);
                 params.put("pLatitude", latitude);
                 params.put("pLongitude", longitude);
+                params.put("pIsScan", Util.HAS_SCANNED_QR);
                 params.put("pCompanyId", companyId);
 
                 String response = null;
@@ -344,8 +345,89 @@ public class ScanActivity extends BaseActivity {
         as.execute();
     }
 
+    private void loadData2()
+    {
+        User usr  = SharedPrefManager.getInstance(this).getUser();
+        final  String CompanyId = usr.getCompanyId();
+        final  String staffId = usr.getStaffId();
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("loading data...");
+        progressDialog.show();
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                progressDialog.dismiss();
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Sandeep444",response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    List<String> locationList;
+                    locationList = new ArrayList<>();
+                    List<String> locationIDsList;
+                    locationIDsList = new ArrayList<>();
 
 
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+                        locationIDsList.add(o.getString("LocationID"));
+                        locationList.add(o.getString("LocationName"));
+                    }
+
+                    Util util = new Util();
+
+                    String[] locations = util.ConvertListToStringArray(locationList);
+                    locationids = util.ConvertListToStringArray(locationIDsList);
+                    arrayAdapter_location = new ArrayAdapter(getApplicationContext()
+                            , R.layout.support_simple_spinner_dropdown_item, locations);
+                    spinner_location.setAdapter(arrayAdapter_location);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(getApplicationContext(),  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("pCompanyId", CompanyId);
+        params.put("pStaffId", staffId);
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+        String theURL = URLs.GET_LOCATION_BY_STAFF_URL +"?" + paramsStr;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
 
 }

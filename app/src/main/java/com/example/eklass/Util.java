@@ -61,6 +61,9 @@ public class Util
     public static final String USER_TYPE_WORKER = "1";
     public static final String USER_TYPE_MANAGER = "2";
 
+    public static final String HAS_SCANNED_QR = "1";
+    public static final String HAS_NOT_SCANNED_QR = "0";
+
 
     public String[] ConvertListToStringArray(List<String> theList)
     {

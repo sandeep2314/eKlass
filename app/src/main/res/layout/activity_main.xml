@@ -60,7 +60,6 @@
             android:layout_height="wrap_content">
 
         <RadioButton
-
             android:id="@+id/radioStaff_activity_main"
             android:layout_width="wrap_content"
             android:checked="true"

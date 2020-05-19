@@ -4,7 +4,6 @@
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ScanActivity"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,57 +15,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <RadioGroup
+            android:id="@+id/radioGroup_IsScan_activity_scan"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioBtn_IsScanYes_activity_scan"
+                android:checked="true"
+                android:text="Post Attendance By Scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioBtn_IsScanNo_activity_scan"
+                android:text="Post Attendance By Manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </RadioButton>
+
+        </RadioGroup>
+
+        <Spinner
+            android:id="@+id/spinner_location_activity_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </Spinner>
+
+
         <TextView
             android:text="Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </TextView>
 
         <TextView
             android:id="@+id/txtName_activity_scan"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
         </TextView>
 
-        <TextView
-
-            android:text="Adress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/txtAdress_activity_scan"
-
+         <TextView
+            android:text="Latitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-        </TextView>
-
-        <TextView
-            android:text="Lattitude"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
         </TextView>
 
         <TextView
             android:id="@+id/txtLatitude_activity_scan"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </TextView>
 
         <TextView
             android:text="Longitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </TextView>
 
         <TextView
@@ -74,7 +86,6 @@
             android:textAppearance="@style/Base.CardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </TextView>
 
 
@@ -82,7 +93,7 @@
 
     <Button
         android:id="@+id/btnScan_activity_scan"
-        android:text="Scan"
+        android:text="Post Attendance"
         android:layout_marginBottom="60dp"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
