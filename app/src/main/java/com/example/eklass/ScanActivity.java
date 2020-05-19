@@ -72,7 +72,6 @@ public class ScanActivity extends BaseActivity {
         txtLatitude = findViewById(R.id.txtLatitude_activity_scan);
         txtLongitude = findViewById(R.id.txtLongitude_activity_scan);
 
-
         //intializing scan object
         qrScan = new IntentIntegrator(this);
 
@@ -94,13 +93,11 @@ public class ScanActivity extends BaseActivity {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 {
                     //Write Function To enable gps
-
                     OnGPS();
                 }
                 else
                 {
                     //GPS is already On then
-
                     getLocation();
                 }
 
@@ -110,36 +107,17 @@ public class ScanActivity extends BaseActivity {
                 qrScan.setCaptureActivity(CaptureActivityPortrait.class);
                 qrScan.initiateScan();
 
-                //addScan();
 
-                //IntentIntegrator.parseActivityResult()
-
-                /*try
-                {
-                    SaveScan();
-                } catch (MalformedURLException e)
-                {
-                    e.printStackTrace();
-                }*/
-                //GetLocation();
             }
         });
 
-
-
-        findViewById(R.id.btnScan_activity_logout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                SharedPrefManager.getInstance(getApplicationContext()).logout();
-            }
-        });
 
 
     }
 
 
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
         //super.onActivityResult(requestCode, resultCode, data);
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
@@ -153,27 +131,27 @@ public class ScanActivity extends BaseActivity {
             {
                 try {   // converting data to JSON
                     // {"name":"Sandeep", "address":"Shop 14"}
+                    // result.getContents() = 2
 
-                    Log.w("sandeep", " result.getContents()  " + result.getContents().toString());
-                    JSONObject obj = new JSONObject(result.getContents());
 
-                    Log.w("sandeep", " 5555  " + obj.getString("name"));
-                    txtQRName.setText(obj.getString("name"));
-                    QRName = obj.getString("name");
-                    txtQRAddress.setText(obj.getString("address"));
-                    QRAddress = obj.getString("address");
+                    //JSONObject obj = new JSONObject(result.getContents());
 
+                    QRName = result.getContents();
+                    txtQRName.setText(QRName);
+                    txtQRAddress.setText(QRName);
+                    QRAddress = QRName;
 
                     addScan();
 
-
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     // if the control comes here
                     // that means the encoded data
                     // dislay whatever data is there
 
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+
+                    Log.w("Sandeep", "result.getContents()" + result.getContents());
 
                 }
 
@@ -186,48 +164,6 @@ public class ScanActivity extends BaseActivity {
             super.onActivityResult(requestCode, resultCode, data);
 
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void GetLocation() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-                !=  PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this
-                    ,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}
-                    , 1);
-
-            if(checkLocationPermission())
-            {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_LONG).show();
-            }
-
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-
-            txtLatitude.setText((int) latitude);
-            txtLongitude.setText((int) longitude);
-
-            // TODO: Consider calling
-            //    Activity#requestPermissions
-            return;
-        }
-
-    }
-
-
-
-
-    public boolean checkLocationPermission()
-    {
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-
-        return (res == PackageManager.PERMISSION_GRANTED);
     }
 
     private void OnGPS() {
@@ -311,13 +247,10 @@ public class ScanActivity extends BaseActivity {
 
     private void addScan()
     {
-        final  String companyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
-        final String  qrName =  txtQRName.getText().toString();
-        final String  WorkerStaffId = SharedPrefManager.getInstance(this).getUser().getStaffId();
-        //final  String userPassword = etStaffPassword.getText().toString();
+        User usr = SharedPrefManager.getInstance(this).getUser();
 
-
-        Log.w("sandeep", "444 IsStaff = " + qrName);
+        final  String companyId = usr.getCompanyId();
+        final String  WorkerStaffId = usr.getStaffId();
 
         // if everything is fine
 
@@ -328,19 +261,13 @@ public class ScanActivity extends BaseActivity {
             protected String doInBackground(Void... voids) {
 
                 RequestHandler requestHandler = new RequestHandler();
-
                 HashMap<String, String> params = new HashMap<>();
 
-                params.put("pQRName", QRName);
+                params.put("pQRId", QRName);
                 params.put("pGuardId", WorkerStaffId);
                 params.put("pLatitude", latitude);
                 params.put("pLongitude", longitude);
                 params.put("pCompanyId", companyId);
-
-                Log.w("sandeep", "pQRName 999 " + qrName);
-
-
-
 
                 String response = null;
                 try
@@ -365,8 +292,6 @@ public class ScanActivity extends BaseActivity {
             {
                 super.onPostExecute(s);
 
-                Log.w("sandeep", "response 222 " + s);
-
                 // converting response to JSON object
                 try
                 {
@@ -385,8 +310,6 @@ public class ScanActivity extends BaseActivity {
 
 
                     }
-
-
 
                     Log.w("staffType_fromDB ", " 444 " + s);
 
@@ -419,73 +342,6 @@ public class ScanActivity extends BaseActivity {
 
         AddScan as = new AddScan();
         as.execute();
-    }
-
-
-    private void SaveScanOld() throws MalformedURLException {
-        final String staff_mobileNo = SharedPrefManager.getInstance(getApplicationContext()).getUser().UserMobileNo;
-
-        final String txtQR_Name = txtQRName.getText().toString();
-        final String txtQR_Address = txtQRAddress.getText().toString();
-        final String txt_latitude =  latitude; //txtLatitude.getText().toString();
-        final String txt_longitude = longitude; //txtLongitude.getText().toString();
-
-        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
-
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Saving Scan...");
-        progressDialog.show();
-
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
-                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
-                Log.w("Scan444",response);
-
-                Toast.makeText(getApplicationContext()
-                        , "Scan Saved Successfully", Toast.LENGTH_LONG).show();
-
-
-
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(getApplicationContext(),  error.getMessage()
-                        , Toast.LENGTH_LONG ).show();
-            }
-        };
-
-
-        RequestHandler rh = new RequestHandler();
-
-        HashMap<String, String> params = new HashMap<>();
-
-        Log.w("sandeep", "txtQR_Name  " + QRName);
-
-        params.put("pMobileNo", staff_mobileNo);
-        params.put("pQRName", txtQR_Name);
-        params.put("pQRAddress", txtQR_Address);
-        params.put("pLatitude", txt_latitude);
-        params.put("pLongitude", txt_longitude);
-        params.put("pCompanyId", CompanyId);
-
-
-        String paramsStr = rh.getPostDataString(params);
-        String theURL = URLs.SAVESCAN_URL +"?" + paramsStr;
-
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
-                , responseListener, errorListener);
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);*/
-
     }
 
 

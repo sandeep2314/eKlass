@@ -196,6 +196,13 @@ public class BaseActivity extends AppCompatActivity {
                         , Toast.LENGTH_LONG).show();
                 return true;
 
+
+            case R.id.menuDuty:
+                finish();
+                startActivity( new Intent(this, ScanActivity.class));
+                return true;
+
+
             case R.id.menuAddStaff:
                 finish();
                 startActivity( new Intent(this, AddStaffActivity.class));

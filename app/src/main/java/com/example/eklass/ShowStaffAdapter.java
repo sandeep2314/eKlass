@@ -55,11 +55,16 @@ public class ShowStaffAdapter
             final Staff staff = staffList.get(position);
 
             // binding the data with the viewholder views
-            holder.tv_FeatureName.setText("    " + staff.getStaffName());
+            holder.tv_FeatureName.setText("    "
+                            + staff.getStaffName()
+                            + "("
+                            + staff.getDesignation()
+                            + ")"
+                    );
             holder.tv_guardID.setText("    " + staff.getStaffId());
-
-
-            holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
+           //holder.tv_FeatureName.setOnClickListener(new View.OnClickListener()
+            holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
                 public void onClick(View v) {
 
@@ -81,12 +86,13 @@ public class ShowStaffAdapter
 
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
-            TextView tv_FeatureName, tv_guardID, tv_locationName;
+            TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty;
 
             public ShowStaffViewHolder(@NonNull View itemView) {
                 super(itemView);
                 this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
                 this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
+                this.tv_ShowDuty = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
                 //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
 
             }
