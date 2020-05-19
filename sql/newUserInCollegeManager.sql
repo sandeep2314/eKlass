@@ -1814,6 +1814,7 @@ CREATE TABLE tblScan(
 	GuardId INT NOT NULL,
 	Latitude VARCHAR(20) NULL,
 	Longitude VARCHAR(20) NULL,
+	IsScan INT NOT NULL DEFAULT 1,
 	CompanyID [int] NOT NULL,
 	CreatedAt DATETIME DEFAULT getdate()
 	)
