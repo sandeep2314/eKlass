@@ -8,10 +8,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-
         android:layout_centerVertical="true"
         android:orientation="vertical"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -46,9 +44,7 @@
             android:id="@+id/spinner_location_activity_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
         </Spinner>
-
 
         <TextView
             android:text="Name"

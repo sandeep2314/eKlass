@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -48,6 +51,8 @@ import java.util.HashMap;
 import java.util.List;
 
 
+
+
 public class ScanActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener
 {
@@ -59,10 +64,17 @@ public class ScanActivity extends BaseActivity
     LocationManager locationManager;
     String latitude,longitude;
     private IntentIntegrator qrScan;
-    private static  final int REQUEST_LOCATION=1;
+    private static final int REQUEST_LOCATION=1;
     Spinner spinner_location;
     ArrayAdapter arrayAdapter_location;
     public String[] locationids;
+    public Integer selectedLocationId = -1;
+    public RadioGroup radioGroupIsScan;
+    public RadioButton radioButtonIsScanYes;
+
+    public double current_lattitude;
+    public double current_longitude;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,8 +88,52 @@ public class ScanActivity extends BaseActivity
         txtLatitude = findViewById(R.id.txtLatitude_activity_scan);
         txtLongitude = findViewById(R.id.txtLongitude_activity_scan);
         spinner_location = findViewById(R.id.spinner_location_activity_scan);
+        radioGroupIsScan = findViewById(R.id.radioGroup_IsScan_activity_scan);
+        radioButtonIsScanYes = findViewById(R.id.radioBtn_IsScanYes_activity_scan);
+
+
+        spinner_location.setOnItemSelectedListener(this);
+
+        if(radioButtonIsScanYes.isChecked()) {
+            spinner_location.setEnabled(false);
+            btnScan.setText("Post Attendance By Scanning");
+
+        }
+
+        radioGroupIsScan.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(radioButtonIsScanYes.isChecked())
+                {
+                    spinner_location.setEnabled(false);
+                    btnScan.setText("Post Attendance ");
+                }
+                else
+                {
+                    spinner_location.setEnabled(true);
+                    btnScan.setText("Post Attendance ");
+                }
+            }
+        });
+
 
         loadData2();
+
+        locationManager=(LocationManager)
+                getSystemService(Context.LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+        {
+            Log.w("Scan", "locationManager222" );
+            //Write Function To enable gps
+            OnGPS();
+        }
+        else
+        {
+            Log.w("Scan", "locationManager333" );
+            //GPS is already On then
+            getLocation();
+        }
+
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
@@ -86,41 +142,33 @@ public class ScanActivity extends BaseActivity
                 {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
         // attaching onClick listener
-
         btnScan.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
 
-                locationManager=(LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    if(radioButtonIsScanYes.isChecked())
+                    {
+                        qrScan.setBeepEnabled(true);
+                        qrScan.setOrientationLocked(true);
+                        qrScan.setCaptureActivity(CaptureActivityPortrait.class);
+                        qrScan.initiateScan();
+                    }
+                    else
+                    {
+                        // add to scan location from spinner
+                        //  QRName = selectedLocationId.toString();
+                        QRName = selectedLocationId.toString();
+                        addScan();
+                    }
 
-                //Check gps is enable or not
-
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                {
-                    //Write Function To enable gps
-                    OnGPS();
-                }
-                else
-                {
-                    //GPS is already On then
-                    getLocation();
-                }
-
-                qrScan.setBeepEnabled(true);
-
-                qrScan.setOrientationLocked(true);
-                qrScan.setCaptureActivity(CaptureActivityPortrait.class);
-                qrScan.initiateScan();
 
 
             }
         });
 
 
-
     }
-
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
@@ -140,13 +188,21 @@ public class ScanActivity extends BaseActivity
                     // {"name":"Sandeep", "address":"Shop 14"}
                     // result.getContents() = 2
 
-
                     //JSONObject obj = new JSONObject(result.getContents());
 
                     QRName = result.getContents();
                     txtQRName.setText(QRName);
 
-                    addScan();
+                    if(latitude.length()> 0 && longitude.length()>0)
+                        addScan();
+                    else
+                    {
+                        Toast.makeText(getApplicationContext()
+                                , "Can not fetch Latitude & Longitude. Please try again"
+                                ,Toast.LENGTH_LONG).show();
+
+                        return;
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -168,17 +224,19 @@ public class ScanActivity extends BaseActivity
 
     private void OnGPS() {
 
-        final AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        Log.w("OnGPS", "OnGPS1111");
 
-        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        final AlertDialog.Builder builder= new AlertDialog.Builder(this);
+        builder.setMessage("Enable GPS").setCancelable(false).setPositiveButton
+                ("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                Log.w("OnGPS", "OnGPS2222");
             }
         }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 dialog.cancel();
             }
         });
@@ -186,23 +244,29 @@ public class ScanActivity extends BaseActivity
         alertDialog.show();
     }
 
-    private void getLocation() {
 
+    private void getLocation() {
 
         //Check Permissions again
 
-        if (ActivityCompat.checkSelfPermission(ScanActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ScanActivity.this,
-
-                Manifest.permission.ACCESS_COARSE_LOCATION) !=PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(
+                ScanActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(ScanActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                !=PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this,new String[]
                     {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
         else
         {
-            Location LocationGps= locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            Location LocationNetwork=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            Location LocationPassive=locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+            Location LocationGps= locationManager.getLastKnownLocation(
+                    LocationManager.GPS_PROVIDER);
+            Location LocationNetwork=locationManager.getLastKnownLocation(
+                    LocationManager.NETWORK_PROVIDER);
+            Location LocationPassive=locationManager.getLastKnownLocation(
+                    LocationManager.PASSIVE_PROVIDER);
 
             if (LocationGps !=null)
             {
@@ -251,6 +315,7 @@ public class ScanActivity extends BaseActivity
 
         final  String companyId = usr.getCompanyId();
         final String  WorkerStaffId = usr.getStaffId();
+        final  Boolean hasScanned = radioButtonIsScanYes.isChecked();
 
         // if everything is fine
 
@@ -267,12 +332,18 @@ public class ScanActivity extends BaseActivity
                 params.put("pGuardId", WorkerStaffId);
                 params.put("pLatitude", latitude);
                 params.put("pLongitude", longitude);
-                params.put("pIsScan", Util.HAS_SCANNED_QR);
+
+                if(hasScanned)
+                    params.put("pIsScan", Util.HAS_SCANNED_QR);
+                else
+                    params.put("pIsScan", Util.HAS_NOT_SCANNED_QR);
                 params.put("pCompanyId", companyId);
 
                 String response = null;
                 try
                 {
+                    Log.w("sandeep"
+                            , "params1111 "+ requestHandler.getPostDataString(params));
                     response = requestHandler.sendPostRequest(URLs.SAVESCAN_URL ,params);
                 } catch (MalformedURLException e)
                 {
@@ -308,8 +379,6 @@ public class ScanActivity extends BaseActivity
                         // if there is any record then login is succesfull
                         isError = false;
                         //isError = o.getString("IsSaved").equals("yes");
-
-
                     }
 
                     Log.w("staffType_fromDB ", " 444 " + s);
@@ -337,7 +406,6 @@ public class ScanActivity extends BaseActivity
                     e.printStackTrace();
                 }
 
-
             }
         }
 
@@ -351,14 +419,14 @@ public class ScanActivity extends BaseActivity
         final  String CompanyId = usr.getCompanyId();
         final  String staffId = usr.getStaffId();
 
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        /*final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("loading data...");
-        progressDialog.show();
+        progressDialog.show();*/
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
                 // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
                 Log.w("Sandeep444",response);
@@ -371,7 +439,6 @@ public class ScanActivity extends BaseActivity
                     locationList = new ArrayList<>();
                     List<String> locationIDsList;
                     locationIDsList = new ArrayList<>();
-
 
                     for(int i=0; i< array.length(); i++)
                     {
@@ -422,7 +489,9 @@ public class ScanActivity extends BaseActivity
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-    }
+        selectedLocationId = Integer.parseInt(locationids[position]);
+
+   }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

@@ -43,15 +43,10 @@ public class RegisterActivity extends AppCompatActivity
         etMobileNo_Register = findViewById(R.id.etMobileNo_Register);
         etPassword_Register = findViewById(R.id.etPassword_Register);
 
-
         findViewById(R.id.btnRegister).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 RegisterUser();
-
-
             }
         });
 
