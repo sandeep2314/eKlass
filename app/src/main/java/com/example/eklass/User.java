@@ -131,4 +131,12 @@ public class User
     public void setUserTheme(int userTheme) {
         UserTheme = userTheme;
     }
+
+    public void setCompanyId(String companyId) {
+        CompanyId = companyId;
+    }
+
+    public void setCompanyName(String companyName) {
+        CompanyName = companyName;
+    }
 }

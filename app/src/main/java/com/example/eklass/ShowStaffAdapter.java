@@ -70,7 +70,7 @@ public class ShowStaffAdapter
 
                     Intent i = new Intent(v.getContext(), DutyActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("guardID",staff.getStaffId() );
+                    i.putExtra("guardIDc",staff.getStaffId() );
                     v.getContext().startActivity(i);
 
                 }

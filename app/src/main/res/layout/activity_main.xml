@@ -13,17 +13,14 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etMobileNo_activity_main"
             android:inputType="number"
-            android:hint="Mobile Number"
+            android:hint="@string/enter_mobile_no"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp">
-
         </EditText>
 
 
@@ -31,59 +28,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/etPassword_activity_main"
-            android:hint="Password"
-            android:inputType="text"
+            android:hint="@string/create_password"
+            android:inputType="numberPassword"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp">
 
         </EditText>
 
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/etCompanyId_activity_main"
-            android:hint="CompanyId"
-            android:inputType="number"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
-
-        </EditText>
-
-        <RadioGroup
-
-            android:id="@+id/radioGroup_staff_activity_main"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/radioStaff_activity_main"
-            android:layout_width="wrap_content"
-            android:checked="true"
-            android:text="Staff"
-            android:layout_height="wrap_content">
-
-        </RadioButton>
-
-
-        <RadioButton
-
-            android:id="@+id/radioAdmin_activity_main"
-            android:layout_width="wrap_content"
-            android:text="Admin"
-            android:layout_height="wrap_content">
-
-        </RadioButton>
-    </RadioGroup>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btnLogin"
-            android:text="Login"
+            android:hint="@string/common_signin_button_text"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp" />
 

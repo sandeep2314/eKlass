@@ -99,6 +99,13 @@
     </item>
 
     <item
+        android:id="@+id/menuChangeCompany"
+        android:title="Change Company"
+        app:showAsAction="never">
+    </item>
+
+
+    <item
         android:id="@+id/menuLogOut"
         android:icon="@drawable/ic_present_to_all_black_24dp"
 

@@ -36,7 +36,8 @@ public class BaseActivity extends AppCompatActivity {
         }
         else
         {
-            setTheme(R.style.Theme_AppCompat_Light);
+            //setTheme(R.style.Theme_AppCompat_Light);
+            setTheme(R.style.AppTheme);
         }
 
         super.onCreate(savedInstanceState);
@@ -151,18 +152,6 @@ public class BaseActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                /*if(this.getClass().getSimpleName().equals("AddLocationActivity"))
-                {
-                    // call save Location
-                    try {
-                        this.getClass().getMethod("addLocation()");
-
-                    } catch (NoSuchMethodException e) {
-                        e.printStackTrace();
-                    }
-
-                }*/
-
             return true;
             case R.id.menuChangeThemeLight:
                 if (themeNo == Util.BLACK_THEME) {
@@ -237,6 +226,11 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menuShowDesignations:
                 finish();
                 startActivity( new Intent(this, ShowDesignationActivity.class));
+                return true;
+
+            case R.id.menuChangeCompany:
+                finish();
+                startActivity( new Intent(this, ShowMyCompaniesActivity.class));
                 return true;
 
             case R.id.menuLogOut:

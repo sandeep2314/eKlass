@@ -3,6 +3,7 @@ package com.example.eklass;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -26,20 +27,16 @@ import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity
 {
-    EditText etName_Register,  etMobileNo_Register, etPassword_Register;
+    EditText etName_Register, etPersonName, etMobileNo_Register, etPassword_Register;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.layout_register);
 
-       // et_MobileNo = (EditText) findViewById(R.id.etMobileNo);
-        //et_Password = (EditText) findViewById(R.id.etPassword);
-
         etName_Register = findViewById(R.id.etName_Register);
+        etPersonName  = findViewById(R.id.etPersonName_Register);
         etMobileNo_Register = findViewById(R.id.etMobileNo_Register);
         etPassword_Register = findViewById(R.id.etPassword_Register);
 
@@ -50,14 +47,40 @@ public class RegisterActivity extends AppCompatActivity
             }
         });
 
-
     }
 
     private void RegisterUser()
     {
         final String register_name = etName_Register.getText().toString();
+        final String person_name = etPersonName.getText().toString();
         final String register_MobileNo = etMobileNo_Register.getText().toString();
         final  String register_Password = etPassword_Register.getText().toString();
+
+
+        if(TextUtils.isEmpty(register_name))
+        {
+            etName_Register.setError("Please Enter Your Mobile Number");
+            etName_Register.requestFocus();
+            return;
+        }
+        if(TextUtils.isEmpty(person_name))
+        {
+            etPersonName.setError("Please Enter Your Name");
+            etPersonName.requestFocus();
+            return;
+        }
+        if(TextUtils.isEmpty(register_MobileNo))
+        {
+            etMobileNo_Register.setError("Please Enter Your Mobile No");
+            etMobileNo_Register.requestFocus();
+            return;
+        }
+        if(TextUtils.isEmpty(register_Password))
+        {
+            etPassword_Register.setError("Please Create Your Password" );
+            etPassword_Register.requestFocus();
+            return;
+        }
 
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -69,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity
                 public void onResponse(String response) {
                     progressDialog.dismiss();
                     //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
-                    // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+
                     Log.w("Register444",response);
 
                     Toast.makeText(getApplicationContext()
@@ -95,20 +118,17 @@ public class RegisterActivity extends AppCompatActivity
             HashMap<String, String> params = new HashMap<>();
 
             params.put("rName", register_name);
+            params.put("rPersonName", person_name);
             params.put("rMobileNo", register_MobileNo);
             params.put("rPassword", register_Password);
-
 
             RequestHandler rh = new RequestHandler();
             String paramsStr = rh.getPostDataString(params);
 
             String theURL = URLs.REGISTER_URL +"?" + paramsStr;
 
-
             StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                     , responseListener, errorListener);
-
-
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             requestQueue.add(stringRequest);

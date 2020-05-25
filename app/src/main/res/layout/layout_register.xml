@@ -9,28 +9,33 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="@string/enter_company"
         android:inputType="text"
         android:id="@+id/etName_Register">
-
     </EditText>
-
 
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Mobile Number"
+        android:hint="@string/enter_person_name"
+        android:inputType="text"
+        android:id="@+id/etPersonName_Register">
+    </EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/enter_mobile_no"
         android:inputType="number"
         android:id="@+id/etMobileNo_Register">
-
     </EditText>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="text"
+        android:hint="@string/create_password"
+        android:inputType="number"
         android:id="@+id/etPassword_Register">
 
     </EditText>
@@ -38,12 +43,9 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register Now"
+        android:text="@string/register_now"
         android:id="@+id/btnRegister">
 
     </Button>
-
-
-
 
 </LinearLayout>

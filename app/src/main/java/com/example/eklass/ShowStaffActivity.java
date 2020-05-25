@@ -29,8 +29,9 @@ public class ShowStaffActivity extends BaseActivity
 {
       public RecyclerView recyclerView;
       public List<Staff> staffList;
-
       Util util = new Util();
+      public String companyID_chosen;
+      public String companyName_chosen;
 
        public ShowStaffAdapter managerDashboardAdapter;
 
@@ -39,8 +40,20 @@ public class ShowStaffActivity extends BaseActivity
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_managers_worker);
 
+            companyID_chosen = getIntent().getStringExtra("companyID_fromShowCompany_activity");
+            companyName_chosen = getIntent().getStringExtra("companyName_fromShowCompany_activity");
+
+            Log.w("sandeep", "companyName_chosen 111 " );
+            if(companyID_chosen != null && companyID_chosen.length() > 0) {
+
+                Log.w("sandeep", "companyName_chosen 222 " +companyName_chosen);
+                User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+                usr.setCompanyId(companyID_chosen);
+                usr.setCompanyName(companyName_chosen);
+                SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+            }
             TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
-            util.SetHeadings(getApplicationContext(), pageHeading
+            util.SetHeadings(this, pageHeading
                     , "My Staff", BaseActivity.themeNo);
 
             recyclerView =  findViewById(R.id.rvManagerWorker);

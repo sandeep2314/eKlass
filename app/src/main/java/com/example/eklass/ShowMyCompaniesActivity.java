@@ -3,9 +3,11 @@ package com.example.eklass;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,52 +26,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DutyActivity extends BaseActivity
+public class ShowMyCompaniesActivity extends BaseActivity
 {
 
-/*
-    // Showing the current location in Google Map
-    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-    // Zoom in the Google Map
-    googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-*/
-
-
-
-
     public RecyclerView recyclerView;
-    public List<Duty> dutyList;
-    public DutyAdapter dutyAdapter;
-    public String guardID;
-
-
+    public List<Company> companyList;
+    Util util = new Util();
+    public ShowMyCompaniesAdapter showMyCompaniesAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_duty);
+        setContentView(R.layout.activity_managers_worker);
 
-        //RecyclerView recyclerView;
-        recyclerView =  findViewById(R.id.rvDuty);
+        TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
+        util.SetHeadings(getApplicationContext(), pageHeading
+                , "My Staff", BaseActivity.themeNo);
+
+        recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        guardID = getIntent().getStringExtra("guardID");
-
-        Log.w("guardID" ,  "guardID222 " + guardID);
-
-        dutyList = new ArrayList<>();
+        companyList = new ArrayList<>();
 
         loadData2();
+
     }
 
     private void loadData2()
     {
-        final String staff_mobileNo = SharedPrefManager.getInstance(getApplicationContext()).getUser().UserMobileNo;
-        final String staffId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getStaffId();
-        final String guardId = "5";
-        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
+        User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+
+        final String mobileNo = usr.getUserMobileNo();
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("loading data...");
@@ -81,41 +69,28 @@ public class DutyActivity extends BaseActivity
                 progressDialog.dismiss();
                 //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
                 // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
-                Log.w("Sandeep777",response);
+                Log.w("Sandeep444",response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
-                    Duty duty_fromDB ;
+                    Company company_fromDB ;
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
+                        company_fromDB =   new Company(
+                                o.getInt("CompanyID")
+                                , o.getString("CompanyName")
 
-
-/*
-public Duty(Integer dutyId, String dutyDateTime, Integer QRId
-                            , String locationName, Integer guardId, String guardName
-                            , Double latitude, Double longitude, Integer companyId)
-*/
-
-                        duty_fromDB =   new Duty(o.getString("ScanID")
-                                , o.getString("CreatedAt")
-                                , o.getString("QRID")
-                                , o.getString("LocationName")
-                                , o.getString("GuardID")
-                                , o.getString("GuardName")
-                                , o.getString("Latitude")
-                                , o.getString("Longitude")
-                                , o.getString("CompanyID")
                         );
-                        dutyList.add(duty_fromDB);
 
+                        companyList.add(company_fromDB);
                     }
 
-                    dutyAdapter =
-                            new DutyAdapter (getApplicationContext(), dutyList);
-                    recyclerView.setAdapter(dutyAdapter);
+                    showMyCompaniesAdapter  =
+                            new ShowMyCompaniesAdapter(getApplicationContext(), companyList);
+                    recyclerView.setAdapter(showMyCompaniesAdapter);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -135,22 +110,14 @@ public Duty(Integer dutyId, String dutyDateTime, Integer QRId
         };
 
         HashMap<String, String> params = new HashMap<>();
-
-        params.put("pStaffId", guardID);
-        params.put("pCompanyId", CompanyId);
-
+        params.put("pMobileNo", mobileNo);
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-
-        String theURL = URLs.GET_DUTY_URL +"?" + paramsStr;
-
+        String theURL = URLs.GET_COMPANIES_URL +"?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
-
-
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 

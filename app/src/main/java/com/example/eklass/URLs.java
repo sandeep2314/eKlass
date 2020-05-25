@@ -6,7 +6,6 @@ public class URLs
 
     public static final String LOGIN_URL = "http://103.233.24.31:8080/student";
 
-
     public static final String BUSA_URL = "http://103.233.24.31:8080/busa";
     public static final String REGISTER_URL = "http://103.233.24.31:8080/registermahi";
     public static final String GUARD_LOGIN_URL = "http://103.233.24.31:8080/loginmahi";
@@ -28,6 +27,7 @@ public class URLs
     public static final String ADD_STAFF_LOCATION_URL = "http://103.233.24.31:8080/addstafflocation";
     public static final String GET_STAFF_LOCATION_MASTER_URL = "http://103.233.24.31:8080/getstafflocationmaster";
 
+    public static final String GET_COMPANIES_URL = "http://103.233.24.31:8080/getcompanies";
 
 
 }

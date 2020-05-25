@@ -36,6 +36,7 @@
 
         </activity>
         <activity android:name=".UpdateLocationActivity"></activity>
+        <activity android:name=".ShowMyCompaniesActivity"></activity>
         <activity android:name=".DashboardActivity"></activity>
         <activity android:name=".SchoolAttendanceActivity"></activity>
         <activity android:name=".RegisterActivity"></activity>

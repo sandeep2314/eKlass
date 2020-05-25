@@ -21,32 +21,31 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
+     // LoginActivity
 
-    EditText et_MobileNo, et_Password, et_CompanyID;
-    RadioGroup radioGroup_Staff;
+
+    EditText et_MobileNo, et_Password;
+    //RadioGroup radioGroup_Staff;
     String deviceToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setTheme(R.style.Theme_AppCompat);
         setContentView(R.layout.activity_main);
 
         et_MobileNo = (EditText) findViewById(R.id.etMobileNo_activity_main);
         et_Password = (EditText) findViewById(R.id.etPassword_activity_main);
-        et_CompanyID = findViewById(R.id.etCompanyId_activity_main);
-        radioGroup_Staff = findViewById(R.id.radioGroup_staff_activity_main);
 
         // if the user is logged in it will go to mychildren activity
+        User usr = SharedPrefManager.getInstance(this).getUser();
+
         if(SharedPrefManager.getInstance(this).isLoggedIn())
         {
-            User usr = SharedPrefManager.getInstance(this).getUser();
             finish();
-            // mamager
             startActivity( new Intent(this, ShowStaffActivity.class));
+
             return;
         }
-
 
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,19 +70,6 @@ public class MainActivity extends AppCompatActivity {
     {
         final String  userMobileNo = et_MobileNo.getText().toString();
         final  String userPassword = et_Password.getText().toString();
-        final String userCompanyId = et_CompanyID.getText().toString();
-        final String userIsAdmin; // = ((RadioButton) findViewById(radioGroup_Staff.getCheckedRadioButtonId())).getText().toString();
-
-        /*RadioButton rdManager = findViewById(R.id.radioBtnManager_activity_staff);
-
-        final  String IsStaff;
-        // 1 is worker, 2 is Manager
-        IsStaff = rdManager.isChecked()?"2":"1";
-*/
-        RadioButton rdAdmin = findViewById(R.id.radioAdmin_activity_main);
-        userIsAdmin = rdAdmin.isChecked()?Util.USER_TYPE_ADMIN:Util.USER_TYPE_MANAGER;
-
-        Log.w("sandeep", "444 userIsAdmin" + userIsAdmin);
 
         if(TextUtils.isEmpty(userMobileNo))
         {
@@ -94,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // if everything is fine
-
         class StaffLogin extends AsyncTask<Void, Void, String>
         {
 
@@ -102,14 +87,10 @@ public class MainActivity extends AppCompatActivity {
             protected String doInBackground(Void... voids) {
 
                 RequestHandler requestHandler = new RequestHandler();
-
                 HashMap<String, String> params = new HashMap<>();
 
                 params.put("rMobileNo", userMobileNo);
                 params.put("rPassword", userPassword);
-                params.put("rCompanyId", userCompanyId);
-                params.put("rIsAdmin", userIsAdmin);
-                //params.put("rIsAdmin", "1");
 
                 String response = null;
                 try
@@ -141,8 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     JSONObject jsonObject = new JSONObject(s);
                     JSONArray array = jsonObject.getJSONArray("a");
-
-
 
                     boolean isError = true;
                     String staffMobileNo_fromDB="-1" ;
@@ -176,18 +155,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.w("sandeep", " 111 " + isError);
 
 
-/*
-                    public User(String userMobileNo, String staffType, String staffId
-                        , String staffName
-                        , String designationId
-                        , String designationName
-                        , String companyId
-                        , String companyName
-                        , int userTheme) {
-*/
 
-
-                    User user = new User(
+                User user = new User(
                             staffMobileNo_fromDB
                             , staffType_fromDB
                             , staffId_fromDB
@@ -200,24 +169,16 @@ public class MainActivity extends AppCompatActivity {
                             );
 
                     // if no error in response
-
-                    Log.w("sandeep", " 333 " + isError);
-                    if(!isError)
+                   if(!isError)
                     {
-
-                        Log.w("sandeep", " 444 " + isError);
-
                         Toast.makeText(getApplicationContext()
                                 , "Login Successful..", Toast.LENGTH_SHORT).show();
 
                         SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
-                        Log.w("sandeep", " 555 " + isError);
 
                         finish();
                         startActivity(new Intent(getApplicationContext()
                                 , ShowStaffActivity.class));
-
-
                     }
                     else
                     {
