@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
+
+
 
 public class ShowStaffAdapter
         extends RecyclerView.Adapter<ShowStaffAdapter.ShowStaffViewHolder>
@@ -54,6 +60,10 @@ public class ShowStaffAdapter
             // getting the feature of the specified  position
             final Staff staff = staffList.get(position);
 
+            // loading the image
+            Glide.with(mCtx).load(staff.getStaffImage()).into(holder.imageStaff);
+
+
             // binding the data with the viewholder views
             holder.tv_FeatureName.setText("    "
                             + staff.getStaffName()
@@ -87,12 +97,14 @@ public class ShowStaffAdapter
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
             TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty;
+            ImageView imageStaff;
 
             public ShowStaffViewHolder(@NonNull View itemView) {
                 super(itemView);
                 this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
                 this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
                 this.tv_ShowDuty = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
+                this.imageStaff = itemView.findViewById(R.id.image_layout_dashboard);
                 //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
 
             }

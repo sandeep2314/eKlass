@@ -104,6 +104,7 @@ public class ShowStaffActivity extends BaseActivity
                                     , o.getString("MobileNo")
                                     , o.getString("CompanyId")
                                     , o.getString("CompanyName")
+                                    , o.getString("imageURL")
                             );
 
                         Log.w("sandeep555" , o.getString("WorkerName").toString());

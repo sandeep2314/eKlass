@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:text="My Staff"
         android:layout_marginTop="5dp"
-
         android:id="@+id/txtSchoolAttendance" >
 
     </TextView>

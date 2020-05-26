@@ -8,8 +8,9 @@ public class Staff
 
     public String Designation;
     public String CompanyId;
-    public String CompanyName;
-    public String MobileNo;
+    private String CompanyName;
+    private String MobileNo;
+    private String StaffImage;
 
     public Staff(String staffId, String staffName
             , String designation
@@ -23,6 +24,22 @@ public class Staff
         MobileNo = mobileNo;
 
     }
+
+    public Staff(String staffId, String staffName
+            , String designation
+            , String mobileNo
+            , String companyId, String companyName, String staffImage) {
+        StaffId = staffId;
+        StaffName = staffName;
+        Designation = designation;
+        CompanyId = companyId;
+        CompanyName = companyName;
+        MobileNo = mobileNo;
+        StaffImage = staffImage;
+
+    }
+
+
 
     public String getStaffId() {
         return StaffId;
@@ -42,5 +59,9 @@ public class Staff
 
     public String getMobileNo() {
         return MobileNo;
+    }
+
+    public String getStaffImage() {
+        return StaffImage;
     }
 }

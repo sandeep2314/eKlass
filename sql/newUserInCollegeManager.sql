@@ -1822,13 +1822,14 @@ CREATE TABLE tblScan(
 -- 1 staff type is Guard
 --2 staff type is Manager
 
---DROp TABLE tblStaff
+-- DROp TABLE tblStaff
 CREATE TABLE tblStaff(
 	StaffId [int] IDENTITY(1,1) NOT NULL,
 	StaffName VARCHAR(50) NOT NULL,
 	DesignationId INT NOT NULL DEFAULT 1,
 	MobileNo VARCHAR(15) NOT NULL,
 	StaffPassword VARCHAR(20) NOT NULL,
+    ImageURL VARCHAR(300) NULL,
 	IsActive INT NOT NULL DEFAULT 1, -- 1 -- Staff is Active, 0 --- Staff not active
 	CompanyID [int] NOT NULL,
 	CreatedAt DATETIME DEFAULT getdate()
@@ -1876,7 +1877,7 @@ INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Incharge', 3, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Manager', 4, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Nurse', 1, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Shopkeeper', 2, 1);
-INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Resident', 1, 1);
+INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Resident', 2, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Co-Ordinator', 2, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Principal', 3, 1);
 INSERT INTO tblDesignationQR(DName, HNo, CompanyID) VALUES('Admin', 9, 1);
