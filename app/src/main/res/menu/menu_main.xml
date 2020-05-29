@@ -104,6 +104,12 @@
         app:showAsAction="never">
     </item>
 
+    <item
+        android:id="@+id/menuProfile"
+        android:title="Change Profile"
+        app:showAsAction="never">
+    </item>
+
 
     <item
         android:id="@+id/menuLogOut"

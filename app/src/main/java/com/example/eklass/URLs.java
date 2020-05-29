@@ -28,6 +28,7 @@ public class URLs
     public static final String GET_STAFF_LOCATION_MASTER_URL = "http://103.233.24.31:8080/getstafflocationmaster";
 
     public static final String GET_COMPANIES_URL = "http://103.233.24.31:8080/getcompanies";
+    public static final String UPLOAD_IMAGE_URL = "http://103.233.24.31:8080/uploadimage";
 
 
 }

@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setLogo();
         actionBar.setTitle("SuperVisor");
 
         if(this.getClass().getSimpleName().equals("ShowStaffActivity"))
@@ -75,13 +76,12 @@ public class BaseActivity extends AppCompatActivity {
         btnSave.setVisible((this.getClass().getSimpleName().equals("AddStaffActivity")
                 || this.getClass().getSimpleName().equals("AddDesignationActivity")
                 || this.getClass().getSimpleName().equals("AddStaffLocationActivity")
+                || this.getClass().getSimpleName().equals("ProfileActivity")
                 || this.getClass().getSimpleName().equals("AddLocationActivity")));
 
         // delete icon
         btnDelete.setVisible((this.getClass().getSimpleName().equals("ShowStaffActivity")
                     || this.getClass().getSimpleName().equals("ShowLocationsActivity")));
-
-        Log.w("Sandeep Menu", "usr.getStaffType() 333 " + usr.getStaffType());
 
         //hide menus when worker
         if(usr.getStaffType().equals(Util.USER_TYPE_WORKER))
@@ -98,11 +98,7 @@ public class BaseActivity extends AppCompatActivity {
                showStaff.setVisible(false);
                addLocations.setVisible(false);
                showLocations.setVisible(false);
-
-               Log.w("Sandeep Menu", "usr.getStaffType() 444 " + usr.getStaffType());
            }
-
-            Log.w("Sandeep Menu", "usr.getStaffType() 555 " + usr.getStaffType());
         }
 
         return true;
@@ -119,7 +115,6 @@ public class BaseActivity extends AppCompatActivity {
                     // call addStaff
 
                     Method method = null;
-
                     String methodName="";
 
                     try {
@@ -138,6 +133,10 @@ public class BaseActivity extends AppCompatActivity {
                         else if(this.getClass().getSimpleName().equals("AddStaffLocationActivity"))
                         {
                             methodName = "addStaffLocation";
+                        }
+                        else if(this.getClass().getSimpleName().equals("ProfileActivity"))
+                        {
+                            methodName = "saveProfile";
                         }
 
                         method = this.getClass().getMethod(methodName);
@@ -226,6 +225,11 @@ public class BaseActivity extends AppCompatActivity {
             case R.id.menuShowDesignations:
                 finish();
                 startActivity( new Intent(this, ShowDesignationActivity.class));
+                return true;
+
+            case R.id.menuProfile:
+                finish();
+                startActivity( new Intent(this, ProfileActivity.class));
                 return true;
 
             case R.id.menuChangeCompany:
