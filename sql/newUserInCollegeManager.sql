@@ -1796,13 +1796,15 @@ CREATE TABLE tblSMSBill(
 
 ----------  Begin SuperVisor -------
 
---DROp TABLE tblRegisterCompany
-CREATE TABLE tblRegisterCompany(
+-- DROp TABLE tblCompany
+CREATE TABLE tblCompany(
 	[CompanyId] [int] IDENTITY(1,1) NOT NULL,
 	CompanyName VARCHAR(100) NOT NULL,
 	MobileNo VARCHAR(20) NULL,
 	CompanyPassword VARCHAR(50) NULL,
 	DeviceToken VARCHAR(500) NULL,
+    ImageName VARCHAR(25) Null,
+    CEmail VARCHAR(100) NULL,
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
@@ -1822,6 +1824,7 @@ CREATE TABLE tblScan(
 -- 1 staff type is Guard
 --2 staff type is Manager
 
+-- ALTER TABLE tblStaff DROP column ImageURL
 -- DROp TABLE tblStaff
 CREATE TABLE tblStaff(
 	StaffId [int] IDENTITY(1,1) NOT NULL,
@@ -1829,11 +1832,24 @@ CREATE TABLE tblStaff(
 	DesignationId INT NOT NULL DEFAULT 1,
 	MobileNo VARCHAR(15) NOT NULL,
 	StaffPassword VARCHAR(20) NOT NULL,
-    ImageURL VARCHAR(300) NULL,
+
 	IsActive INT NOT NULL DEFAULT 1, -- 1 -- Staff is Active, 0 --- Staff not active
 	CompanyID [int] NOT NULL,
 	CreatedAt DATETIME DEFAULT getdate()
 	)
+
+
+--use GardenValleyDB
+-- DROp TABLE tblProfile
+CREATE TABLE tblProfile(
+	ProfileId [int] IDENTITY(1,1) NOT NULL,
+	MobileNo VARCHAR(15) NOT NULL,
+	ImageURL VARCHAR(300) NULL,
+	StaffEmail VARCHAR(100) NULL,
+    Country VARCHAR(50) NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
+
 
 
 --DROp TABLE tblLocationQR

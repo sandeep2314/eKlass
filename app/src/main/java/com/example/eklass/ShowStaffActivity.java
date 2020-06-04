@@ -70,7 +70,7 @@ public class ShowStaffActivity extends BaseActivity
         {
             User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 
-            final String staff_mobileNo = usr.UserMobileNo;
+            final String staff_mobileNo = usr.getUserMobileNo();
             final String staffId = usr.getStaffId();
             final  String CompanyId = usr.getCompanyId();
             final String DesignationId = usr.getDesignationId();
@@ -92,10 +92,15 @@ public class ShowStaffActivity extends BaseActivity
                         JSONArray array = jsonObject.getJSONArray("a");
 
                         Staff staff_fromDB ;
+                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
+                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
+                        String imageURL = "";
                         for(int i=0; i< array.length(); i++)
                         {
                             JSONObject o = array.getJSONObject(i);
-                            Log.w("sandeep444" , o.getString("WorkerName").toString());
+                            imageURL = URLs.GET_IMAGE_URL + o.getString("imageURL");
+                            imageURL += "&pIsLogo=0";
+                            Log.w("sandeep444" , "imageURL "+imageURL);
 
                             staff_fromDB =   new Staff(
                                       o.getString("WorkerID")
@@ -104,15 +109,12 @@ public class ShowStaffActivity extends BaseActivity
                                     , o.getString("MobileNo")
                                     , o.getString("CompanyId")
                                     , o.getString("CompanyName")
-                                    , o.getString("imageURL")
+                                    , imageURL
                             );
 
                         Log.w("sandeep555" , o.getString("WorkerName").toString());
                         staffList.add(staff_fromDB);
                         }
-
-                        Log.w("Sandeep", " stafflist222 "+ staffList.size());
-
                         managerDashboardAdapter  =
                                 new ShowStaffAdapter(getApplicationContext(), staffList);
                         recyclerView.setAdapter(managerDashboardAdapter);
@@ -137,6 +139,7 @@ public class ShowStaffActivity extends BaseActivity
             HashMap<String, String> params = new HashMap<>();
             params.put("pStaffId", staffId);
             params.put("pCompanyId", CompanyId);
+            params.put("pIsLogo", "0");
 
             RequestHandler rh = new RequestHandler();
             String paramsStr = rh.getPostDataString(params);

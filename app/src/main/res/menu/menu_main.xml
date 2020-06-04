@@ -110,6 +110,13 @@
         app:showAsAction="never">
     </item>
 
+    <item
+        android:id="@+id/menuLogo"
+        android:title="Change Logo"
+        app:showAsAction="never">
+    </item>
+
+
 
     <item
         android:id="@+id/menuLogOut"

@@ -89,7 +89,6 @@
             <TextView
                 android:id="@+id/tvUpdate_layout_dashboard"
                 android:text="Update"
-                android:textColorLink="@color/colorBlueGreen"
                 android:layout_marginLeft="45dp"
                 android:layout_marginTop="70dp"
                 android:layout_width="wrap_content"

@@ -77,6 +77,7 @@ public class BaseActivity extends AppCompatActivity {
                 || this.getClass().getSimpleName().equals("AddDesignationActivity")
                 || this.getClass().getSimpleName().equals("AddStaffLocationActivity")
                 || this.getClass().getSimpleName().equals("ProfileActivity")
+                || this.getClass().getSimpleName().equals("CompanyProfileActivity")
                 || this.getClass().getSimpleName().equals("AddLocationActivity")));
 
         // delete icon
@@ -138,7 +139,10 @@ public class BaseActivity extends AppCompatActivity {
                         {
                             methodName = "saveProfile";
                         }
-
+                        else if(this.getClass().getSimpleName().equals("CompanyProfileActivity"))
+                        {
+                            methodName = "saveProfile";
+                        }
                         method = this.getClass().getMethod(methodName);
 
                         if(method != null)
@@ -232,10 +236,16 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, ProfileActivity.class));
                 return true;
 
+            case R.id.menuLogo:
+                finish();
+                startActivity( new Intent(this, CompanyProfileActivity.class));
+                return true;
+
             case R.id.menuChangeCompany:
                 finish();
                 startActivity( new Intent(this, ShowMyCompaniesActivity.class));
                 return true;
+
 
             case R.id.menuLogOut:
                 Toast.makeText(this, "Log out Clicked", Toast.LENGTH_SHORT).show();

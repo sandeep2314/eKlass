@@ -1,7 +1,6 @@
 package com.example.eklass;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,7 +25,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -36,8 +33,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -344,7 +339,7 @@ public class ScanActivity extends BaseActivity
                 {
                     Log.w("sandeep"
                             , "params1111 "+ requestHandler.getPostDataString(params));
-                    response = requestHandler.sendPostRequest(URLs.SAVESCAN_URL ,params);
+                    response = requestHandler.sendPostRequest(URLs.SAVE_SCAN_URL,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();

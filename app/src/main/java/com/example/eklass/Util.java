@@ -3,10 +3,12 @@ package com.example.eklass;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -491,6 +493,8 @@ public class Util
             return "";
         return str.toString();
     }
+
+
 
 
 
