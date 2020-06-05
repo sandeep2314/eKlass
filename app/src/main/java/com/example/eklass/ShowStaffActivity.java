@@ -52,7 +52,7 @@ public class ShowStaffActivity extends BaseActivity
                 usr.setCompanyName(companyName_chosen);
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
             }
-            TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
+            TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
             util.SetHeadings(this, pageHeading
                     , "My Staff", BaseActivity.themeNo);
 

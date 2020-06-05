@@ -1,17 +1,9 @@
 package com.example.eklass;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.SurfaceHolder;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.zxing.WriterException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +42,7 @@ public class ShowLocationsActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
 
-        TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
         util.SetHeadings(getApplicationContext(), pageHeading, "My Locations", BaseActivity.themeNo);
 
         recyclerView =  findViewById(R.id.rvManagerWorker);

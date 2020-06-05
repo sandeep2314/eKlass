@@ -79,12 +79,12 @@ public class ProfileActivity extends BaseActivity
             return;
         }
 
-        loadImage();
+        loadData();
 
     }
 
 
-    public void loadImage()
+    public void loadData()
     {
         User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();
 

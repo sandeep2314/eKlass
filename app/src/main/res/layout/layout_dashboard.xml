@@ -35,7 +35,7 @@
 
                 android:id="@+id/ckb_layout_Dashboard"
                 android:layout_marginTop="30dp"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="130dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/tvFeatureName_layout_dashboard"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="135dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             <TextView
                 android:id="@+id/tvGuardID_layout_dashboard"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="140dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="50dp"
                 android:layout_width="match_parent"
@@ -78,7 +78,7 @@
             <TextView
                 android:id="@+id/tvLocationName_layout_dashboard"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="45dp"
+                android:layout_marginLeft="145dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="60dp"
                 android:layout_width="match_parent"
@@ -89,7 +89,7 @@
             <TextView
                 android:id="@+id/tvUpdate_layout_dashboard"
                 android:text="Update"
-                android:layout_marginLeft="45dp"
+                android:layout_marginLeft="165dp"
                 android:layout_marginTop="70dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

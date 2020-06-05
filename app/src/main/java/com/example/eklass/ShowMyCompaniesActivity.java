@@ -7,7 +7,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +38,7 @@ public class ShowMyCompaniesActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
 
-        TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
         util.SetHeadings(getApplicationContext(), pageHeading
                 , "My Staff", BaseActivity.themeNo);
 
@@ -111,6 +110,7 @@ public class ShowMyCompaniesActivity extends BaseActivity
 
         HashMap<String, String> params = new HashMap<>();
         params.put("pMobileNo", mobileNo);
+        params.put("pCompanyId", "-1");
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);

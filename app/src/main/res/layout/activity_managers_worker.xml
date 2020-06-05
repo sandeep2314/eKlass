@@ -6,15 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageProfile_activity_managers_worker"
+        android:padding="4dp"
+        android:layout_width="80dp"
+        android:layout_marginLeft="2dp"
+        android:layout_height="80dp">
+
+    </ImageView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="90dp"
         android:text="My Staff"
         android:layout_marginTop="5dp"
-        android:id="@+id/txtSchoolAttendance" >
-
+        android:id="@+id/tvHeader_activity_managers_workers" >
     </TextView>
+
+    <ImageView
+        android:id="@+id/imageLogo_activity_managers_worker"
+        android:padding="4dp"
+        android:layout_width="80dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="80dp">
+
+    </ImageView>
 
 
     <androidx.recyclerview.widget.RecyclerView

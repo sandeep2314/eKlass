@@ -43,7 +43,7 @@ public class ShowDesignationActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
 
-        TextView pageHeading  = findViewById(R.id.txtSchoolAttendance);
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
 
         util.SetHeadings(getApplicationContext(), pageHeading, "My Locations", BaseActivity.themeNo);
 
