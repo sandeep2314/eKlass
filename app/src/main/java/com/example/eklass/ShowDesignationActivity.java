@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class ShowDesignationActivity extends BaseActivity
     Util util = new Util();
     private List<String> currentSelectedItems1 = new ArrayList<>();
     SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
-
+    public ImageView imageViewProfileHeading, imageViewLogoHeading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +46,14 @@ public class ShowDesignationActivity extends BaseActivity
 
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
 
-        util.SetHeadings(getApplicationContext(), pageHeading, "My Locations", BaseActivity.themeNo);
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+        util.SetHeadings(getApplicationContext(), pageHeading
+                , "My Locations"
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
 
         recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);

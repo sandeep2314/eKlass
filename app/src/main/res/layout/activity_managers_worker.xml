@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ShowStaffActivity"
     android:orientation="vertical"
@@ -10,16 +10,19 @@
         android:id="@+id/imageProfile_activity_managers_worker"
         android:padding="4dp"
         android:layout_width="80dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/ic_profile_grey_24dp"
         android:layout_height="80dp">
-
     </ImageView>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="90dp"
         android:text="My Staff"
+        android:textFontWeight="10"
         android:layout_marginTop="5dp"
         android:id="@+id/tvHeader_activity_managers_workers" >
     </TextView>
@@ -27,20 +30,20 @@
     <ImageView
         android:id="@+id/imageLogo_activity_managers_worker"
         android:padding="4dp"
-        android:layout_width="80dp"
+        android:src="@drawable/ic_profile_grey_24dp"
+        android:layout_marginTop="5dp"
         android:layout_alignParentRight="true"
+        android:layout_width="80dp"
         android:layout_height="80dp">
-
     </ImageView>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvManagerWorker"
 
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-</LinearLayout>
+</RelativeLayout>

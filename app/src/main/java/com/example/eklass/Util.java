@@ -8,11 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -76,14 +80,115 @@ public class Util
         return items;
     }
 
+    public void SetImage(final Context ctx, final ImageView imageView, final boolean isLogo)
+    {
+
+        Log.w("Sandeep4444", "SetImage");
+
+        User usr = SharedPrefManager.getInstance(ctx).getUser();
+
+        final String staffId = usr.getStaffId();
+        final  String CompanyId = usr.getCompanyId();
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Sandeep4444",response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    Staff staff_fromDB ;
+                    //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
+                    //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
+                    String imageURL = "";
+
+
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+
+                        String theURL = "";
+                        if(isLogo)
+                        {
+                            imageURL = URLs.GET_IMAGE_URL + o.getString("imageName");
+                            imageURL += "&pIsLogo=1";
+                        }
+                        else
+                        {
+                            imageURL = URLs.GET_IMAGE_URL + o.getString("imageURL");
+                            imageURL += "&pIsLogo=0";
+                        }
+                    }
+
+                    RequestOptions options = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_profile_grey_24dp)
+                            .error(R.drawable.ic_profile_grey_24dp);
+
+                    Glide.with(ctx).load(imageURL).apply(options).into(imageView);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(ctx,  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
+
+        HashMap<String, String> params = new HashMap<>();
+        params.put("pStaffId", staffId);
+        params.put("pCompanyId", CompanyId);
+
+        String the_url="";
+        if(isLogo) {
+            params.put("pIsLogo", "1");
+            the_url = URLs.GET_COMPANIES_URL;
+        }
+        else
+        {
+            params.put("pIsLogo", "0");
+            the_url= URLs.GET_STAFF_URL;
+        }
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+
+        String theURL = the_url +"?" + paramsStr;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(ctx);
+        requestQueue.add(stringRequest);
+
+    }
 
     public void SetHeadings(Context ctx, TextView tvPageHeading
-            , String pageName, int themeNo)
+            , String pageName
+            , ImageView logoImage
+            , ImageView profileImage
+            , int themeNo)
     {
         User user = SharedPrefManager.getInstance(ctx).getUser();
 
-        String heading = "Welcome Back: "+user.getStaffName()+"("+user.getCompanyName()+")";
-        heading += "\n\n" +pageName;
+        String heading = user.getStaffName();
+        heading += "\n" + user.getCompanyName();
+        heading += "\n" + pageName;
+
+
 
         //mTextView.setTextColor(ContextCompat.getColor(context, R.color.<name_of_color>));
         // mTextView.setTextColor(Color.parseColor("#bdbdbd"))
@@ -99,6 +204,13 @@ public class Util
             //pageHeading.setTextColor(Color.parseColor("#000000"));
             tvPageHeading.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
         }
+
+        SetImage(ctx, logoImage, true);
+        SetImage(ctx, profileImage, false);
+
+        // loading the image
+        //Glide.with(ctx).load(staff.getStaffImage()).apply(options).into(holder.imageStaff);
+        //Glide.with(ctx).load(imageURL_logo).apply(options).into(logo);
 
         tvPageHeading.setText(heading);
 

@@ -3,6 +3,7 @@ package com.example.eklass;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class ShowMyCompaniesActivity extends BaseActivity
     public List<Company> companyList;
     Util util = new Util();
     public ShowMyCompaniesAdapter showMyCompaniesAdapter;
+    public ImageView imageViewProfileHeading, imageViewLogoHeading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,8 +41,15 @@ public class ShowMyCompaniesActivity extends BaseActivity
         setContentView(R.layout.activity_managers_worker);
 
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
         util.SetHeadings(getApplicationContext(), pageHeading
-                , "My Staff", BaseActivity.themeNo);
+                , "My Companies"
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
 
         recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);

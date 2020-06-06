@@ -3,6 +3,7 @@ package com.example.eklass;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +33,9 @@ public class ShowStaffActivity extends BaseActivity
       Util util = new Util();
       public String companyID_chosen;
       public String companyName_chosen;
+      public ImageView imageViewProfileHeading, imageViewLogoHeading;
 
-       public ShowStaffAdapter managerDashboardAdapter;
+      public ShowStaffAdapter managerDashboardAdapter;
 
         @Override
         protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class ShowStaffActivity extends BaseActivity
 
             companyID_chosen = getIntent().getStringExtra("companyID_fromShowCompany_activity");
             companyName_chosen = getIntent().getStringExtra("companyName_fromShowCompany_activity");
+
+
+
 
             Log.w("sandeep", "companyName_chosen 111 " );
             if(companyID_chosen != null && companyID_chosen.length() > 0) {
@@ -53,8 +58,15 @@ public class ShowStaffActivity extends BaseActivity
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
             }
             TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+
+            imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+            imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
             util.SetHeadings(this, pageHeading
-                    , "My Staff", BaseActivity.themeNo);
+                    , "My Staff"
+                    , imageViewLogoHeading
+                    , imageViewProfileHeading
+                    , BaseActivity.themeNo);
 
             recyclerView =  findViewById(R.id.rvManagerWorker);
             recyclerView.setHasFixedSize(true);
