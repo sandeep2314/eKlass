@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ShowStaffActivity extends BaseActivity
 {
       public RecyclerView recyclerView;
@@ -33,7 +36,12 @@ public class ShowStaffActivity extends BaseActivity
       Util util = new Util();
       public String companyID_chosen;
       public String companyName_chosen;
-      public ImageView imageViewProfileHeading, imageViewLogoHeading;
+      public CircleImageView imageViewProfileHeading;
+              //, imageViewLogoHeading;
+      public CircleImageView imageViewLogoHeading;
+
+
+
 
       public ShowStaffAdapter managerDashboardAdapter;
 

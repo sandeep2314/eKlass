@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ShowStaffActivity"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageProfile_activity_managers_worker"
         android:padding="4dp"
-        android:layout_width="80dp"
+        android:layout_width="70dp"
         android:layout_marginTop="5dp"
         android:layout_alignParentLeft="true"
+        app:civ_border_color="@color/colorDarkGrey"
         android:src="@drawable/ic_profile_grey_24dp"
-        android:layout_height="80dp">
-    </ImageView>
-
+        android:layout_height="70dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,15 +28,17 @@
         android:id="@+id/tvHeader_activity_managers_workers" >
     </TextView>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageLogo_activity_managers_worker"
         android:padding="4dp"
         android:src="@drawable/ic_profile_grey_24dp"
         android:layout_marginTop="5dp"
+        app:civ_border_color="@color/colorDarkGrey"
         android:layout_alignParentRight="true"
-        android:layout_width="80dp"
-        android:layout_height="80dp">
-    </ImageView>
+        android:layout_width="70dp"
+        android:layout_height="70dp">
+    </de.hdodenhof.circleimageview.CircleImageView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvManagerWorker"

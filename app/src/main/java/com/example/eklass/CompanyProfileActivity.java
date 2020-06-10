@@ -78,6 +78,8 @@ public class CompanyProfileActivity extends BaseActivity
 
     }
 
+
+
     public void loadData()
     {
         User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();

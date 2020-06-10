@@ -10,8 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ShowMyCompaniesAdapter extends
@@ -46,6 +50,17 @@ public class ShowMyCompaniesAdapter extends
         final User usr = SharedPrefManager.getInstance(mCtx).getUser();
 
         final Company company = companyList.get(position);
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.ic_profile_grey_24dp)
+                .error(R.drawable.ic_profile_grey_24dp);
+
+
+        // loading the image
+        Glide.with(mCtx).load(company.getCompanyLogo()).apply(options).into(holder.logo);
+
+
         holder.tv_FeatureName.setText(company.getCompanyName());
         holder.tv_FeatureName.setOnClickListener(new View.OnClickListener()
         {
@@ -78,9 +93,11 @@ public class ShowMyCompaniesAdapter extends
     public class ShowMyCompaniesViewHolder extends RecyclerView.ViewHolder
     {
         TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty;
+        CircleImageView logo;
         public ShowMyCompaniesViewHolder(@NonNull View itemView) {
             super(itemView);
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
+            this.logo = itemView.findViewById(R.id.image_layout_dashboard);
         }
     }
 

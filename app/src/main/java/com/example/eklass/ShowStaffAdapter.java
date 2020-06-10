@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ShowStaffAdapter
@@ -75,13 +76,8 @@ public class ShowStaffAdapter
             holder.ckbDelete.setVisibility(View.INVISIBLE);
 
             // binding the data with the viewholder views
-            holder.tv_FeatureName.setText("    "
-                            + staff.getStaffName()
-                            + "("
-                            + staff.getDesignation()
-                            + ")"
-                    );
-            holder.tv_guardID.setText("    " + staff.getStaffId());
+            holder.tv_FeatureName.setText(staff.getStaffName());
+            holder.tv_guardID.setText(staff.getDesignation());
            //holder.tv_FeatureName.setOnClickListener(new View.OnClickListener()
             holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
             {
@@ -107,7 +103,7 @@ public class ShowStaffAdapter
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
             TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty;
-            ImageView imageStaff;
+            CircleImageView imageStaff;
             CheckBox ckbDelete;
 
             public ShowStaffViewHolder(@NonNull View itemView) {

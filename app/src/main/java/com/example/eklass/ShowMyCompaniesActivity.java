@@ -84,12 +84,17 @@ public class ShowMyCompaniesActivity extends BaseActivity
                     JSONArray array = jsonObject.getJSONArray("a");
 
                     Company company_fromDB ;
+                    String imageURL = "";
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
+                        imageURL = URLs.GET_IMAGE_URL + o.getString("imageName");
+                        imageURL += "&pIsLogo=1";
+
                         company_fromDB =   new Company(
                                 o.getInt("CompanyID")
                                 , o.getString("CompanyName")
+                                , imageURL
 
                         );
 
