@@ -38,6 +38,7 @@
 
         </activity>
 
+        <activity android:name=".ShowStaffLocationActivity"></activity>
         <activity android:name=".CompanyProfileActivity"></activity>
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".UpdateLocationActivity"></activity>

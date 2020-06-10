@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdapter.ShowLocationsViewHolder>
+public class ShowLocationsAdapter
+        extends RecyclerView.Adapter<ShowLocationsAdapter.ShowLocationsViewHolder>
 {
 
     Util util = new Util();
@@ -54,11 +55,7 @@ public class ShowLocationsAdapter extends RecyclerView.Adapter<ShowLocationsAdap
 
         final LocationQR theLocation = locationList.get(position);
         // binding the data with the viewholder views
-        holder.tv_FeatureName.setText("  ID: "
-                                    + theLocation.getLocationId()
-                                    + " Location: "
-                                    + theLocation.getLocationName()
-                                        );
+        holder.tv_FeatureName.setText(theLocation.getLocationName());
 
         holder.tv_guardID.setText( util.GetString(theLocation.getLatitude())
                 + ", "+ util.GetString(theLocation.getLongitude()));

@@ -28,6 +28,7 @@ public class URLs
     public static final String GET_COMPANIES_URL = DOMAIN_NAME + "getcompanies";
     public static final String UPLOAD_IMAGE_URL = DOMAIN_NAME + "uploadimage";
     public static final String GET_IMAGE_URL = DOMAIN_NAME + "getimage?fileName=";
+    public static final String GET_STAFF_LOCATION_URL = DOMAIN_NAME + "getallstafflocation";
 
 }
 

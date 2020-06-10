@@ -218,8 +218,8 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, AddStaffLocationActivity.class));
                 return true;
             case R.id.menuShowStaffLocation:
-                //finish();
-                //startActivity( new Intent(this, ShowL.class));
+                finish();
+                startActivity( new Intent(this, ShowStaffLocationActivity.class));
                 return true;
             case R.id.menuAddDesignations:
                 finish();
