@@ -81,8 +81,12 @@ public class BaseActivity extends AppCompatActivity {
                 || this.getClass().getSimpleName().equals("AddLocationActivity")));
 
         // delete icon
-        btnDelete.setVisible((this.getClass().getSimpleName().equals("ShowStaffActivity")
-                    || this.getClass().getSimpleName().equals("ShowLocationsActivity")));
+        btnDelete.setVisible(
+                      this.getClass().getSimpleName().equals("ShowStaffActivity")
+                    || this.getClass().getSimpleName().equals("ShowLocationsActivity")
+                    || this.getClass().getSimpleName().equals("ShowDesignationActivity")
+                    || this.getClass().getSimpleName().equals("ShowStaffLocationActivity")
+                    );
 
         //hide menus when worker
         if(usr.getStaffType().equals(Util.USER_TYPE_WORKER))
@@ -110,13 +114,14 @@ public class BaseActivity extends AppCompatActivity {
 
         User usr = SharedPrefManager.getInstance(this).getUser();
 
+        Method method = null;
+        String methodName="";
+
         switch (item.getItemId())
         {
             case  R.id.menuSave:
                     // call addStaff
 
-                    Method method = null;
-                    String methodName="";
 
                     try {
                         if(this.getClass().getSimpleName().equals("AddStaffActivity")) {
@@ -155,7 +160,26 @@ public class BaseActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-            return true;
+                    return true;
+
+            case R.id.menuDelete:
+                try {
+                    method = this.getClass().getMethod("Delete");
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                if(method != null) {
+                    try {
+                        method.invoke(this);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return true;
+
+
             case R.id.menuChangeThemeLight:
                 if (themeNo == Util.BLACK_THEME) {
                     themeNo = Util.WHITE_THEME;
@@ -169,6 +193,7 @@ public class BaseActivity extends AppCompatActivity {
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
                 recreate();
                 return true;
+
 
 
             case android.R.id.home:

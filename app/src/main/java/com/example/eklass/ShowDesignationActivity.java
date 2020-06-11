@@ -2,6 +2,7 @@ package com.example.eklass;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.ImageView;
@@ -61,6 +62,18 @@ public class ShowDesignationActivity extends BaseActivity
         designationList = new ArrayList<>();
 
         loadData2();
+    }
+
+
+    public void Delete()
+    {
+        String selectedIds = TextUtils.join(", ", currentSelectedItems1) ;
+        util.DeleteRecord(getApplicationContext()
+                , selectedIds, URLs.DEL_DESIGNATION_URL);
+        Toast.makeText(getApplicationContext()
+                , "Records Deleted.." + selectedIds, Toast.LENGTH_LONG).show();
+        recreate();
+
     }
 
 
