@@ -2,6 +2,7 @@ package com.example.eklass;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.ImageView;
@@ -50,7 +51,7 @@ public class ShowStaffLocationActivity extends BaseActivity
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
         imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
         imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
-        util.SetHeadings(getApplicationContext(), pageHeading, "My Locations"
+        util.SetHeadings(getApplicationContext(), pageHeading, "My Staff-Locations"
                 , imageViewLogoHeading
                 , imageViewProfileHeading
                 , BaseActivity.themeNo);
@@ -64,6 +65,19 @@ public class ShowStaffLocationActivity extends BaseActivity
 
 
     }
+
+
+    public void Delete()
+    {
+        String selectedIds = TextUtils.join(", ", currentSelectedItems1) ;
+        util.DeleteRecord(getApplicationContext()
+                , selectedIds, URLs.DEL_STAFF_LOCATION_URL);
+        Toast.makeText(getApplicationContext()
+                , "Records Deleted.." + selectedIds, Toast.LENGTH_LONG).show();
+        recreate();
+
+    }
+
 
     private void loadData2()
     {

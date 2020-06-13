@@ -606,7 +606,21 @@ public class Util
         return str.toString();
     }
 
+    public int GetSpinnerPosition(String [] idsArray, int param)
+    {
+        int position=0;
 
+        if(idsArray!=null) {
+            for (int i = 0; i < idsArray.length; i++) {
+                if (idsArray[i].equals(String.valueOf(param))) {
+                    position = i;
+                    break;
+                }
+
+            }
+        }
+        return position;
+    }
 
 
 

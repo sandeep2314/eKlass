@@ -42,6 +42,7 @@ public class AddStaffLocationActivity extends BaseActivity
     Integer selectedLocationId, selectedWorkerId, selectedManagerId;
     Integer selectedWorkerHierarchy, selectedManagerHierarchy;
     Boolean isUpdate = false;
+    int slid, locationIdUpdate,  workerIdUpdate, managerIdUpdate  ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +60,33 @@ public class AddStaffLocationActivity extends BaseActivity
         spinner_worker.setOnItemSelectedListener(this);
 
         loadData2();
+
+        String update  = getIntent().getStringExtra("isUpdate");
+        if(update!= null)
+            isUpdate = update.equals("yes");
+
+        if(isUpdate)
+        {
+            //etLocationName.setText(getIntent().getStringExtra("locationName"));
+
+            slid = getIntent().getIntExtra("SLId",-1);
+
+
+            locationIdUpdate= getIntent().getIntExtra("locationId",0);
+            spinner_location.setSelection(locationIdUpdate);
+
+            workerIdUpdate =  getIntent().getIntExtra("workerId", 0);
+            spinner_worker.setSelection(workerIdUpdate);
+
+            managerIdUpdate =  getIntent().getIntExtra("managerId", 0);
+            spinner_manager.setSelection(managerIdUpdate);
+
+            //selectedManagerId = Integer.parseInt(managerids[position]);
+
+
+        }
+
+
 
     }
 
@@ -88,6 +116,9 @@ public class AddStaffLocationActivity extends BaseActivity
                 RequestHandler requestHandler = new RequestHandler();
                 HashMap<String, String> params = new HashMap<>();
 
+                if (isUpdate)
+                    params.put("pSlId", String.valueOf(slid));
+
                 params.put("pLocationId", selectedLocationId.toString());
                 params.put("pManagerId", selectedManagerId.toString());
                 params.put("pWorkerId", selectedWorkerId.toString());
@@ -98,7 +129,7 @@ public class AddStaffLocationActivity extends BaseActivity
                 String urlLocation = URLs.ADD_STAFF_LOCATION_URL;
 
                 if(isUpdate)
-                    urlLocation = URLs.UPDATE_LOCATION_URL;
+                    urlLocation = URLs.UPDATE_STAFF_LOCATION_URL;
 
                 try
                 {
@@ -241,6 +272,9 @@ public class AddStaffLocationActivity extends BaseActivity
 
                     locationids = util.ConvertListToStringArray(locationIDsList);
                     managerids = util.ConvertListToStringArray(managerIDsList);
+
+                    //Log.w("sandeep999", "managerids.length22 "+managerids.length);
+
                     hierarchies = util.ConvertListToStringArray(hieracyList);
 
                     arrayAdapter_location = new ArrayAdapter(getApplicationContext()
@@ -252,6 +286,12 @@ public class AddStaffLocationActivity extends BaseActivity
                     spinner_location.setAdapter(arrayAdapter_location);
                     spinner_manager.setAdapter(arrayAdapter_manager);
                     spinner_worker.setAdapter(arrayAdapter_manager);
+
+                    if(isUpdate) {
+                        spinner_location.setSelection(util.GetSpinnerPosition(locationids, locationIdUpdate));
+                        spinner_worker.setSelection(util.GetSpinnerPosition(managerids, workerIdUpdate));
+                        spinner_manager.setSelection(util.GetSpinnerPosition(managerids, managerIdUpdate));
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -315,8 +355,6 @@ public class AddStaffLocationActivity extends BaseActivity
                 selectedManagerId = Integer.parseInt(managerids[position]);
         }
 
-        Toast.makeText(parent.getContext()
-                ,  item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
 
     }
 

@@ -65,16 +65,19 @@ public class ShowStaffLocationAdapter
         holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mCtx, "Update Clicked", Toast.LENGTH_LONG).show();
+                //Toast.makeText(mCtx, "Update Clicked", Toast.LENGTH_LONG).show();
 
-                Intent i = new Intent(v.getContext(), AddLocationActivity.class);
+                Intent i = new Intent(v.getContext(), AddStaffLocationActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("SLId",staffLocation.getSLId());
+                //i.putExtra("SLId", staffLocation.getSLId());
+
+                i.putExtra("SLId", staffLocation.getSLId());
                 i.putExtra("isUpdate","yes" );
                 i.putExtra("locationId",staffLocation.getLocationId() );
                 i.putExtra("workerId",staffLocation.getWorkerId() );
                 i.putExtra("managerId",staffLocation.getManagerId());
                 v.getContext().startActivity(i);
+
 
             }
         });

@@ -30,6 +30,8 @@ public class URLs
     public static final String GET_IMAGE_URL = DOMAIN_NAME + "getimage?fileName=";
     public static final String GET_STAFF_LOCATION_URL = DOMAIN_NAME + "getallstafflocation";
     public static final String DEL_DESIGNATION_URL = DOMAIN_NAME + "deldesignation";
+    public static final String DEL_STAFF_LOCATION_URL = DOMAIN_NAME + "delstafflocation";
+    public static final String UPDATE_STAFF_LOCATION_URL = DOMAIN_NAME + "updatestafflocation";
 
 }
 
