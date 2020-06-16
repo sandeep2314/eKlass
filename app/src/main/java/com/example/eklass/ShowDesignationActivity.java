@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ShowDesignationActivity extends BaseActivity
 {
 
@@ -38,7 +40,7 @@ public class ShowDesignationActivity extends BaseActivity
     Util util = new Util();
     private List<String> currentSelectedItems1 = new ArrayList<>();
     SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
-    public ImageView imageViewProfileHeading, imageViewLogoHeading;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class ShowDesignationActivity extends BaseActivity
         setContentView(R.layout.activity_managers_worker);
 
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
-
+        CircleImageView imageViewProfileHeading, imageViewLogoHeading;
         imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
         imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
 

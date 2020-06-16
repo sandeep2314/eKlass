@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".AddLocationActivity"
@@ -7,28 +7,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/activity_managers_worker"></include>
+
     <EditText
         android:id="@+id/etLocationName_activity_location"
         android:inputType="text"
         android:hint="Location Name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/edit_text"
+        android:layout_marginTop="280dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_height="50dp"
+        android:layout_width="match_parent" >
     </EditText>
 
     <EditText
         android:id="@+id/etLatitude_activity_location"
         android:inputType="text"
         android:hint="Latitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/edit_text"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="330dp"
+        android:layout_width="match_parent" >
     </EditText>
 
     <EditText
         android:id="@+id/etLongitude_activity_location"
         android:inputType="text"
         android:hint="Longitude"
+        android:layout_marginTop="380dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </EditText>
 
-</LinearLayout>
+</RelativeLayout>

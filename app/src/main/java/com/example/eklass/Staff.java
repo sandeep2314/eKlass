@@ -4,15 +4,18 @@ public class Staff
 {
     public String StaffId;
     public String StaffName;
-    // admin, Guard, manager
-
+    public String StaffPassword;
+    public int DesignationId;
     public String Designation;
     public String CompanyId;
     private String CompanyName;
     private String MobileNo;
+    private int IsActive;
     private String StaffImage;
 
+
     public Staff(String staffId, String staffName
+
             , String designation
             , String mobileNo
             , String companyId, String companyName) {
@@ -25,21 +28,41 @@ public class Staff
 
     }
 
-    public Staff(String staffId, String staffName
+    public Staff(String staffId
+            , String staffName
+            , String staffPassword
+            , int designationId
             , String designation
             , String mobileNo
-            , String companyId, String companyName, String staffImage) {
+            , String companyId
+            , String companyName
+            , int isActive
+            , String staffImage)
+    {
         StaffId = staffId;
         StaffName = staffName;
+        StaffPassword = staffPassword;
+        DesignationId = designationId;
         Designation = designation;
         CompanyId = companyId;
         CompanyName = companyName;
         MobileNo = mobileNo;
+        IsActive = isActive;
         StaffImage = staffImage;
 
     }
 
+    public int getIsActive() {
+        return IsActive;
+    }
 
+    public String getStaffPassword() {
+        return StaffPassword;
+    }
+
+    public int getDesignationId() {
+        return DesignationId;
+    }
 
     public String getStaffId() {
         return StaffId;

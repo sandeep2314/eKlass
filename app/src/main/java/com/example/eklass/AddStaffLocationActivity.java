@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AddStaffLocationActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener
 {
@@ -43,6 +46,7 @@ public class AddStaffLocationActivity extends BaseActivity
     Integer selectedWorkerHierarchy, selectedManagerHierarchy;
     Boolean isUpdate = false;
     int slid, locationIdUpdate,  workerIdUpdate, managerIdUpdate  ;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,8 +89,6 @@ public class AddStaffLocationActivity extends BaseActivity
 
 
         }
-
-
 
     }
 

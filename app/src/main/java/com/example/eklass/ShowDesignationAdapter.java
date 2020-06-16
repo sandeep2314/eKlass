@@ -44,16 +44,8 @@ public class ShowDesignationAdapter
         final Designation designation = designationList.get(position);
         // binding the data with the viewholder views
 
-        holder.tv_FeatureName.setText("   Id: "
-                        + designation.getDesignationId()
-                        + " Designation: "
-                        + designation.getDName()
-                            );
-        holder.tv_guardID.setText(" Hierarchy: "
-                        + designation.getHNo().toString()
-                        + " Dept: "
-                        + designation.getDept()
-                    );
+        holder.tv_FeatureName.setText(designation.getDName());
+        holder.tv_guardID.setText(designation.getHNo().toString());
 
         holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override

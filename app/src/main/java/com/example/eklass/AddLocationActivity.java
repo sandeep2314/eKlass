@@ -10,7 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -46,6 +48,18 @@ public class AddLocationActivity extends BaseActivity
         etLocationName = findViewById(R.id.etLocationName_activity_location);
         etLatitude = findViewById(R.id.etLatitude_activity_location);
         etLongitude = findViewById(R.id.etLongitude_activity_location);
+
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        ImageView imageViewProfileHeading, imageViewLogoHeading;
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+        util.SetHeadings(getApplicationContext(), pageHeading
+                , "Add Locations"
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
+
 
         String update  = getIntent().getStringExtra("isUpdate");
         if(update!= null)

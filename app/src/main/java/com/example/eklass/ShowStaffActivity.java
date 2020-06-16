@@ -2,13 +2,13 @@ package com.example.eklass;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.widget.ImageView;
+import android.util.SparseBooleanArray;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,27 +36,24 @@ public class ShowStaffActivity extends BaseActivity
       Util util = new Util();
       public String companyID_chosen;
       public String companyName_chosen;
-      public CircleImageView imageViewProfileHeading;
-              //, imageViewLogoHeading;
-      public CircleImageView imageViewLogoHeading;
+      public ShowStaffAdapter showStaffAdapter;
+      public  String isAllStaff;
+      private List<String> currentSelectedItems1 = new ArrayList<>();
+      SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
 
 
 
-
-      public ShowStaffAdapter managerDashboardAdapter;
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState)
+        {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_managers_worker);
 
             companyID_chosen = getIntent().getStringExtra("companyID_fromShowCompany_activity");
             companyName_chosen = getIntent().getStringExtra("companyName_fromShowCompany_activity");
 
+            isAllStaff = String.valueOf(getIntent().getIntExtra("isAllStaff", 0));
 
-
-
-            Log.w("sandeep", "companyName_chosen 111 " );
             if(companyID_chosen != null && companyID_chosen.length() > 0) {
 
                 Log.w("sandeep", "companyName_chosen 222 " +companyName_chosen);
@@ -66,12 +63,18 @@ public class ShowStaffActivity extends BaseActivity
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
             }
             TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
-
+            CircleImageView imageViewProfileHeading, imageViewLogoHeading;
             imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
             imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
 
+            String pageName = "";
+            if(isAllStaff.equals("0"))
+                pageName = "My Assigned Staff";
+            else
+                pageName = "My All Staff";
+
             util.SetHeadings(this, pageHeading
-                    , "My Staff"
+                    , pageName
                     , imageViewLogoHeading
                     , imageViewProfileHeading
                     , BaseActivity.themeNo);
@@ -85,7 +88,20 @@ public class ShowStaffActivity extends BaseActivity
             loadData2();
       }
 
-        //////////////////begin loaddata2////////////
+
+    public void Delete()
+    {
+        String selectedIds = TextUtils.join(", ", currentSelectedItems1) ;
+        util.DeleteRecord(getApplicationContext()
+                , selectedIds, URLs.DEL_STAFF_URL);
+        Toast.makeText(getApplicationContext()
+                , "Records Deleted.." + selectedIds, Toast.LENGTH_LONG).show();
+        recreate();
+
+    }
+
+
+    //////////////////begin loaddata2////////////
         private void loadData2()
         {
             User usr = SharedPrefManager.getInstance(getApplicationContext()).getUser();
@@ -125,19 +141,54 @@ public class ShowStaffActivity extends BaseActivity
                             staff_fromDB =   new Staff(
                                       o.getString("WorkerID")
                                     , o.getString("WorkerName")
+                                    , o.getString("StaffPassword")
+                                    , o.getInt("Did")
                                     , o.getString("DName")
                                     , o.getString("MobileNo")
                                     , o.getString("CompanyId")
                                     , o.getString("CompanyName")
+                                    , o.getInt("IsActive")
                                     , imageURL
                             );
 
                         Log.w("sandeep555" , o.getString("WorkerName").toString());
                         staffList.add(staff_fromDB);
                         }
-                        managerDashboardAdapter  =
-                                new ShowStaffAdapter(getApplicationContext(), staffList);
-                        recyclerView.setAdapter(managerDashboardAdapter);
+
+                        showStaffAdapter = new ShowStaffAdapter
+                                (getApplicationContext(),  staffList
+                                        , new ShowStaffAdapter.OnItemCheckListener()
+                                {
+
+                                    @Override
+                                    public void onItemCheck(int pos, Staff item) {
+
+                                        //currentSelectedItems.add(item);
+                                        currentSelectedItems.put(pos, true);
+                                        currentSelectedItems1.add(item.getStaffId());
+
+                                        Toast.makeText(getApplicationContext()
+                                                , "onItemCheck " + currentSelectedItems1.toString()
+                                                , Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onItemUncheck(int pos, Staff item) {
+                                        currentSelectedItems.delete(pos);
+                                        currentSelectedItems1.remove(item.getStaffId());
+
+
+                                        Toast.makeText(getApplicationContext()
+                                                , "onItemUn-Check "
+                                                        + currentSelectedItems1.toString()
+                                                , Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+
+
+                        recyclerView.setAdapter(showStaffAdapter);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -160,6 +211,8 @@ public class ShowStaffActivity extends BaseActivity
             params.put("pStaffId", staffId);
             params.put("pCompanyId", CompanyId);
             params.put("pIsLogo", "0");
+            params.put("pIsAllStaff", isAllStaff);
+
 
             RequestHandler rh = new RequestHandler();
             String paramsStr = rh.getPostDataString(params);

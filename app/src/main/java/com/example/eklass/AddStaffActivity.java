@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,27 +35,70 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AddStaffActivity extends BaseActivity
         implements AdapterView.OnItemSelectedListener
 {
 
-    EditText etStaffName, etStaffPassword, etStaffMobile, etDesignation;
+    EditText etStaffName, etStaffPassword, etStaffMobile;
     public String[] designationIds;
     Spinner spinner_designation;
+    int designationId;
     ArrayAdapter arrayAdapter_designation;
+    Boolean isUpdate = false;
+    String staffIdUpdate;
+    int  designationIdUpdate, IsActiveUpdate;
+    CheckBox ckbIsActive;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addstaff);
 
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        CircleImageView imageViewProfileHeading, imageViewLogoHeading;
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+        String update  = getIntent().getStringExtra("isUpdate");
+        if(update!= null)
+            isUpdate = update.equals("yes");
+
+
+        String pageName = "";
+        if(isUpdate)
+            pageName = "Update Staff";
+        else
+            pageName = "Add Staff";
+
+        util.SetHeadings(this, pageHeading
+                , pageName
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
+
+
         etStaffName = findViewById(R.id.etStaffName_activity_staff);
         etStaffMobile = findViewById(R.id.etStaffMobileNo_activity_staff);
         etStaffPassword= findViewById(R.id.etStaffPassword_activity_staff);
-        etDesignation = findViewById(R.id.etDesignation_activity_addstaff);
 
         spinner_designation = findViewById(R.id.spinner_designation_activity_addstaff);
         spinner_designation.setOnItemSelectedListener(this);
+
+        ckbIsActive = findViewById(R.id.ckbActive_activity_isstaff);
+
+        if(isUpdate)
+        {
+            staffIdUpdate = getIntent().getStringExtra("StaffID");
+            etStaffName.setText(getIntent().getStringExtra("StaffName"));
+            etStaffPassword.setText(getIntent().getStringExtra("StaffPassword"));
+            etStaffMobile.setText(getIntent().getStringExtra("StaffMobile"));
+            designationIdUpdate = getIntent().getIntExtra("locationId",0);
+            IsActiveUpdate = getIntent().getIntExtra("IsActive",1);
+            ckbIsActive.setChecked(IsActiveUpdate==1);
+        }
+
 
         // add designations to spinner
         loadData2();
@@ -68,7 +114,8 @@ public class AddStaffActivity extends BaseActivity
         final String  staffName = etStaffName.getText().toString();
         final String  staffMobileNo = etStaffMobile.getText().toString();
         final String staffPassword = etStaffPassword.getText().toString();
-        final String staffDesignation = etDesignation.getText().toString();
+        final Boolean IsCkbChecked = ckbIsActive.isChecked();
+
 
         if(TextUtils.isEmpty(staffName))
         {
@@ -91,13 +138,6 @@ public class AddStaffActivity extends BaseActivity
             return;
         }
 
-        if(TextUtils.isEmpty(staffDesignation))
-        {
-            spinner_designation.requestFocus();
-            return;
-        }
-
-
         // if everything is fine
 
         class AddStaff extends AsyncTask<Void, Void, String>
@@ -109,16 +149,28 @@ public class AddStaffActivity extends BaseActivity
                 RequestHandler requestHandler = new RequestHandler();
                 HashMap<String, String> params = new HashMap<>();
 
+                params.put("pStaffId", String.valueOf(staffIdUpdate));
                 params.put("pCompanyId", companyId);
                 params.put("pMobileNo", staffMobileNo);
                 params.put("pPassword", staffPassword);
                 params.put("pStaffName", staffName);
-                params.put("pDesignationId", staffDesignation);
+                params.put("pDesignationId", String.valueOf(designationId));
+
+                if(IsCkbChecked)
+                    params.put("pIsActive", "1");
+                else
+                    params.put("pIsActive", "0");
+
+                String saveStaffURL="";
+                if(isUpdate)
+                    saveStaffURL=URLs.UPDATE_STAFF_URL;
+                else
+                    saveStaffURL=URLs.ADDSTAFF_URL;
 
                 String response = null;
                 try
                 {
-                    response = requestHandler.sendPostRequest(URLs.ADDSTAFF_URL ,params);
+                    response = requestHandler.sendPostRequest(saveStaffURL ,params);
                 } catch (MalformedURLException e)
                 {
                     e.printStackTrace();
@@ -192,11 +244,9 @@ public class AddStaffActivity extends BaseActivity
 
         if(parent.getId()==R.id.spinner_designation_activity_addstaff) {
             selected_value = designationIds[position];
-            etDesignation.setText(selected_value);
+            designationId = Integer.parseInt(selected_value);
         }
 
-        Toast.makeText(parent.getContext()
-                ,  item + " Value: " + selected_value, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -236,8 +286,7 @@ public class AddStaffActivity extends BaseActivity
                         JSONObject o = array.getJSONObject(i);
 
                         designationIDsList.add(o.getString("DId"));
-                            designationList.add(o.getString("DName"));
-
+                        designationList.add(o.getString("DName"));
                     }
 
                     Util util = new Util();
@@ -249,7 +298,14 @@ public class AddStaffActivity extends BaseActivity
                     spinner_designation.setAdapter(arrayAdapter_designation);
 
 
-                } catch (JSONException e) {
+                    if(isUpdate) {
+                        spinner_designation.setSelection(util.GetSpinnerPosition(designationIds
+                                , designationIdUpdate));
+                    }
+
+
+
+                    } catch (JSONException e) {
                     e.printStackTrace();
                 }
 

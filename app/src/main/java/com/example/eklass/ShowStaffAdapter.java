@@ -2,6 +2,7 @@ package com.example.eklass;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,18 +29,31 @@ public class ShowStaffAdapter
 
         // this context we will use to inflate the layout
         private Context mCtx;
-        //private List<Feature> featureList;
-
         private List<Staff> staffList;
+        SparseBooleanArray itemStateArray= new SparseBooleanArray();
 
+        interface OnItemCheckListener
+        {
+            void onItemCheck(int pos, Staff item);
+            void onItemUncheck(int pos, Staff item);
+        }
+
+        @NonNull
+        private ShowStaffAdapter.OnItemCheckListener onItemCheckListener;
 
         // constructor
-    public ShowStaffAdapter(Context mCtx, List<Staff> staff)
+        /*public ShowStaffAdapter(Context mCtx, List<Staff> staff)
         {
             this.mCtx = mCtx;
             this.staffList = staff;
         }
-
+*/
+        public ShowStaffAdapter(Context mCtx, List<Staff> staffList
+                , @NonNull OnItemCheckListener onItemCheckListener) {
+            this.mCtx = mCtx;
+            this.staffList = staffList;
+            this.onItemCheckListener = onItemCheckListener;
+        }
 
         @NonNull
         @Override
@@ -72,13 +86,33 @@ public class ShowStaffAdapter
             // loading the image
             Glide.with(mCtx).load(staff.getStaffImage()).apply(options).into(holder.imageStaff);
 
-
-            holder.ckbDelete.setVisibility(View.INVISIBLE);
+            //holder.ckbDelete.setVisibility(View.INVISIBLE);
 
             // binding the data with the viewholder views
             holder.tv_FeatureName.setText(staff.getStaffName());
             holder.tv_guardID.setText(staff.getDesignation());
-           //holder.tv_FeatureName.setOnClickListener(new View.OnClickListener()
+
+            holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(v.getContext(), AddStaffActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //i.putExtra("SLId", staffLocation.getSLId());
+                    i.putExtra("isUpdate","yes" );
+                    i.putExtra("StaffID", staff.getStaffId());
+                    i.putExtra("StaffName",staff.getStaffName() );
+                    i.putExtra("StaffPassword",staff.getStaffPassword() );
+                    i.putExtra("StaffMobile",staff.getMobileNo() );
+                    i.putExtra("DesignationId",staff.getDesignationId() );
+                    i.putExtra("IsActive",staff.getIsActive() );
+
+                    v.getContext().startActivity(i);
+
+
+                }
+            });
+
+
             holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -86,11 +120,47 @@ public class ShowStaffAdapter
 
                     Intent i = new Intent(v.getContext(), DutyActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("guardIDc",staff.getStaffId() );
+                    i.putExtra("guardIDc", staff.getStaffId() );
                     v.getContext().startActivity(i);
 
                 }
             });
+
+
+
+            if (!itemStateArray.get(position, false))
+            {
+                holder.ckbDelete.setChecked(false);
+            }
+            else
+            {
+                holder.ckbDelete.setChecked(true);
+            }
+
+            holder.ckbDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    //holder.ckb.setChecked(! holder.ckb.isChecked());
+
+
+                    if (!itemStateArray.get(position, false))
+                    {
+                        holder.ckbDelete.setChecked(true);
+                        itemStateArray.put(position, true);
+                        onItemCheckListener.onItemCheck(position, staff);
+                    }
+                    else
+                    {
+                        holder.ckbDelete.setChecked(false);
+                        itemStateArray.put(position, false);
+                        onItemCheckListener.onItemUncheck(position, staff);
+                    }
+
+                }
+            });
+
+
 
         }
 
@@ -102,7 +172,7 @@ public class ShowStaffAdapter
 
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
-            TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty;
+            TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty, tvUpdate;
             CircleImageView imageStaff;
             CheckBox ckbDelete;
 
@@ -113,6 +183,7 @@ public class ShowStaffAdapter
                 this.tv_ShowDuty = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
                 this.imageStaff = itemView.findViewById(R.id.image_layout_dashboard);
                 this.ckbDelete = itemView.findViewById(R.id.ckb_layout_Dashboard);
+                this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
                 //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
 
             }

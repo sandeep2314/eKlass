@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import androidx.core.app.NavUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class BaseActivity extends AppCompatActivity {
 
     Util util = new Util();
@@ -26,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
 
         User usr = SharedPrefManager.getInstance(this).getUser();
         int themeNo = usr.getUserTheme();
@@ -224,8 +228,19 @@ public class BaseActivity extends AppCompatActivity {
                 finish();
                 startActivity( new Intent(this, AddStaffActivity.class));
                 return true;
-            case R.id.menuShowStaff:
 
+            case R.id.menuShowAllStaff:
+
+                finish();
+
+                Intent i = new Intent(getApplicationContext(), ShowStaffActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("isAllStaff", 1 );
+                getApplicationContext().startActivity(i);
+                startActivity( new Intent(this, ShowStaffActivity.class));
+                return true;
+
+            case R.id.menuShowStaff:
                 finish();
                 startActivity( new Intent(this, ShowStaffActivity.class));
                 return true;

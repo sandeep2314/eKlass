@@ -41,7 +41,7 @@ public class DutyActivity extends BaseActivity
     public RecyclerView recyclerView;
     public List<Duty> dutyList;
     public DutyAdapter dutyAdapter;
-    public String guardID;
+    public int guardID;
 
 
 
@@ -55,9 +55,7 @@ public class DutyActivity extends BaseActivity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        guardID = getIntent().getStringExtra("guardID");
-
-        Log.w("guardID" ,  "guardID222 " + guardID);
+        guardID = getIntent().getIntExtra("guardID", -1);
 
         dutyList = new ArrayList<>();
 
@@ -66,10 +64,8 @@ public class DutyActivity extends BaseActivity
 
     private void loadData2()
     {
-        final String staff_mobileNo = SharedPrefManager.getInstance(getApplicationContext()).getUser().UserMobileNo;
-        final String staffId = SharedPrefManager.getInstance(getApplicationContext()).getUser().getStaffId();
-        final String guardId = "5";
-        final  String CompanyId = SharedPrefManager.getInstance(this).getUser().getCompanyId();
+        User usr = SharedPrefManager.getInstance(this).getUser();
+        final  String CompanyId = usr.getCompanyId();
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("loading data...");
@@ -91,13 +87,6 @@ public class DutyActivity extends BaseActivity
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
-
-
-/*
-public Duty(Integer dutyId, String dutyDateTime, Integer QRId
-                            , String locationName, Integer guardId, String guardName
-                            , Double latitude, Double longitude, Integer companyId)
-*/
 
                         duty_fromDB =   new Duty(o.getString("ScanID")
                                 , o.getString("CreatedAt")
@@ -136,21 +125,15 @@ public Duty(Integer dutyId, String dutyDateTime, Integer QRId
 
         HashMap<String, String> params = new HashMap<>();
 
-        params.put("pStaffId", guardID);
+        params.put("pStaffId", String.valueOf(guardID));
         params.put("pCompanyId", CompanyId);
-
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
 
         String theURL = URLs.GET_DUTY_URL +"?" + paramsStr;
-
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
-
-
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
 
