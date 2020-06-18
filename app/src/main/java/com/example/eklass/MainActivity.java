@@ -42,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         if(SharedPrefManager.getInstance(this).isLoggedIn())
         {
             finish();
-            startActivity( new Intent(this, ShowStaffActivity.class));
-
+            //startActivity( new Intent(this, ShowStaffLocationActivity.class));
+            startActivity(new Intent(getApplicationContext()
+                    , ShowStaffLocationActivity.class));
             return;
+
         }
 
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
@@ -178,7 +180,9 @@ public class MainActivity extends AppCompatActivity {
 
                         finish();
                         startActivity(new Intent(getApplicationContext()
-                                , ShowStaffActivity.class));
+                                , ShowStaffLocationActivity.class));
+
+
                     }
                     else
                     {

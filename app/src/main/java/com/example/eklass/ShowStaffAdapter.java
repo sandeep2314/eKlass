@@ -76,14 +76,12 @@ public class ShowStaffAdapter
         {
             // getting the feature of the specified  position
             final Staff staff = staffList.get(position);
-
+            // loading the image
             RequestOptions options = new RequestOptions()
                     .centerCrop()
                     .placeholder(R.drawable.ic_profile_grey_24dp)
                     .error(R.drawable.ic_profile_grey_24dp);
 
-
-            // loading the image
             Glide.with(mCtx).load(staff.getStaffImage()).apply(options).into(holder.imageStaff);
 
             //holder.ckbDelete.setVisibility(View.INVISIBLE);

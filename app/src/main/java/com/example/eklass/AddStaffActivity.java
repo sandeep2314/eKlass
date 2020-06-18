@@ -65,7 +65,6 @@ public class AddStaffActivity extends BaseActivity
         if(update!= null)
             isUpdate = update.equals("yes");
 
-
         String pageName = "";
         if(isUpdate)
             pageName = "Update Staff";
@@ -77,7 +76,6 @@ public class AddStaffActivity extends BaseActivity
                 , imageViewLogoHeading
                 , imageViewProfileHeading
                 , BaseActivity.themeNo);
-
 
         etStaffName = findViewById(R.id.etStaffName_activity_staff);
         etStaffMobile = findViewById(R.id.etStaffMobileNo_activity_staff);
@@ -94,15 +92,14 @@ public class AddStaffActivity extends BaseActivity
             etStaffName.setText(getIntent().getStringExtra("StaffName"));
             etStaffPassword.setText(getIntent().getStringExtra("StaffPassword"));
             etStaffMobile.setText(getIntent().getStringExtra("StaffMobile"));
-            designationIdUpdate = getIntent().getIntExtra("locationId",0);
+            designationIdUpdate = getIntent().getIntExtra("DesignationId",0);
             IsActiveUpdate = getIntent().getIntExtra("IsActive",1);
             ckbIsActive.setChecked(IsActiveUpdate==1);
-        }
 
+        }
 
         // add designations to spinner
         loadData2();
-
 
     }
 
@@ -251,7 +248,6 @@ public class AddStaffActivity extends BaseActivity
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
 
@@ -297,12 +293,12 @@ public class AddStaffActivity extends BaseActivity
 
                     spinner_designation.setAdapter(arrayAdapter_designation);
 
-
                     if(isUpdate) {
-                        spinner_designation.setSelection(util.GetSpinnerPosition(designationIds
-                                , designationIdUpdate));
+                        Log.w("sandeep", "designationIdUpdate "+designationIdUpdate);
+                        spinner_designation.setSelection(
+                                util.GetSpinnerPosition(designationIds
+                                                        , designationIdUpdate));
                     }
-
 
 
                     } catch (JSONException e) {

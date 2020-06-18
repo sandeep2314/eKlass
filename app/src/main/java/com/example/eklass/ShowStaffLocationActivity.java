@@ -31,7 +31,6 @@ import java.util.List;
 public class ShowStaffLocationActivity extends BaseActivity
 {
     public RecyclerView recyclerView;
-    public ImageView imageViewProfileHeading, imageViewLogoHeading;
     public List<StaffLocation> staffLocationList;
     Util util = new Util();
     public ShowStaffLocationAdapter showStaffLocationAdapter;
@@ -39,19 +38,26 @@ public class ShowStaffLocationActivity extends BaseActivity
     private List<String> currentSelectedItems1 = new ArrayList<>();
     SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
     public TextView tvUpdate;
-
-
-
+    public  String isAllStaffLocation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
 
+        isAllStaffLocation = "0";//String.valueOf(getIntent().getIntExtra("isAllStaffLocation", 0));
+
+        String pageName="";
+        if(isAllStaffLocation.equals("0"))
+            pageName = "My Assigned Staff";
+        else
+            pageName = "All Assigned Staff ";
+
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        ImageView imageViewProfileHeading, imageViewLogoHeading;
         imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
         imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
-        util.SetHeadings(getApplicationContext(), pageHeading, "My Staff-Locations"
+        util.SetHeadings(getApplicationContext(), pageHeading, pageName
                 , imageViewLogoHeading
                 , imageViewProfileHeading
                 , BaseActivity.themeNo);
@@ -63,9 +69,7 @@ public class ShowStaffLocationActivity extends BaseActivity
 
         loadData2();
 
-
     }
-
 
     public void Delete()
     {
@@ -96,7 +100,7 @@ public class ShowStaffLocationActivity extends BaseActivity
                 //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
                 // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
                 Log.w("Sandeep444",response);
-
+                String imageURL = "";
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
@@ -105,19 +109,33 @@ public class ShowStaffLocationActivity extends BaseActivity
                     for(int i=0; i< array.length(); i++)
                     {
                         JSONObject o = array.getJSONObject(i);
+                        imageURL = URLs.GET_IMAGE_URL + o.getString("imageURL");
+                        imageURL += "&pIsLogo=0";
+
+                        Log.w("sandeep", "staffLocationList "
+                                + staffLocationList.size() + " isAllStaffLocation " + isAllStaffLocation);
 
                         staffLocation_fromDB =   new StaffLocation(
-                                Integer.parseInt(o.getString("SLID"))
-                                , Integer.parseInt(o.getString("LocationID"))
+                                o.getInt("SLID")
+                                , o.getInt("LocationID")
                                 , o.getString("LocationName")
-                                , Integer.parseInt(o.getString("WorkerID"))
+                                , o.getInt("WorkerID")
                                 , o.getString("WorkerName")
-                                , Integer.parseInt(o.getString("ManagerID"))
+                                , o.getString("WorkerDesignation")
+                                , imageURL
+                                , o.getInt("ManagerID")
                                 , o.getString("ManagerName")
+                                , o.getString("ManagerDesignation")
 
                         );
                         staffLocationList.add(staffLocation_fromDB);
+
+                        Log.w("sandeep", "staffLocationList222 "
+                                + staffLocationList.size() + " isAllStaffLocation " + isAllStaffLocation);
+
+
                     }
+
 
                     showStaffLocationAdapter = new ShowStaffLocationAdapter
                             (getApplicationContext(),  staffLocationList
@@ -173,9 +191,13 @@ public class ShowStaffLocationActivity extends BaseActivity
         HashMap<String, String> params = new HashMap<>();
 
         params.put("pCompanyId", CompanyId);
+        params.put("pStaffId", staffId);
+        params.put("pIsAllStaffLocation", isAllStaffLocation);
+
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-        String theURL = URLs.GET_STAFF_LOCATION_URL+"?" + paramsStr;
+
+        String theURL = URLs.GET_WORKER2_URL+"?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);

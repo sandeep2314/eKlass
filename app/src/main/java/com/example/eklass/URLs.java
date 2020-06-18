@@ -34,6 +34,8 @@ public class URLs
     public static final String UPDATE_STAFF_LOCATION_URL = DOMAIN_NAME + "updatestafflocation";
     public static final String UPDATE_STAFF_URL = DOMAIN_NAME + "updatestaff";
     public static final String DEL_STAFF_URL = DOMAIN_NAME + "delstaff";
+    public static final String GET_WORKER2_URL = DOMAIN_NAME + "getworker2";
+
 
 }
 

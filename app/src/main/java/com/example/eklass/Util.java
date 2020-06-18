@@ -232,7 +232,7 @@ public class Util
 
     }
 
-    public void DeleteRecord(final Context ctx, String ids, String theURL)
+    public void DeleteRecord(final Context ctx, String ids, final String theURL)
     {
 /*
         final ProgressDialog progressDialog = new ProgressDialog(ctx);
@@ -261,6 +261,12 @@ public class Util
                     if(deleted.equals("yes"))
                         Toast.makeText(ctx, "Records Deleted Successfully"
                              , Toast.LENGTH_LONG).show();
+                    else {
+                        if (theURL.equals(URLs.DEL_STAFF_URL))
+                            Toast.makeText(ctx, "Records can not be Deleted  " +
+                                            "Please first delete from Staff-Assigned To Location"
+                                    , Toast.LENGTH_LONG).show();
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();

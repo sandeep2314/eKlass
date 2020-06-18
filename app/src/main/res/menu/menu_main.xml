@@ -53,7 +53,7 @@
 
 
     <item
-        android:id="@+id/menuShowStaff"
+        android:id="@+id/menuShowAssignedStaff"
         android:title="Show Assigned Staff"
         app:showAsAction="never">
     </item>

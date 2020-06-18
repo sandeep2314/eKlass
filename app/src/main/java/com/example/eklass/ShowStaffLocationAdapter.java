@@ -13,7 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ShowStaffLocationAdapter
         extends RecyclerView.Adapter<ShowStaffLocationAdapter.ShowStaffLocationViewHolder>
@@ -57,10 +62,17 @@ public class ShowStaffLocationAdapter
 
         final StaffLocation staffLocation = staffLocationList.get(position);
         // binding the data with the viewholder views
-        holder.tv_FeatureName.setText(staffLocation.getLocationName());
-
-        holder.tv_guardID.setText(staffLocation.getWorkerName());
+        holder.tv_locationName.setText(staffLocation.getLocationName());
+        holder.tv_FeatureName.setText(staffLocation.getWorkerName());
+        holder.tv_guardID.setText(staffLocation.getManagerName()+"["
+                + staffLocation.getManagerDesignation() +"]");
         //holder.tvUpdate.setMovementMethod(LinkMovementMethod.getInstance());
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.ic_profile_grey_24dp)
+                .error(R.drawable.ic_profile_grey_24dp);
+
+        Glide.with(mCtx).load(staffLocation.getWorkerImage()).apply(options).into(holder.imageWorker);
 
         holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,16 +136,18 @@ public class ShowStaffLocationAdapter
 
     public class ShowStaffLocationViewHolder extends RecyclerView.ViewHolder {
         TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate;
-
+        CircleImageView imageWorker;
         CheckBox ckb;
 
         public ShowStaffLocationViewHolder(@NonNull View itemView) {
             super(itemView);
+            tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
             tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
             this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
             this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+            imageWorker = itemView.findViewById(R.id.image_layout_dashboard);
 
         }
     }

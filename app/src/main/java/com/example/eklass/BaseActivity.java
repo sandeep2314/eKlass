@@ -97,7 +97,7 @@ public class BaseActivity extends AppCompatActivity {
         {
            //MenuItem addStaff =   findViewById(R.id.menuAddStaff);
            MenuItem addStaff =   menu.findItem(R.id.menuAddStaff);
-           MenuItem showStaff  = menu.findItem(R.id.menuShowStaff);
+           MenuItem showStaff  = menu.findItem(R.id.menuShowAssignedStaff);
            MenuItem addLocations = menu.findItem(R.id.menuAddLocations);
            MenuItem showLocations =   menu.findItem(R.id.menuShowLocations);
            MenuItem  generateQRCode = menu.findItem(R.id.menuGenerateQRCode);
@@ -199,13 +199,15 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
 
 
-
             case android.R.id.home:
                // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_LONG).show();
                 finish();
-                //NavUtils.navigateUpFromSameTask(this);
-                finish();
-                startActivity( new Intent(this, ShowStaffActivity.class));
+
+                Intent i = new Intent(getApplicationContext(), ShowStaffLocationActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("isAllStaffLocation", 0 );
+                getApplicationContext().startActivity(i);
+
                 return true;
 
             case R.id.menuGenerateQRCode:
@@ -233,17 +235,14 @@ public class BaseActivity extends AppCompatActivity {
 
                 finish();
 
-                Intent i = new Intent(getApplicationContext(), ShowStaffActivity.class);
+                //startActivity( new Intent(this, ShowStaffActivity.class));
+                i = new Intent(getApplicationContext(), ShowStaffActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 i.putExtra("isAllStaff", 1 );
                 getApplicationContext().startActivity(i);
-                startActivity( new Intent(this, ShowStaffActivity.class));
+
                 return true;
 
-            case R.id.menuShowStaff:
-                finish();
-                startActivity( new Intent(this, ShowStaffActivity.class));
-                return true;
             case  R.id.menuAddLocations:
                 finish();
                 startActivity( new Intent(this, AddLocationActivity.class));
@@ -259,7 +258,10 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.menuShowStaffLocation:
                 finish();
-                startActivity( new Intent(this, ShowStaffLocationActivity.class));
+                i = new Intent(getApplicationContext(), ShowStaffLocationActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("isAllStaffLocation", 1 );
+                getApplicationContext().startActivity(i);
                 return true;
             case R.id.menuAddDesignations:
                 finish();

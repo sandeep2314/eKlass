@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_margin="10dp"
+        android:layout_margin="2dp"
 
         android:clickable="true"
         android:focusable="true"
@@ -24,13 +24,12 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_layout_dashboard"
-                android:padding="4dp"
+                android:padding="1dp"
                 app:civ_border_color="@color/colorDarkGrey"
                 android:layout_width="120dp"
                 android:layout_height="90dp">
 
             </de.hdodenhof.circleimageview.CircleImageView>
-
 
             <CheckBox
 
@@ -41,6 +40,7 @@
                 android:layout_height="wrap_content">
 
             </CheckBox>
+
 
             <TextView
                 android:id="@+id/tvFeatureName_layout_dashboard"
@@ -88,6 +88,8 @@
 
             </TextView>
 
+
+
             <TextView
                 android:id="@+id/tvUpdate_layout_dashboard"
                 android:text="Update"
@@ -97,7 +99,6 @@
                 android:layout_height="wrap_content">
 
             </TextView>
-
 
 
         </RelativeLayout>

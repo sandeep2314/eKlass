@@ -7,14 +7,20 @@ public class StaffLocation
     private String LocationName;
     private int WorkerId;
     private String WorkerName;
+    private String WorkerDesignation;
+    private String WorkerImage;
+    private String ManagerDesignation;
     private int ManagerId;
     private String ManagerName;
+
+
     private int CompanyId;
 
     public StaffLocation(int SLId
             , int locationId, String locationName
-            , int workerId, String workerName
-            , int managerId, String managerName
+            , int workerId, String workerName, String workerDesignation
+            , String workerImage
+            , int managerId, String managerName, String managerDesignation
             )
     {
         this.SLId = SLId;
@@ -22,9 +28,25 @@ public class StaffLocation
         LocationName = locationName;
         WorkerId = workerId;
         WorkerName = workerName;
+        WorkerDesignation = workerDesignation;
+        WorkerImage = workerImage;
         ManagerId = managerId;
         ManagerName = managerName;
+        ManagerDesignation = managerDesignation;
 
+    }
+
+
+    public String getWorkerImage() {
+        return WorkerImage;
+    }
+
+    public String getWorkerDesignation() {
+        return WorkerDesignation;
+    }
+
+    public String getManagerDesignation() {
+        return ManagerDesignation;
     }
 
     public int getSLId() {
