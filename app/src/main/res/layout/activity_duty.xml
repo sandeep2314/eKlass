@@ -10,13 +10,13 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Duty of Worker"
+        android:text=""
         android:textFontWeight="20"
         android:id="@+id/txtWorkerName" >
 
     </TextView>
 
-
+    <include layout="@layout/activity_managers_worker"></include>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvDuty"
         android:layout_marginTop="100dp"

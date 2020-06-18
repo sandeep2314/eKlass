@@ -94,6 +94,21 @@ public class ShowStaffLocationAdapter
             }
         });
 
+        holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(v.getContext(), DutyActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("WorkerID", staffLocation.getWorkerId() );
+                i.putExtra("WorkerName", staffLocation.getWorkerName() );
+                v.getContext().startActivity(i);
+
+            }
+        });
+
+
         if (!itemStateArray.get(position, false))
         {
             holder.ckb.setChecked(false);
@@ -135,7 +150,7 @@ public class ShowStaffLocationAdapter
     }
 
     public class ShowStaffLocationViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate;
+        TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate, tv_ShowDuty;
         CircleImageView imageWorker;
         CheckBox ckb;
 
@@ -148,6 +163,7 @@ public class ShowStaffLocationAdapter
             ckb.setClickable(false);
             this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
             imageWorker = itemView.findViewById(R.id.image_layout_dashboard);
+            tv_ShowDuty =  itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
 
         }
     }

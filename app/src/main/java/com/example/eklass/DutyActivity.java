@@ -3,6 +3,7 @@ package com.example.eklass;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class DutyActivity extends BaseActivity
 {
 
@@ -42,6 +45,7 @@ public class DutyActivity extends BaseActivity
     public List<Duty> dutyList;
     public DutyAdapter dutyAdapter;
     public int guardID;
+    public String workerName;
 
 
 
@@ -55,7 +59,23 @@ public class DutyActivity extends BaseActivity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        guardID = getIntent().getIntExtra("guardID", -1);
+        guardID = getIntent().getIntExtra("WorkerID", -1);
+        workerName = getIntent().getStringExtra("WorkerName");
+
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        CircleImageView imageViewProfileHeading, imageViewLogoHeading;
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+        String pageName = "Duty of " + workerName;
+
+        util.SetHeadings(this, pageHeading
+                , pageName
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
+
+
 
         dutyList = new ArrayList<>();
 
