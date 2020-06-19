@@ -629,5 +629,10 @@ public class Util
     }
 
 
+    public String GetLastPostedTime()
+    {
+        String lastPosted = "";
+        return  lastPosted;
+    }
 
 }

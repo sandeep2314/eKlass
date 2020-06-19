@@ -55,7 +55,7 @@ public class DutyActivity extends BaseActivity
         setContentView(R.layout.activity_duty);
 
         //RecyclerView recyclerView;
-        recyclerView =  findViewById(R.id.rvDuty);
+        recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -67,7 +67,7 @@ public class DutyActivity extends BaseActivity
         imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
         imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
 
-        String pageName = "Duty of " + workerName;
+        String pageName = "Duty of " + workerName + "("+guardID+")";
 
         util.SetHeadings(this, pageHeading
                 , pageName
@@ -119,6 +119,7 @@ public class DutyActivity extends BaseActivity
                                 , o.getString("CompanyID")
                         );
                         dutyList.add(duty_fromDB);
+                        Log.w("sandeep777", "GuardName " + o.getString("GuardName"));
 
                     }
 
