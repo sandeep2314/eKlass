@@ -629,12 +629,61 @@ public class Util
         return position;
     }
 
+    public String GetPostOfDay(String currentDateTime, List<Duty> dutyList, Boolean isFirst)
+    {
+        String firstPostedAt = "";
+        String pattern = "dd-MM-yyyy";
+
+        Date dt = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try
+        {
+            dt = sdf.parse(currentDateTime);
+          //  dtOrg = sdfOrg.parse(currentDateTime);
+
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
+
+        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
+
+        List<String> postingsOfDay ;
+        postingsOfDay = new ArrayList<>();
+
+        // put all postings of one day in one date array
+        for(int i=0; i< dtArray.length; i++)
+        {
+
+            if(dt != null && dt.equals(dtArray[i]))
+            {
+                sdf =  new SimpleDateFormat("HH:mm:ss");
+                postingsOfDay.add(sdf.format(dtArrayOrg[i]));
+                Log.w("sandeep777","dt " + dt + "dtArray[i] " + dtArrayOrg[i]);
+            }
+        }
+
+
+        if (!isFirst)
+            firstPostedAt = "" + postingsOfDay.get(0);
+        else
+            firstPostedAt = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+
+
+        return firstPostedAt;
+    }
+
 
     public String GetLastPostedDateTime(String currentDateTime, List<Duty> dutyList)
              {
         String lastPosted = "";
+        String pattern = "dd-MM-yyyy HH:mm:ss";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         Date dt= null;
         Date dtBefore = null;
          try
@@ -646,10 +695,9 @@ public class Util
              e.printStackTrace();
          }
 
-         Date[] dtArray = ConvertListToDateArray(dutyList);
+         Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
 
          // get the datetime before the current date time
-
           for(int i=0; i< dtArray.length; i++)
           {
                 if(dt != null && dt.compareTo(dtArray[i]) == 0 )
@@ -661,41 +709,45 @@ public class Util
                     break;
                 }
           }
-
-
-         long diff = 1;
-         if(dt != null && dtBefore!= null)
-              diff = dt.getTime() - dtBefore.getTime() ;
-
-         long diffSeconds = diff / (1000);
-         double d = diffSeconds / 60 ;
-         long diffMinutes = (long)Math.floor(d);
-         diffSeconds = diffSeconds - (diffMinutes * 60);
-
-         d = diffMinutes / 60;
-         long diffHours = (long)Math.floor(d);
-         diffMinutes = diffMinutes - (diffHours * 60);
-
-         d = diffHours / 24;
-         long diffDays = (long)Math.floor(d);
-         diffHours = diffHours - (diffDays * 24);
-
-         lastPosted = "d:" + diffDays + " H:" + diffHours +
-                        " M:"+ diffMinutes + " S:"+ diffSeconds;
-         //lastPosted =  dt.toString() + "n/" + dtBefore.toString();
-         //lastPosted = "diff " + diff;
+        lastPosted = GetDuration(dt, dtBefore);
 
         return  lastPosted;
     }
 
 
+   public String GetDuration(Date dt, Date dtBefore)
+   {
+       String lastPosted = "";
+
+       long diff = 1;
+       if(dt != null && dtBefore!= null)
+           diff = dt.getTime() - dtBefore.getTime() ;
+
+       long diffSeconds = diff / (1000);
+       double d = diffSeconds / 60 ;
+       long diffMinutes = (long)Math.floor(d);
+       diffSeconds = diffSeconds - (diffMinutes * 60);
+
+       d = diffMinutes / 60;
+       long diffHours = (long)Math.floor(d);
+       diffMinutes = diffMinutes - (diffHours * 60);
+
+       d = diffHours / 24;
+       long diffDays = (long)Math.floor(d);
+       diffHours = diffHours - (diffDays * 24);
+
+       lastPosted = "d:" + diffDays + " H:" + diffHours + " M:"+ diffMinutes + " S:"+ diffSeconds;
+
+       return  lastPosted;
+
+   }
 
 
-
-    public Date[] ConvertListToDateArray(List<Duty> theList)
+    public Date[] ConvertListToDateArray(List<Duty> theList, String pattern)
     {
         Date[] items = new Date[theList.size()];
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         for(int i=0; i < theList.size(); i++) {
            Duty duty =  (Duty)theList.get(i);
            Date dt = null;

@@ -22,6 +22,8 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
     private List<Duty> dutyList;
 
+    Util util = new Util();
+
 
     // constructor
     public DutyAdapter(Context mCtx, List<Duty> duties)
@@ -54,8 +56,19 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
         // binding the data with the viewholder views
         holder.tv_FeatureName.setText(duty.getDutyDateTime());
-        holder.tv_guard.setText(" Last Posted After ");
-        holder.tv_LocationName.setText(duty.getLocationName());
+        //holder.tv_LocationName.setText(duty.getLocationName());
+
+        holder.tv_LocationName.setText("First Post of Day: "
+                + util.GetPostOfDay(duty.getDutyDateTime(), dutyList, true)
+                + "\nLast Post of Day: "
+                        + util.GetPostOfDay(duty.getDutyDateTime(), dutyList, false)
+
+        );
+
+
+        holder.tv_guard.setText("Posted After: "
+                + util.GetLastPostedDateTime(duty.getDutyDateTime(), dutyList));
+
 
 
         holder.ckbDelete.setVisibility(View.INVISIBLE);
