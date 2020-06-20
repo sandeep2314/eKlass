@@ -1,11 +1,9 @@
 package com.example.eklass;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -70,6 +68,18 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
                 + util.GetLastPostedDateTime(duty.getDutyDateTime(), dutyList));
 
 
+        holder.tv_latitude.setText("Latitude: " + duty.getLatitude());
+        holder.tv_longitude.setText("Longitude: " + duty.getLongitude());
+
+        String postMethod = "";
+        if(duty.getIsScan() == 1)
+            postMethod = "QR Scan Post";
+        else
+            postMethod = "Manual Post";
+
+        holder.tv_posted.setText(postMethod);
+
+
         int marginLeft  = 50;
         int marginBottom  = 120;
 
@@ -84,6 +94,18 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         parameter =  (RelativeLayout.LayoutParams) holder.tv_FeatureName.getLayoutParams();
         parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, marginBottom);
         holder.tv_FeatureName.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_latitude.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_latitude.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_longitude.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_longitude.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_posted.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_posted.setLayoutParams(parameter);
 
 
 
@@ -103,7 +125,9 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
     public class DutyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView tv_FeatureName, tv_update, tv_guard, tv_ShowDutySymbol, tv_LocationName;
+        TextView tv_FeatureName, tv_update, tv_guard
+                 , tv_latitude, tv_longitude, tv_posted
+                , tv_ShowDutySymbol, tv_LocationName;
         CheckBox ckbDelete;
 
         public DutyViewHolder(@NonNull View itemView) {
@@ -113,6 +137,10 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
             tv_update = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
             tv_ShowDutySymbol = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
             tv_LocationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
+            tv_latitude = itemView.findViewById(R.id.tvLatitude_layout_dashboard);
+            tv_longitude = itemView.findViewById(R.id.tvLongitude_layout_dashboard);
+            tv_posted = itemView.findViewById(R.id.tvPostedMethod_layout_dashboard);
+
             ckbDelete =  itemView.findViewById(R.id.ckb_layout_Dashboard);
         }
     }

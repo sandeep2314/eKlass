@@ -12,9 +12,14 @@ public class Duty
     public String GuardName;
     public String Latitude;
     public String Longitude;
+    private int IsScan;
+
     public String CompanyId;
 
-    public Duty(String dutyId, String dutyDateTime, String QRId, String locationName, String guardId, String guardName, String latitude, String longitude, String companyId) {
+    public Duty(String dutyId, String dutyDateTime, String QRId
+            , String locationName, String guardId, String guardName
+            , String latitude, String longitude, int isScan
+            , String companyId) {
         DutyId = dutyId;
         DutyDateTime = dutyDateTime;
         this.QRId = QRId;
@@ -23,7 +28,12 @@ public class Duty
         GuardName = guardName;
         Latitude = latitude;
         Longitude = longitude;
+        IsScan = isScan;
         CompanyId = companyId;
+    }
+
+    public int getIsScan() {
+        return IsScan;
     }
 
     public String getDutyId() {
