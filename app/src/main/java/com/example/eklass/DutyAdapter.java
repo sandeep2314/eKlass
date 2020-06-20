@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,7 +39,6 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
     public DutyAdapter.DutyViewHolder onCreateViewHolder(@NonNull ViewGroup parent
             , int viewType)
     {
-
         // inflating and returning our View Holder
         LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
         View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
@@ -68,6 +68,22 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
         holder.tv_guard.setText("Posted After: "
                 + util.GetLastPostedDateTime(duty.getDutyDateTime(), dutyList));
+
+
+        int marginLeft  = 50;
+        int marginBottom  = 120;
+
+        RelativeLayout.LayoutParams parameter =  (RelativeLayout.LayoutParams) holder.tv_LocationName.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_LocationName.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_guard.getLayoutParams();
+        parameter.setMargins(marginLeft, marginBottom, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_guard.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_FeatureName.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, marginBottom);
+        holder.tv_FeatureName.setLayoutParams(parameter);
 
 
 
