@@ -47,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.PublicKey;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -629,10 +630,84 @@ public class Util
     }
 
 
-    public String GetLastPostedTime()
-    {
+    public String GetLastPostedDateTime(String currentDateTime, List<Duty> dutyList)
+             {
         String lastPosted = "";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        Date dt= null;
+        Date dtBefore = null;
+         try
+         {
+             dt = sdf.parse(currentDateTime);
+         }
+         catch (ParseException e)
+         {
+             e.printStackTrace();
+         }
+
+         Date[] dtArray = ConvertListToDateArray(dutyList);
+
+         // get the datetime before the current date time
+
+          for(int i=0; i< dtArray.length; i++)
+          {
+                if(dt != null && dt.compareTo(dtArray[i]) == 0 )
+                {
+                    if(dtArray.length == i+1)
+                        dtBefore = dtArray[i];
+                    else
+                        dtBefore = dtArray[i+1];
+                    break;
+                }
+          }
+
+
+         long diff = 1;
+         if(dt != null && dtBefore!= null)
+              diff = dt.getTime() - dtBefore.getTime() ;
+
+         long diffSeconds = diff / (1000);
+         double d = diffSeconds / 60 ;
+         long diffMinutes = (long)Math.floor(d);
+         diffSeconds = diffSeconds - (diffMinutes * 60);
+
+         d = diffMinutes / 60;
+         long diffHours = (long)Math.floor(d);
+         diffMinutes = diffMinutes - (diffHours * 60);
+
+         d = diffHours / 24;
+         long diffDays = (long)Math.floor(d);
+         diffHours = diffHours - (diffDays * 24);
+
+         lastPosted = "d:" + diffDays + " H:" + diffHours +
+                        " M:"+ diffMinutes + " S:"+ diffSeconds;
+         //lastPosted =  dt.toString() + "n/" + dtBefore.toString();
+         //lastPosted = "diff " + diff;
+
         return  lastPosted;
     }
+
+
+
+
+
+    public Date[] ConvertListToDateArray(List<Duty> theList)
+    {
+        Date[] items = new Date[theList.size()];
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        for(int i=0; i < theList.size(); i++) {
+           Duty duty =  (Duty)theList.get(i);
+           Date dt = null;
+            try {
+                dt = sdf.parse(duty.getDutyDateTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            items[i] = dt;
+        }
+        return items;
+    }
+
 
 }
