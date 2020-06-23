@@ -99,9 +99,6 @@ INSERT INTO tblSubjectGroupMaster(SubjectGroupName, SubjectGroupType, UserID, Fy
 VALUES('Discipline', 'Grade', 19, 2014)
 
 
-
-
-
 select * from tblUserInfo
 select * from tblSubUser
 
@@ -1948,6 +1945,80 @@ WITH RECURSIVE cte_name AS (
 SELECT * FROM cte_name;
 
 
+
+
+
+Use Master
+go
+
+--DROP DATABASE SchoolDB2021
+--go
+
+use master
+
+CREATE DATABASE MahiDB ON  PRIMARY 
+( NAME = N'MahiDB'
+, FILENAME = N'c:\AppMahi\DATA\MahiDB.mdf' 
+, SIZE = 2240KB 
+, MAXSIZE = UNLIMITED
+, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'MahiDB_log'
+, FILENAME = N'c:\AppMahi\DATA\MahiDB_log.LDF' 
+, SIZE = 504KB 
+, MAXSIZE = 2048GB 
+, FILEGROWTH = 10%)
+ COLLATE SQL_Latin1_General_CP1_CI_AS
+go
+
+
+
+use mahidb
+
+-- DROp TABLE tblProduct
+CREATE TABLE tblProduct(
+	ProductId [int] IDENTITY(1,1) NOT NULL,
+	ProductName VARCHAR(50) NOT NULL,
+	ImageURL VARCHAR(100) NULL,
+	ProductInfo VARCHAR(100) NULL,
+    Price VARCHAR(10) NULL,
+	Rating VARCHAR(10) NULL, 
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+select * from tblProduct
+
+INSERT INTO tblProduct(ProductName
+, ImageURL, ProductInfo, Price, Rating)
+VALUES('Football', 'football.jpg'
+, 'Full size football for kids in yellow color'
+, '500.00'
+, '4.5'
+)
+
+
+
+
+
+
+-- DROp TABLE tblDT
+CREATE TABLE tblDT(
+	ID [int] IDENTITY(1,1) NOT NULL,
+	DayNo INT NOT NULL,
+  	CreatedAt DATETIME DEFAULT getdate()
+	)
+
+
+CREATE PROCEDURE FillDays AS
+DECLARE @dys AS INT
+SET @dys = 1
+
+WHILE (@dys < 32)
+BEGIN
+	INSERT INTO tblDT(DayNo) VALUES(@dys);
+	SET @dys = @dys + 1
+END 
+
+--execute FillDays
 */
-
-
