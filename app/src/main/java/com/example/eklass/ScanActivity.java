@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ScanActivity extends BaseActivity
@@ -53,7 +53,7 @@ public class ScanActivity extends BaseActivity
 {
     // view objects
 
-    private Button btnScan;
+    private Button btnIn, btnOut, btnScan;
     public TextView txtQRName, txtLatitude, txtLongitude;
     public String QRName;
     LocationManager locationManager;
@@ -67,8 +67,9 @@ public class ScanActivity extends BaseActivity
     public RadioGroup radioGroupIsScan;
     public RadioButton radioButtonIsScanYes;
 
-    public double current_lattitude;
-    public double current_longitude;
+    public int postType;
+    public  User usr;
+
 
 
     @Override
@@ -76,8 +77,25 @@ public class ScanActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        usr = SharedPrefManager.getInstance(this).getUser();
+
         // view objects
 
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        CircleImageView imageViewProfileHeading, imageViewLogoHeading;
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+        String pageName = "Mark Attendance";
+
+        util.SetHeadings(this, pageHeading
+                , pageName
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
+
+        btnIn = findViewById(R.id.btnIn_activity_scan);
+        btnOut = findViewById(R.id.btnOut_activity_scan);
         btnScan = findViewById(R.id.btnScan_activity_scan);
         txtQRName = findViewById(R.id.txtName_activity_scan);
         txtLatitude = findViewById(R.id.txtLatitude_activity_scan);
@@ -86,12 +104,16 @@ public class ScanActivity extends BaseActivity
         radioGroupIsScan = findViewById(R.id.radioGroup_IsScan_activity_scan);
         radioButtonIsScanYes = findViewById(R.id.radioBtn_IsScanYes_activity_scan);
 
-
         spinner_location.setOnItemSelectedListener(this);
+
+        UpdateButtons();
+        Log.w("Sandeep888", "getPostType " + usr.getPostType());
 
         if(radioButtonIsScanYes.isChecked()) {
             spinner_location.setEnabled(false);
-            btnScan.setText("Post Attendance By Scanning");
+            btnIn.setText("DAY IN Attendance By Scanning");
+            btnOut.setText("DAY OUT Attendance By Scanning");
+            btnScan.setText("Time Attendance By Scanning");
 
         }
 
@@ -101,19 +123,23 @@ public class ScanActivity extends BaseActivity
                 if(radioButtonIsScanYes.isChecked())
                 {
                     spinner_location.setEnabled(false);
-                    btnScan.setText("Post Attendance ");
+                    btnIn.setText("DAY IN Attendance By Scanning");
+                    btnOut.setText("DAY OUT Attendance By Scanning");
+                    btnScan.setText("Time Attendance By Scanning");
                 }
                 else
                 {
                     spinner_location.setEnabled(true);
-                    btnScan.setText("Post Attendance ");
+                    btnIn.setText("DAY IN Attendance");
+                    btnOut.setText("DAY OUT Attendance ");
+                    btnScan.setText("Time Attendance ");
                 }
             }
         });
 
 
-        loadData2();
 
+        loadData2();
         locationManager=(LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
@@ -132,7 +158,6 @@ public class ScanActivity extends BaseActivity
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
-
         ActivityCompat.requestPermissions(this,new String[]
                 {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
 
@@ -142,20 +167,71 @@ public class ScanActivity extends BaseActivity
             @Override
             public void onClick(View v) {
 
+                postType = Util.ATTENDANCE_BETWEEN;
+                usr.setPostType(postType);
+                SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+                UpdateButtons();
+
                     if(radioButtonIsScanYes.isChecked())
                     {
-                        qrScan.setBeepEnabled(true);
-                        qrScan.setOrientationLocked(true);
-                        qrScan.setCaptureActivity(CaptureActivityPortrait.class);
-                        qrScan.initiateScan();
+                        ScanProcess();
                     }
                     else
                     {
-                        // add to scan location from spinner
-                        //  QRName = selectedLocationId.toString();
                         QRName = selectedLocationId.toString();
                         addScan();
                     }
+
+            }
+        });
+
+
+        btnIn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+
+                postType = Util.ATTENDANCE_DAY_IN;
+                usr.setPostType(postType);
+                SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+                UpdateButtons();
+
+                Log.w("Sandeep888", "IN getPostType " + usr.getPostType());
+
+                if(radioButtonIsScanYes.isChecked())
+                {
+                    ScanProcess();
+                }
+                else
+                {
+                    QRName = selectedLocationId.toString();
+                    addScan();
+                }
+
+
+
+            }
+        });
+
+        btnOut.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+
+                postType = Util.ATTENDANCE_DAY_OUT;
+                usr.setPostType(postType);
+                SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+                UpdateButtons();
+
+                if(radioButtonIsScanYes.isChecked())
+                {
+                    ScanProcess();
+                }
+                else
+                {
+                    QRName = selectedLocationId.toString();
+                    addScan();
+                }
 
 
 
@@ -163,6 +239,31 @@ public class ScanActivity extends BaseActivity
         });
 
 
+
+
+
+    }
+
+    protected  void UpdateButtons()
+    {
+
+       // when btn out is clicked
+       btnIn.setEnabled(usr.getPostType() == Util.ATTENDANCE_DAY_OUT);
+       btnOut.setEnabled(usr.getPostType()== Util.ATTENDANCE_DAY_IN
+               || usr.getPostType()== Util.ATTENDANCE_BETWEEN);
+       btnScan.setEnabled(usr.getPostType()== Util.ATTENDANCE_DAY_IN
+               || usr.getPostType()== Util.ATTENDANCE_BETWEEN);
+
+    }
+
+
+
+    protected void ScanProcess()
+    {
+        qrScan.setBeepEnabled(true);
+        qrScan.setOrientationLocked(true);
+        qrScan.setCaptureActivity(CaptureActivityPortrait.class);
+        qrScan.initiateScan();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
@@ -333,6 +434,7 @@ public class ScanActivity extends BaseActivity
                 else
                     params.put("pIsScan", Util.HAS_NOT_SCANNED_QR);
                 params.put("pCompanyId", companyId);
+                params.put("pPostType", String.valueOf(postType));
 
                 String response = null;
                 try

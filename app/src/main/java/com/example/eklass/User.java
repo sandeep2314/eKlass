@@ -20,6 +20,7 @@ public class User
     public String CompanyId;
     public String CompanyName;
     public int UserTheme;
+    public int PostType;
 
 
     public Staff UserStaff;
@@ -84,7 +85,7 @@ public class User
             , String designationName
             , String companyId
             , String companyName
-            , int userTheme) {
+            , int userTheme, int postType ) {
         UserMobileNo = userMobileNo;
         StaffType = staffType;
         StaffId = staffId;
@@ -94,7 +95,11 @@ public class User
         CompanyId = companyId;
         CompanyName = companyName;
         UserTheme = userTheme;
+        PostType = postType;
     }
+
+
+
 
     public String getDesignationId() {
         return DesignationId;
@@ -126,6 +131,14 @@ public class User
 
     public int getUserTheme() {
         return UserTheme;
+    }
+
+    public void setPostType(int postType) {
+        PostType = postType;
+    }
+
+    public int getPostType() {
+        return PostType;
     }
 
     public void setUserTheme(int userTheme) {

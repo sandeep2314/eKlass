@@ -20,6 +20,7 @@ public class SharedPrefManager
     private static final String KEY_COMPANYNAME="keycompanyname";
 
     private static final String KEY_THEME="keytheme";
+    private static final String KEY_POST_TYPE="keyposttype";
 
 
     private static SharedPrefManager mInstance;
@@ -55,10 +56,10 @@ public class SharedPrefManager
         editor.putString(KEY_DESIGNATIONID, user.getDesignationId());
         editor.putString(KEY_DESIGNATIONNAME, user.getDesignationName());
 
-
         editor.putString(KEY_COMPANYID, user.getCompanyId());
         editor.putString(KEY_COMPANYNAME, user.getCompanyName());
         editor.putInt(KEY_THEME,  user.getUserTheme());
+        editor.putInt(KEY_POST_TYPE,  user.getPostType());
 
         editor.apply();
 
@@ -93,6 +94,7 @@ public class SharedPrefManager
                 , sharedPreferences.getString(KEY_COMPANYID, null)
                 , sharedPreferences.getString(KEY_COMPANYNAME, null)
                 , sharedPreferences.getInt(KEY_THEME, Util.WHITE_THEME)
+                , sharedPreferences.getInt(KEY_POST_TYPE, -1)
         );
 
         //return new User(sharedPreferences.getString(KEY_MOBILENO, null));

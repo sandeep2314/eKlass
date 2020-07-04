@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                             , companyId_fromDB
                             , companyName_fromDB
                             , Util.WHITE_THEME
+                            , Util.ATTENDANCE_DAY_OUT
                             );
 
                     // if no error in response

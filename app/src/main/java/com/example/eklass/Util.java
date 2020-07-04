@@ -71,7 +71,14 @@ public class Util
     public static final String HAS_SCANNED_QR = "1";
     public static final String HAS_NOT_SCANNED_QR = "0";
 
+    public static final int ATTENDANCE_DAY_IN = 1;
+    public static final int ATTENDANCE_DAY_OUT = 2;
+    public static final int ATTENDANCE_BETWEEN = 3;
+
     public static final String NO_COMPANY = "-1";
+
+
+
 
     public String[] ConvertListToStringArray(List<String> theList)
     {
@@ -748,9 +755,11 @@ public class Util
         Date[] items = new Date[theList.size()];
         //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+
+        Date dt = null;
+        Duty duty = null;
         for(int i=0; i < theList.size(); i++) {
-           Duty duty =  (Duty)theList.get(i);
-           Date dt = null;
+            duty =  (Duty)theList.get(i);
             try {
                 dt = sdf.parse(duty.getDutyDateTime());
             } catch (ParseException e) {
@@ -760,6 +769,36 @@ public class Util
         }
         return items;
     }
+
+    public void CreateMonthlyReport(String monthYear, String pattern)
+    {
+
+        String mnth = "JUN";
+        String yr = "20";
+        pattern = "dd-MM-yyyy";
+
+        Integer[] dys = new Integer[31];
+
+        String dtStr = "";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        Date dt = null;
+
+        // create valid days of a month
+        for(int i=1; i < 32; i++)
+        {
+            dtStr = i+"/"+mnth+"/"+yr;
+            try {
+                dt = sdf.parse(dtStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            dys[i] = i;
+        }
+
+    }
+
+
+
 
 
 }

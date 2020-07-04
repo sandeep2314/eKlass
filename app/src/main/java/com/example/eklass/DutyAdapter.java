@@ -74,7 +74,7 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         String postMethod = "";
         if(duty.getIsScan() == 1)
             postMethod = "QR Scan Post";
-        else
+                else
             postMethod = "Manual Post";
 
         holder.tv_posted.setText(postMethod);
