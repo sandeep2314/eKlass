@@ -1836,6 +1836,13 @@ CREATE TABLE tblStaff(
 	CreatedAt DATETIME DEFAULT getdate()
 	)
 
+-- white theme = 2
+ALTER TABLE tblStaff ADD ThemeNo INT DEFAULT 2;
+-- OUT = 2
+ALTER TABLE tblStaff ADD PostType INT DEFAULT 2;
+
+
+
 
 --use GardenValleyDB
 -- DROp TABLE tblProfile

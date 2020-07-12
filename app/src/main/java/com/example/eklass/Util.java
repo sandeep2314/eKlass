@@ -797,6 +797,94 @@ public class Util
 
     }
 
+    public String GetDayPosting(Duty duty, List<Duty> dutyList, int postType)
+    {
+
+        String firstPostedAt = "";
+        String pattern = "dd-MM-yyyy";
+
+        Date dt = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try
+        {
+            dt = sdf.parse(duty.getDutyDateTime());
+
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
+
+        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
+
+        List<String> postingsOfDay ;
+        postingsOfDay = new ArrayList<>();
+
+        // put all postings of one day in one date array
+        for(int i=0; i< dtArray.length; i++)
+        {
+
+            if(dt != null && dt.equals(dtArray[i])
+                && duty.getPostType() == postType)
+            {
+                sdf =  new SimpleDateFormat("HH:mm:ss");
+                postingsOfDay.add(sdf.format(dtArrayOrg[i]));
+
+            }
+        }
+
+        if(postingsOfDay.size() >= 1 )
+            firstPostedAt = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+
+        return firstPostedAt;
+    }
+
+    public String GetDayIN(Duty duty, List<Duty> dutyList)
+    {
+        String firstDayIN = "";
+        String pattern = "dd-MM-yyyy";
+
+        Date dt = null;
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try
+        {
+            dt = sdf.parse(duty.getDutyDateTime());
+
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
+
+        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
+
+        List<String> postingsOfDay ;
+        postingsOfDay = new ArrayList<>();
+
+        // put all postings of one day in one date array
+
+        // get first DayIN post in the day
+        for(int i=0; i< dtArray.length; i++)
+        {
+            if(dt != null && dt.equals(dtArray[i])
+                         && duty.getPostType() == ATTENDANCE_DAY_IN)
+            {
+                sdf =  new SimpleDateFormat("HH:mm:ss");
+                postingsOfDay.add(sdf.format(dtArrayOrg[i]));
+            }
+        }
+
+        if(postingsOfDay.size() >= 1 )
+            firstDayIN = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+
+        return firstDayIN;
+    }
 
 
 

@@ -23,7 +23,6 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity {
      // LoginActivity
 
-
     EditText et_MobileNo, et_Password;
     //RadioGroup radioGroup_Staff;
     String deviceToken;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext()
                     , ShowStaffLocationActivity.class));
             return;
-
         }
 
         findViewById(R.id.btnLogin).setOnClickListener(new View.OnClickListener() {
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 StaffLogin();
             }
         });
-
 
        findViewById(R.id.txtRegister).setOnClickListener(new View.OnClickListener() {
            @Override
@@ -134,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     String companyName_fromDB = "";
                     String companyId_fromDB = "";
                     String staffType_fromDB = "222";
+                    int themeNo_fromDB = 2;
+                    int postType_fromDB = 2;
 
                     Log.w("sandeep", " 999 " + isError);
 
@@ -149,14 +148,13 @@ public class MainActivity extends AppCompatActivity {
                         staffName_fromDB =o.getString("StaffName");
                         staffMobileNo_fromDB = o.getString("MobileNo");
                         designationId_fromDB = o.getString("DesignationID");
-
+                        themeNo_fromDB = o.getInt("ThemeNo");
+                        postType_fromDB = o.getInt("PostType");
                         companyId_fromDB =  o.getString("CompanyId");
                         companyName_fromDB =  o.getString("CompanyName");
 
                     }
-                    Log.w("sandeep", " 111 " + isError);
-
-
+                    Log.w("sandeep", " 111 " + postType_fromDB);
 
                 User user = new User(
                             staffMobileNo_fromDB
@@ -167,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
                             , designationName_fromDB
                             , companyId_fromDB
                             , companyName_fromDB
-                            , Util.WHITE_THEME
-                            , Util.ATTENDANCE_DAY_OUT
+                            , themeNo_fromDB
+                            , postType_fromDB
                             );
 
                     // if no error in response
@@ -182,14 +180,11 @@ public class MainActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(getApplicationContext()
                                 , ShowStaffLocationActivity.class));
-
-
                     }
                     else
                     {
                         Toast.makeText(getApplicationContext()
                                 , "Invalid Mobile or Password", Toast.LENGTH_SHORT).show();
-
                     }
 
                 }
@@ -197,15 +192,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     e.printStackTrace();
                 }
-
-
             }
         }
-
         StaffLogin ul = new StaffLogin();
         ul.execute();
     }
-
-
 
 }

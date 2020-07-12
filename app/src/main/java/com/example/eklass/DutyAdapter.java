@@ -56,11 +56,12 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         holder.tv_FeatureName.setText(duty.getDutyDateTime());
         //holder.tv_LocationName.setText(duty.getLocationName());
 
-        holder.tv_LocationName.setText("First Post of Day: "
-                + util.GetPostOfDay(duty.getDutyDateTime(), dutyList, true)
-                + "\nLast Post of Day: "
-                        + util.GetPostOfDay(duty.getDutyDateTime(), dutyList, false)
-
+        holder.tv_LocationName.setText("Day IN: "
+                + util.GetDayIN(duty, dutyList)
+                + "\n Day OUT: "
+                + util.GetDayPosting(duty, dutyList, Util.ATTENDANCE_DAY_OUT)
+                + "\n Day BETWEEN: "
+                + util.GetDayPosting(duty, dutyList, Util.ATTENDANCE_BETWEEN)
         );
 
 
@@ -125,7 +126,8 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
     public class DutyViewHolder extends RecyclerView.ViewHolder
     {
-        TextView tv_FeatureName, tv_update, tv_guard
+        TextView tv_FeatureName
+                , tv_update, tv_guard
                  , tv_latitude, tv_longitude, tv_posted
                 , tv_ShowDutySymbol, tv_LocationName;
         CheckBox ckbDelete;

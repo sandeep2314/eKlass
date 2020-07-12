@@ -13,12 +13,15 @@ public class Duty
     public String Latitude;
     public String Longitude;
     private int IsScan;
+    private int PostType;
 
     public String CompanyId;
 
     public Duty(String dutyId, String dutyDateTime, String QRId
             , String locationName, String guardId, String guardName
-            , String latitude, String longitude, int isScan
+            , String latitude, String longitude
+            , int isScan
+            , int postType
             , String companyId) {
         DutyId = dutyId;
         DutyDateTime = dutyDateTime;
@@ -29,11 +32,16 @@ public class Duty
         Latitude = latitude;
         Longitude = longitude;
         IsScan = isScan;
+        PostType = postType;
         CompanyId = companyId;
     }
 
     public int getIsScan() {
         return IsScan;
+    }
+
+    public int getPostType() {
+        return PostType;
     }
 
     public String getDutyId() {

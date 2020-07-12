@@ -117,6 +117,7 @@ public class DutyActivity extends BaseActivity
                                 , o.getString("Latitude")
                                 , o.getString("Longitude")
                                 , o.getInt("IsScan")
+                                , o.getInt("PostType")
                                 , o.getString("CompanyID")
                         );
                         dutyList.add(duty_fromDB);
