@@ -2029,4 +2029,15 @@ BEGIN
 END 
 
 --execute FillDays
+
+-- bpsdb2021 
+ALTER TABLE tblStudentMaster Add StudentPassword varchar(10)
+
+ 
+ALTER TABLE tblStudentMaster Add FeePaid INT DEFAULT 0 NOT NULL
+
+
+
 */
+
+
