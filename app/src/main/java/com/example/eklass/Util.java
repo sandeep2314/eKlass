@@ -78,8 +78,6 @@ public class Util
     public static final String NO_COMPANY = "-1";
 
 
-
-
     public String[] ConvertListToStringArray(List<String> theList)
     {
         String[] items = new String[theList.size()];
@@ -427,13 +425,10 @@ public class Util
                         JSONObject o = array.getJSONObject(i);
 
                         Bitmap bitmap = generateQrCode(o.getString("LocationID"));
-
-
                         if(bitmap != null)
                             qrCodeFileName = storeImage(ctx
                                     , bitmap, o.getString("LocationName"));
-
-                    }
+                  }
 
 
                 } catch (JSONException e) {
@@ -749,7 +744,6 @@ public class Util
 
    }
 
-
     public Date[] ConvertListToDateArray(List<Duty> theList, String pattern)
     {
         Date[] items = new Date[theList.size()];
@@ -794,10 +788,32 @@ public class Util
             }
             dys[i] = i;
         }
-
     }
 
     public String GetDayPosting(Duty duty, List<Duty> dutyList, int postType)
+    {
+
+        String firstPostedAt = "";
+
+        Date dt = null;
+        SimpleDateFormat sdf =  new SimpleDateFormat("HH:mm:ss");
+        try
+        {
+            dt = sdf.parse(duty.getDutyDateTime());
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        if(dt != null
+             && duty.getPostType() == postType)
+            firstPostedAt = sdf.format(dt);
+
+        return firstPostedAt;
+    }
+
+        public String GetDayPostingOld(Duty duty, List<Duty> dutyList, int postType)
     {
 
         String firstPostedAt = "";
@@ -808,7 +824,6 @@ public class Util
         try
         {
             dt = sdf.parse(duty.getDutyDateTime());
-
         }
         catch (ParseException e)
         {
@@ -827,19 +842,26 @@ public class Util
         for(int i=0; i< dtArray.length; i++)
         {
 
+
             if(dt != null && dt.equals(dtArray[i])
                 && duty.getPostType() == postType)
             {
+
                 sdf =  new SimpleDateFormat("HH:mm:ss");
                 postingsOfDay.add(sdf.format(dtArrayOrg[i]));
-
             }
+
+            Log.w("Sandeep777  22 ", sdf.format(dtArrayOrg[i]));
         }
 
         if(postingsOfDay.size() >= 1 )
             firstPostedAt = "" +  postingsOfDay.get(postingsOfDay.size()-1);
 
-        return firstPostedAt;
+        // if post type is DAY IN then show blank
+       if(duty.getPostType() == ATTENDANCE_DAY_IN)
+           firstPostedAt = "";
+
+        return firstPostedAt ;
     }
 
     public String GetDayIN(Duty duty, List<Duty> dutyList)
@@ -884,6 +906,78 @@ public class Util
             firstDayIN = "" +  postingsOfDay.get(postingsOfDay.size()-1);
 
         return firstDayIN;
+    }
+
+
+    public void UpdateAttendanceType(final Context ctx
+            , int attendanceType, final String theURL)
+    {
+        // update attendance status to tblStaff (PostType)
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //progressDialog.dismiss();
+                //{"a": [{"IsDeleted": "yes"}]}
+                Log.w("Sandeep65",response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    String deleted = "no";
+                    for(int i=0; i< array.length(); i++)
+                    {
+                        JSONObject o = array.getJSONObject(i);
+                        deleted = o.getString("IsUpdateds");
+                    }
+
+                    if(deleted.equals("yes"))
+                        Toast.makeText(ctx, "Records Updated Successfully"
+                                , Toast.LENGTH_LONG).show();
+                    else {
+                        if (theURL.equals(URLs.DEL_STAFF_URL))
+                            Toast.makeText(ctx, "Records can not be Updated  "
+                                    , Toast.LENGTH_LONG).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+                Toast.makeText(ctx,  error.getMessage()
+                        , Toast.LENGTH_LONG ).show();
+            }
+        };
+
+
+        User user = SharedPrefManager.getInstance(ctx).getUser();
+
+        HashMap<String, String> params = new HashMap<>();
+        //params.put("pStaffId", staffId);
+
+        params.put("pCompanyId", user.getCompanyId());
+        params.put("pStaffId", user.getStaffId());
+        params.put("pAttendanceType", String.valueOf(attendanceType));
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+        String delURL = theURL +"?" + paramsStr;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, delURL
+                , responseListener, errorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(ctx);
+        requestQueue.add(stringRequest);
+
+
     }
 
 

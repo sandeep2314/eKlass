@@ -71,7 +71,6 @@ public class ScanActivity extends BaseActivity
     public  User usr;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,8 +170,11 @@ public class ScanActivity extends BaseActivity
                 usr.setPostType(postType);
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
                 UpdateButtons();
+                util.UpdateAttendanceType(getApplicationContext()
+                        , Util.ATTENDANCE_BETWEEN, URLs.UPDATE_STAFF_ATTENDANCE_TYPE_URL );
 
-                    if(radioButtonIsScanYes.isChecked())
+
+                if(radioButtonIsScanYes.isChecked())
                     {
                         ScanProcess();
                     }
@@ -185,7 +187,6 @@ public class ScanActivity extends BaseActivity
             }
         });
 
-
         btnIn.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
@@ -194,6 +195,10 @@ public class ScanActivity extends BaseActivity
                 postType = Util.ATTENDANCE_DAY_IN;
                 usr.setPostType(postType);
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+                // update attendance status to tblStaff (PostType)
+                util.UpdateAttendanceType(getApplicationContext()
+                        , Util.ATTENDANCE_DAY_IN, URLs.UPDATE_STAFF_ATTENDANCE_TYPE_URL );
+
                 UpdateButtons();
 
                 Log.w("Sandeep888", "IN getPostType " + usr.getPostType());
@@ -208,8 +213,6 @@ public class ScanActivity extends BaseActivity
                     addScan();
                 }
 
-
-
             }
         });
 
@@ -221,6 +224,9 @@ public class ScanActivity extends BaseActivity
                 postType = Util.ATTENDANCE_DAY_OUT;
                 usr.setPostType(postType);
                 SharedPrefManager.getInstance(getApplicationContext()).userLogin(usr);
+                util.UpdateAttendanceType(getApplicationContext()
+                        , Util.ATTENDANCE_DAY_OUT, URLs.UPDATE_STAFF_ATTENDANCE_TYPE_URL );
+
                 UpdateButtons();
 
                 if(radioButtonIsScanYes.isChecked())
@@ -232,17 +238,11 @@ public class ScanActivity extends BaseActivity
                     QRName = selectedLocationId.toString();
                     addScan();
                 }
-
-
-
             }
         });
 
-
-
-
-
     }
+
 
     protected  void UpdateButtons()
     {
@@ -426,8 +426,18 @@ public class ScanActivity extends BaseActivity
 
                 params.put("pQRId", QRName);
                 params.put("pGuardId", WorkerStaffId);
-                params.put("pLatitude", latitude);
-                params.put("pLongitude", longitude);
+                //params.put("pLatitude", latitude);
+                //params.put("pLongitude", longitude);
+                if(latitude != null)
+                    params.put("pLatitude", latitude);
+                else
+                    params.put("pLatitude", "0");
+                if(longitude != null)
+                    params.put("pLongitude", longitude);
+                else
+                    params.put("pLongitude", "0");
+
+
 
                 if(hasScanned)
                     params.put("pIsScan", Util.HAS_SCANNED_QR);
@@ -439,8 +449,6 @@ public class ScanActivity extends BaseActivity
                 String response = null;
                 try
                 {
-                    Log.w("sandeep"
-                            , "params1111 "+ requestHandler.getPostDataString(params));
                     response = requestHandler.sendPostRequest(URLs.SAVE_SCAN_URL,params);
                 } catch (MalformedURLException e)
                 {
