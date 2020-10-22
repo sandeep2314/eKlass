@@ -2007,9 +2007,6 @@ VALUES('Football', 'football.jpg'
 
 
 
-
-
-
 -- DROp TABLE tblDT
 CREATE TABLE tblDT(
 	ID [int] IDENTITY(1,1) NOT NULL,
@@ -2040,4 +2037,27 @@ ALTER TABLE tblStudentMaster Add FeePaid INT DEFAULT 0 NOT NULL
 
 */
 
+
+SELECT guardID
+, AttendanceType
+, MIN(INTIME) INTIME
+, MAX(OUTTIME) OUTTIME
+, SUM(DATEDIFF(HOUR, intime, outtime)) hrs
+FROM
+(
+Select guardID
+,(CASE WHEN (postType = 1) THEN 'IN'
+	   WHEN (postType = 2) THEN 'OUT'
+	   ELSE 'BETWEEN'	END) AttendanceType
+, CreatedAt INTIME
+, (SELECT TOP 1 CreatedAt FROM tblScan s2
+  WHERE s2.createdAt > s1.CreatedAT
+  AND s2.postTYpe = 2) OUTTIME
+
+FROM tblScan s1
+where posTType=1
+GROUP BY CreatedAt, guardID, postType
+) as a
+GROUP BY DAY(INTIME), guardID, AttendanceType
+ORDER BY INTIME
 
