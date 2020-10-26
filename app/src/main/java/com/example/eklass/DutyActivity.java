@@ -38,9 +38,6 @@ public class DutyActivity extends BaseActivity
     googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 */
 
-
-
-
     public RecyclerView recyclerView;
     public List<Duty> dutyList;
     public DutyAdapter dutyAdapter;
@@ -119,9 +116,15 @@ public class DutyActivity extends BaseActivity
                                 , o.getInt("IsScan")
                                 , o.getInt("PostType")
                                 , o.getString("CompanyID")
+                                , o.getString("Intime")
+                                , o.getString("Outtime")
+                                , o.getInt("hrs")
+
+
+
                         );
                         dutyList.add(duty_fromDB);
-                        Log.w("sandeep777", "GuardName " + o.getString("GuardName"));
+                        Log.w("sandeep777 2", "GuardName " + o.getString("GuardName"));
 
                     }
 

@@ -806,9 +806,12 @@ public class Util
             e.printStackTrace();
         }
 
-        if(dt != null
-             && duty.getPostType() == postType)
+        if(dt != null)
+             //&& duty.getPostType() == postType)
             firstPostedAt = sdf.format(dt);
+
+        if(duty.getPostType() == postType)
+            firstPostedAt = duty.getDutyDateTime();
 
         return firstPostedAt;
     }
@@ -894,10 +897,11 @@ public class Util
         // get first DayIN post in the day
         for(int i=0; i< dtArray.length; i++)
         {
-            if(dt != null && dt.equals(dtArray[i])
-                         && duty.getPostType() == ATTENDANCE_DAY_IN)
+            if(dt != null && dt.equals(dtArray[i]))
+                         //&& duty.getPostType() == ATTENDANCE_DAY_IN)
             {
-                sdf =  new SimpleDateFormat("HH:mm:ss");
+                //sdf =  new SimpleDateFormat("HH:mm:ss");
+                sdf =  new SimpleDateFormat(patternOrg);
                 postingsOfDay.add(sdf.format(dtArrayOrg[i]));
             }
         }
@@ -979,6 +983,66 @@ public class Util
 
 
     }
+
+    public Date StrToDate(String dtStr, String pattern) {
+
+        Date dt = null;
+        //String pattern = "dd-MM-yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try
+        {
+            dt = sdf.parse(dtStr);
+
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        return  dt;
+    }
+
+    public String GetDayHours(String InTime, String OutTime)
+    {
+        String lastPosted = "";
+
+        Date dt, dtBefore = null;
+
+        dt = StrToDate(InTime, "dd-MM-yyyy HH:mm:ss");
+        dtBefore = StrToDate(InTime, "dd-MM-yyyy HH:mm:ss");
+
+        long diff = 1;
+        if(dt != null && dtBefore!= null)
+            diff = dt.getTime() - dtBefore.getTime() ;
+
+        long diffSeconds = diff / (1000);
+        double d = diffSeconds / 60 ;
+        long diffMinutes = (long)Math.floor(d);
+        diffSeconds = diffSeconds - (diffMinutes * 60);
+
+        d = diffMinutes / 60;
+        long diffHours = (long)Math.floor(d);
+        diffMinutes = diffMinutes - (diffHours * 60);
+
+        d = diffHours / 24;
+        long diffDays = (long)Math.floor(d);
+        diffHours = diffHours - (diffDays * 24);
+
+        lastPosted = "d:" + diffDays + " H:" + diffHours + " M:"+ diffMinutes + " S:"+ diffSeconds;
+
+        return  lastPosted;
+
+    }
+
+    public String GetInOutTime(Duty duty, String intimeOrOutime) {
+
+        String theTme = null;
+
+
+
+        return theTme;
+    }
+
 
 
 

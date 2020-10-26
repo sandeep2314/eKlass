@@ -2036,13 +2036,36 @@ ALTER TABLE tblStudentMaster Add FeePaid INT DEFAULT 0 NOT NULL
 
 
 */
+-- INTime OutTime query
+
+SELECT ScanID,
+       CONVERT(VARCHAR, s.CreatedAt,105 )
+	   + ' ' + CONVERT(VARCHAR, s.CreatedAt,108 ) CreatedAt
+	   ,(CASE WHEN t2.Intime is not null THEN	CONVERT(VARCHAR, t2.Intime,105 )
+	   + ' ' + CONVERT(VARCHAR, t2.Intime,108 )
+		ELSE '' END )Intime
+     , (CASE WHEN t2.Intime is not null
+       THEN CONVERT(VARCHAR, t2.outtime,105 )
+	   + ' ' + CONVERT(VARCHAR, t2.outtime,108 )
+		else '' end ) Outtime
+      , isNull(t2.hrs, 0)hrs
+  	   , QRID
+        , LocationName, s.GuardID, StaffName GuardName
+        , s.Latitude, s.Longitude
+	, IsScan, s.PostType, s.CompanyID
+   		FROM tblScan s
+     LEFT OUTER JOIN tblStaff f ON f.StaffId = s.guardID
+     LEFT OUTER JOIN tblLocationQR l ON l.locationID  = s.QRId
+
+    LEFT OUTER JOIN (
+
+    SELECT guardID
+     , AttendanceType
+     , MIN(INTIME) INTIME
+     , MAX(OUTTIME) OUTTIME
+     , SUM(DATEDIFF(HOUR, intime, isNull(outtime,getdate()))) hrs
 
 
-SELECT guardID
-, AttendanceType
-, MIN(INTIME) INTIME
-, MAX(OUTTIME) OUTTIME
-, SUM(DATEDIFF(HOUR, intime, outtime)) hrs
 FROM
 (
 Select guardID
@@ -2053,11 +2076,16 @@ Select guardID
 , (SELECT TOP 1 CreatedAt FROM tblScan s2
   WHERE s2.createdAt > s1.CreatedAT
   AND s2.postTYpe = 2) OUTTIME
+, posttype
 
 FROM tblScan s1
 where posTType=1
 GROUP BY CreatedAt, guardID, postType
 ) as a
-GROUP BY DAY(INTIME), guardID, AttendanceType
-ORDER BY INTIME
+GROUP BY CONVERT(VARCHAR, Intime,105 ), guardID, AttendanceType
 
+) as t2 ON CONVERT(VARCHAR, t2.INTIME,105 ) = CONVERT(VARCHAR, s.createdat,105 )
+ WHERE s.guardID=3
+ AND s.CompanyID  = 1
+
+ORDER BY s.CreatedAt desc

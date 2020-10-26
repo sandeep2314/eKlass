@@ -14,6 +14,9 @@ public class Duty
     public String Longitude;
     private int IsScan;
     private int PostType;
+    private String InTime;
+    private String OutTime;
+    private int WorkingHrs;
 
     public String CompanyId;
 
@@ -22,7 +25,12 @@ public class Duty
             , String latitude, String longitude
             , int isScan
             , int postType
-            , String companyId) {
+            , String companyId
+            , String inTime
+            , String outTime
+            , int workingHrs
+
+    ) {
         DutyId = dutyId;
         DutyDateTime = dutyDateTime;
         this.QRId = QRId;
@@ -34,6 +42,9 @@ public class Duty
         IsScan = isScan;
         PostType = postType;
         CompanyId = companyId;
+        InTime = inTime;
+        OutTime = outTime;
+        WorkingHrs = workingHrs;
     }
 
     public int getIsScan() {
@@ -72,6 +83,18 @@ public class Duty
         return Latitude;
     }
 
+    public String getInTime() {
+        return InTime;
+    }
+
+    public String getOutTime() {
+        return OutTime;
+    }
+
+    public int getWorkingHrs() {
+        return WorkingHrs;
+    }
+
     public String getLongitude() {
         return Longitude;
     }
@@ -79,4 +102,8 @@ public class Duty
     public String getCompanyId() {
         return CompanyId;
     }
+
+
+
 }
+
