@@ -17,6 +17,7 @@ import androidx.core.app.NavUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutionException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -272,6 +273,24 @@ public class BaseActivity extends AppCompatActivity {
                 finish();
                 startActivity( new Intent(this, ShowDesignationActivity.class));
                 return true;
+
+            case R.id.menuGenerateMonthlyReport:
+
+                String theExcelFile
+                        = null;
+
+                try {
+                    util.GetStaffTimeSheet(getApplicationContext());
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(getApplicationContext()
+                        , "TimeSheet Generated"
+                        , Toast.LENGTH_LONG).show();
+                return true;
+
 
             case R.id.menuProfile:
                 finish();

@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -37,6 +38,14 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
 
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +63,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -346,6 +357,9 @@ public class Util
         File pictureFile = getOutputMediaFile(ctx, QRCodeName);
 
         String fileName = pictureFile.getName();
+
+        Log.d("Sandeep7878", "fileName : " + pictureFile.getAbsolutePath() );
+
         if (pictureFile == null) {
             Log.d("Sandeep",
                     "Error creating media file, check storage permissions: ");// e.getMessage());
@@ -998,7 +1012,6 @@ public class Util
         {
             e.printStackTrace();
         }
-
         return  dt;
     }
 
@@ -1034,17 +1047,281 @@ public class Util
 
     }
 
-    public String GetInOutTime(Duty duty, String intimeOrOutime) {
 
-        String theTme = null;
+    public String GenerateTimeSheet(Context ctx, String fileName
+            , Integer mnth, List<Staff> staffList)    {
+
+        String path;
+        File dir;
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            Log.e("Failed", "Storage not available or read only");
+            return "Failed";
+        }
+        boolean success = false;
+
+        //New Workbook
+        Workbook wb = new HSSFWorkbook();
+
+        Cell c = null;
+
+        //Cell style for header row
+        CellStyle cs = wb.createCellStyle();
+        cs.setFillForegroundColor(HSSFColor.LIME.index);
+        cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        cs.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+
+        //New Sheet
+        Sheet sheet1 = null;
+        sheet1 = wb.createSheet("TimeSheet");
+
+        // Generate column headings
+        Row row = null;
+
+        row = sheet1.createRow(0);
+
+
+        c = row.createCell(0);
+        c.setCellValue("Serial Number");
+        c.setCellStyle(cs);
+
+        c = row.createCell(1);
+        c.setCellValue("Emp Name");
+        c.setCellStyle(cs);
+
+        for(int i=1; i < 32; i++)
+        {
+            c = row.createCell(i+1);
+            c.setCellValue(i+"-" + mnth + "-2020" );
+            c.setCellStyle(cs);
+        }
+
+        sheet1.setColumnWidth(0, (15 * 100));
+        sheet1.setColumnWidth(1, (15 * 100));
+        sheet1.setColumnWidth(2, (15 * 100));
+
+    // Get all staff in a column
+    // Get attendance of one staff for the given month
+
+
+        int val = 0;
+        int rw = 1;
+        String cellValue = "";
+
+
+        Staff staff ;
+
+        Log.w("Sandeep9999", " " + staffList.size());
+
+        for(int i = 0; i< staffList.size(); i++)
+        {
+            row = sheet1.createRow(rw);
+            staff = staffList.get(i);
+            for(int j=0;j<35;j++){
+                if(j==0)
+                    cellValue = staff.getStaffName();
+                else
+                    cellValue = String.valueOf(val);
+                c = row.createCell(j);
+                c.setCellValue(cellValue);
+                c.setCellStyle(cellStyle);
+                val++;
+            }
+            sheet1.setColumnWidth(i, (15 * 500));
+            rw++;
+        }
+
+
+        //path = Environment.getExternalStorageDirectory()+"/Sandeep/";
+        path = "/storage/emulated/0/Android/data/com.example.eklass/Files/";
+        //File file = new File(Environment.getRootDirectory()
+        //+ "/Sandeep/" + File.separator + fileName);
+
+
+        //File mediaStorageDir = new File(
+          //      Environment.getExternalStorageDirectory().getAbsolutePath()+"/Sandeep/");
+        //File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
 
 
-        return theTme;
+        dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        File file = new File(dir, fileName);
+        FileOutputStream os = null;
+
+        try {
+            os = new FileOutputStream(file);
+            wb.write(os);
+            Log.w("FileUtils", "Writing file" + file);
+            success = true;
+        } catch (IOException e) {
+            Log.w("FileUtils", "Error writing " + file, e);
+        } catch (Exception e) {
+            Log.w("FileUtils", "Failed to save file", e);
+        } finally {
+            try {
+                if (null != os)
+                    os.close();
+            } catch (Exception ex) {
+            }
+        }
+        return file.getAbsolutePath();
     }
 
+    public static boolean isExternalStorageReadOnly() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isExternalStorageAvailable() {
+        String extStorageState = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(extStorageState)) {
+            return true;
+        }
+        return false;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+    /*public String syncCall(){
+
+        String URL = "http://192.168.1.35:8092/rest";
+        String response = new String();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getContext());
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, new JSONObject(), future, future);
+        requestQueue.add(request);
+
+        try {
+            response = future.get().toString();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return response;
+            }
+
+         Thread thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        String response = syncCall();
+
+                                    }
+                                });
+                                thread.start();
 
 
 
+
+
+    */
+    /////////////////////////////////////////////////////////////////////////
+
+
+    public void GetStaffTimeSheet(final Context ctx) throws ExecutionException, InterruptedException {
+            final List<Staff> staffList= new ArrayList<>();
+            User usr = SharedPrefManager.getInstance(ctx.getApplicationContext()).getUser();
+
+            final String staffId = usr.getStaffId();
+            final  String CompanyId = usr.getCompanyId();
+            final String DesignationId = usr.getDesignationId();
+
+           /* final ProgressDialog progressDialog = new ProgressDialog(ctx);
+            progressDialog.setMessage("loading data...");
+            progressDialog.show();
+*/
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    //progressDialog.dismiss();
+
+                    // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                    Log.w("Sandeep44444",response);
+
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray array = jsonObject.getJSONArray("a");
+
+                        Staff staff_fromDB ;
+                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
+                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
+                        String imageURL = "";
+                        for(int i=0; i< array.length(); i++)
+                        {
+                            JSONObject o = array.getJSONObject(i);
+
+                            staff_fromDB =   new Staff(
+                                    o.getString("WorkerID")
+                                    , o.getString("WorkerName")
+                                    , o.getString("WorkerID")
+                                    , o.getInt("Did")
+                                    , o.getString("DName")
+                                    , o.getString("MobileNo")
+                                    , o.getString("CompanyId")
+                                    , o.getString("CompanyName")
+                                    , o.getInt("IsActive")
+                                    , imageURL
+                            );
+
+                            Log.w("sandeep555" , o.getString("WorkerName").toString());
+                            staffList.add(staff_fromDB);
+
+                            // Create timesheet.xls file
+                            GenerateTimeSheet(ctx, "timesheet.xls"
+                                    , 10,  staffList);
+
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            };
+
+            Response.ErrorListener errorListener = new Response.ErrorListener()
+            {
+                @Override
+                public void onErrorResponse(VolleyError error)
+                {
+                    Toast.makeText(ctx.getApplicationContext(),  error.getMessage()
+                            , Toast.LENGTH_LONG ).show();
+                }
+            };
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("pStaffId", staffId);
+            params.put("pCompanyId", CompanyId);
+            params.put("pIsLogo", "0");
+            // to get all staff = 1
+            params.put("pIsAllStaff", "1");
+
+            RequestHandler rh = new RequestHandler();
+            String paramsStr = rh.getPostDataString(params);
+            String theURL = URLs.GET_WORKER_URL +"?" + paramsStr;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
+                , responseListener, errorListener);
+        RequestQueue requestQueue = Volley.newRequestQueue(ctx);
+        requestQueue.add(stringRequest);
+
+
+
+    }
 
 }
