@@ -1049,7 +1049,7 @@ public class Util
 
 
     public String GenerateTimeSheet(Context ctx, String fileName
-            , Integer mnth, List<Staff> staffList)    {
+            , Integer mnth, List<TimeSheet> timeSheetList)    {
 
         String path;
         File dir;
@@ -1111,17 +1111,17 @@ public class Util
         String cellValue = "";
 
 
-        Staff staff ;
+        TimeSheet timeSheet ;
 
-        Log.w("Sandeep9999", " " + staffList.size());
+        Log.w("Sandeep9999", " " + timeSheetList.size());
 
-        for(int i = 0; i< staffList.size(); i++)
+        for(int i = 0; i< timeSheetList.size(); i++)
         {
             row = sheet1.createRow(rw);
-            staff = staffList.get(i);
+            timeSheet = timeSheetList.get(i);
             for(int j=0;j<35;j++){
                 if(j==0)
-                    cellValue = staff.getStaffName();
+                    cellValue = timeSheet.getStaffId();
                 else
                     cellValue = String.valueOf(val);
                 c = row.createCell(j);
@@ -1232,7 +1232,7 @@ public class Util
 
 
     public void GetStaffTimeSheet(final Context ctx) throws ExecutionException, InterruptedException {
-            final List<Staff> staffList= new ArrayList<>();
+            final List<TimeSheet> timeSheetList= new ArrayList<>();
             User usr = SharedPrefManager.getInstance(ctx.getApplicationContext()).getUser();
 
             final String staffId = usr.getStaffId();
@@ -1256,7 +1256,7 @@ public class Util
                         JSONObject jsonObject = new JSONObject(response);
                         JSONArray array = jsonObject.getJSONArray("a");
 
-                        Staff staff_fromDB ;
+                        TimeSheet timesheet_fromDB ;
                         //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
                         //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
                         String imageURL = "";
@@ -1264,26 +1264,35 @@ public class Util
                         {
                             JSONObject o = array.getJSONObject(i);
 
-                            staff_fromDB =   new Staff(
-                                    o.getString("WorkerID")
-                                    , o.getString("WorkerName")
-                                    , o.getString("WorkerID")
-                                    , o.getInt("Did")
-                                    , o.getString("DName")
-                                    , o.getString("MobileNo")
-                                    , o.getString("CompanyId")
-                                    , o.getString("CompanyName")
-                                    , o.getInt("IsActive")
-                                    , imageURL
+                            timesheet_fromDB =   new TimeSheet(
+                                    o.getString("StaffID")
+                                    , o.getString("DAY1_INTIME")
+                                    , o.getString("DAY1_OUTTIME")
+                                    , o.getString("DAY1_hrs")
+                                    , o.getString("DAY1_INTIME_longitude")
+                                    , o.getString("DAY1_INTIME_longitude")
+
+                                    , o.getString("DAY18_INTIME")
+                                    , o.getString("DAY18_OUTTIME")
+                                    , o.getString("DAY18_hrs")
+                                    , o.getString("DAY18_INTIME_longitude")
+                                    , o.getString("DAY18_INTIME_longitude")
+
+                                    , o.getString("DAY26_INTIME")
+                                    , o.getString("DAY26_OUTTIME")
+                                    , o.getString("DAY26_hrs")
+                                    , o.getString("DAY26_INTIME_longitude")
+                                    , o.getString("DAY26_INTIME_longitude")
+
+
                             );
 
-                            Log.w("sandeep555" , o.getString("WorkerName").toString());
-                            staffList.add(staff_fromDB);
+
+                            timeSheetList.add(timesheet_fromDB);
 
                             // Create timesheet.xls file
                             GenerateTimeSheet(ctx, "timesheet.xls"
-                                    , 10,  staffList);
-
+                                    , 10,  timeSheetList);
 
                         }
 
@@ -1305,15 +1314,11 @@ public class Util
             };
 
             HashMap<String, String> params = new HashMap<>();
-            params.put("pStaffId", staffId);
             params.put("pCompanyId", CompanyId);
-            params.put("pIsLogo", "0");
-            // to get all staff = 1
-            params.put("pIsAllStaff", "1");
 
             RequestHandler rh = new RequestHandler();
             String paramsStr = rh.getPostDataString(params);
-            String theURL = URLs.GET_WORKER_URL +"?" + paramsStr;
+            String theURL = URLs.GET_TIMESHEET_URL +"?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);

@@ -36,6 +36,7 @@ public class URLs
     public static final String DEL_STAFF_URL = DOMAIN_NAME + "delstaff";
     public static final String GET_WORKER2_URL = DOMAIN_NAME + "getworker2";
     public static final String UPDATE_STAFF_ATTENDANCE_TYPE_URL = DOMAIN_NAME + "updatestaffattendancetype";
+    public static final String GET_TIMESHEET_URL = DOMAIN_NAME + "gettimesheet";
 
 
 }
