@@ -1082,7 +1082,6 @@ public class Util
 
         row = sheet1.createRow(0);
 
-
         c = row.createCell(0);
         c.setCellValue("Serial Number");
         c.setCellStyle(cs);
@@ -1105,34 +1104,48 @@ public class Util
     // Get all staff in a column
     // Get attendance of one staff for the given month
 
-
-        int val = 0;
+        int colNo = 0;
         int rw = 1;
         String cellValue = "";
 
-
         TimeSheet timeSheet ;
-
-        Log.w("Sandeep9999", " " + timeSheetList.size());
 
         for(int i = 0; i< timeSheetList.size(); i++)
         {
             row = sheet1.createRow(rw);
             timeSheet = timeSheetList.get(i);
-            for(int j=0;j<35;j++){
-                if(j==0)
-                    cellValue = timeSheet.getStaffId();
+            Log.w("Sandeep9922", " " + timeSheet.getStaffId());
+            for(int col=0;col<35;col++){
+                if(col==0) // Staff Name
+                {
+                    cellValue = "Staff Id - " + timeSheet.getStaffId();
+
+                }
+                else if(col==1)
+                {
+                    cellValue = timeSheet.getDay1_INTIME();
+
+                }
+                else if(col==19)
+                {
+                    cellValue = timeSheet.getDay18_INTIME();
+
+                }
+                else if(col==27)
+                {
+                    cellValue = timeSheet.getDay26_INTIME();
+                }
                 else
-                    cellValue = String.valueOf(val);
-                c = row.createCell(j);
+                    cellValue = timeSheet.getDAY1_lat();
+                    //cellValue = String.valueOf(val);
+                c = row.createCell(col);
                 c.setCellValue(cellValue);
                 c.setCellStyle(cellStyle);
-                val++;
+                colNo++;
             }
             sheet1.setColumnWidth(i, (15 * 500));
             rw++;
         }
-
 
         //path = Environment.getExternalStorageDirectory()+"/Sandeep/";
         path = "/storage/emulated/0/Android/data/com.example.eklass/Files/";
