@@ -2028,6 +2028,8 @@ END
 --execute FillDays
 
 -- bpsdb2021 
+use scholardb2021
+
 ALTER TABLE tblStudentMaster Add StudentPassword varchar(10)
 
  

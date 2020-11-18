@@ -69,8 +69,7 @@ import java.util.concurrent.ExecutionException;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
-public class Util
-{
+public class Util {
 
     public static final int BLACK_THEME = 1;
     public static final int WHITE_THEME = 2;
@@ -89,23 +88,21 @@ public class Util
     public static final String NO_COMPANY = "-1";
 
 
-    public String[] ConvertListToStringArray(List<String> theList)
-    {
+    public String[] ConvertListToStringArray(List<String> theList) {
         String[] items = new String[theList.size()];
-        for(int i=0; i < theList.size(); i++)
+        for (int i = 0; i < theList.size(); i++)
             items[i] = theList.get(i).toString();
         return items;
     }
 
-    public void SetImage(final Context ctx, final ImageView imageView, final boolean isLogo)
-    {
+    public void SetImage(final Context ctx, final ImageView imageView, final boolean isLogo) {
 
         Log.w("Sandeep4444", "SetImage");
 
         User usr = SharedPrefManager.getInstance(ctx).getUser();
 
         final String staffId = usr.getStaffId();
-        final  String CompanyId = usr.getCompanyId();
+        final String CompanyId = usr.getCompanyId();
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -113,30 +110,26 @@ public class Util
 
                 //{"a": [{"StudentName": "Mahi", "MobileF": "8923579979"}, {"StudentName": "ANURAG VERMA", "MobileF": "9837402809"}
                 // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
-                Log.w("Sandeep4444",response);
+                Log.w("Sandeep4444", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
-                    Staff staff_fromDB ;
+                    Staff staff_fromDB;
                     //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
                     //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
                     String imageURL = "";
 
 
-                    for(int i=0; i< array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
 
                         String theURL = "";
-                        if(isLogo)
-                        {
+                        if (isLogo) {
                             imageURL = URLs.GET_IMAGE_URL + o.getString("imageName");
                             imageURL += "&pIsLogo=1";
-                        }
-                        else
-                        {
+                        } else {
                             imageURL = URLs.GET_IMAGE_URL + o.getString("imageURL");
                             imageURL += "&pIsLogo=0";
                         }
@@ -156,13 +149,11 @@ public class Util
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(ctx,  error.getMessage()
-                        , Toast.LENGTH_LONG ).show();
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx, error.getMessage()
+                        , Toast.LENGTH_LONG).show();
             }
         };
 
@@ -170,21 +161,19 @@ public class Util
         params.put("pStaffId", staffId);
         params.put("pCompanyId", CompanyId);
 
-        String the_url="";
-        if(isLogo) {
+        String the_url = "";
+        if (isLogo) {
             params.put("pIsLogo", "1");
             the_url = URLs.GET_COMPANIES_URL;
-        }
-        else
-        {
+        } else {
             params.put("pIsLogo", "0");
-            the_url= URLs.GET_STAFF_URL;
+            the_url = URLs.GET_STAFF_URL;
         }
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
 
-        String theURL = the_url +"?" + paramsStr;
+        String theURL = the_url + "?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
@@ -197,8 +186,7 @@ public class Util
             , String pageName
             , ImageView logoImage
             , ImageView profileImage
-            , int themeNo)
-    {
+            , int themeNo) {
         User user = SharedPrefManager.getInstance(ctx).getUser();
 
         String heading = user.getStaffName();
@@ -206,17 +194,13 @@ public class Util
         heading += "\n" + pageName;
 
 
-
         //mTextView.setTextColor(ContextCompat.getColor(context, R.color.<name_of_color>));
         // mTextView.setTextColor(Color.parseColor("#bdbdbd"))
         // black theme = 1
         // grey theme = 2
-        if(themeNo == BLACK_THEME)
-        {
+        if (themeNo == BLACK_THEME) {
             tvPageHeading.setTextColor(ContextCompat.getColor(ctx, android.R.color.white));
-        }
-        else
-        {
+        } else {
             // black font color
             //pageHeading.setTextColor(Color.parseColor("#000000"));
             tvPageHeading.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
@@ -233,24 +217,21 @@ public class Util
 
     }
 
-    public void CheckAll(CheckBox ckb)
-    {
-         if(ckb.isChecked())
+    public void CheckAll(CheckBox ckb) {
+        if (ckb.isChecked())
             ckb.setChecked(false);
         else
             ckb.setChecked(true);
     }
 
-    public String GetCheckedIds()
-    {
+    public String GetCheckedIds() {
         String selectedIds = "";
 
         return selectedIds;
 
     }
 
-    public void DeleteRecord(final Context ctx, String ids, final String theURL)
-    {
+    public void DeleteRecord(final Context ctx, String ids, final String theURL) {
 /*
         final ProgressDialog progressDialog = new ProgressDialog(ctx);
         progressDialog.setMessage("loading data...");
@@ -262,22 +243,21 @@ public class Util
             public void onResponse(String response) {
                 //progressDialog.dismiss();
                 //{"a": [{"IsDeleted": "yes"}]}
-                Log.w("Sandeep444",response);
+                Log.w("Sandeep444", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
                     String deleted = "no";
-                    for(int i=0; i< array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
                         deleted = o.getString("IsDeleted");
                     }
 
-                    if(deleted.equals("yes"))
+                    if (deleted.equals("yes"))
                         Toast.makeText(ctx, "Records Deleted Successfully"
-                             , Toast.LENGTH_LONG).show();
+                                , Toast.LENGTH_LONG).show();
                     else {
                         if (theURL.equals(URLs.DEL_STAFF_URL))
                             Toast.makeText(ctx, "Records can not be Deleted  " +
@@ -292,13 +272,11 @@ public class Util
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(ctx,  error.getMessage()
-                        , Toast.LENGTH_LONG ).show();
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx, error.getMessage()
+                        , Toast.LENGTH_LONG).show();
             }
         };
 
@@ -313,7 +291,7 @@ public class Util
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-        String delURL = theURL +"?" + paramsStr;
+        String delURL = theURL + "?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, delURL
                 , responseListener, errorListener);
@@ -324,8 +302,7 @@ public class Util
     }
 
 
-    public Bitmap generateQrCode(String myCodeText) throws WriterException
-    {
+    public Bitmap generateQrCode(String myCodeText) throws WriterException {
 
         Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H); // H = 30% damage
@@ -347,7 +324,7 @@ public class Util
             }
         }
 
-        Bitmap  bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
 
         return bitmap;
@@ -358,7 +335,7 @@ public class Util
 
         String fileName = pictureFile.getName();
 
-        Log.d("Sandeep7878", "fileName : " + pictureFile.getAbsolutePath() );
+        Log.d("Sandeep7878", "fileName : " + pictureFile.getAbsolutePath());
 
         if (pictureFile == null) {
             Log.d("Sandeep",
@@ -374,10 +351,10 @@ public class Util
         } catch (IOException e) {
             Log.d("Sandeep", "Error accessing file: " + e.getMessage());
         }
-        return  fileName;
+        return fileName;
     }
 
-    private  File getOutputMediaFile(Context ctx, String QRCodeName){
+    private File getOutputMediaFile(Context ctx, String QRCodeName) {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
@@ -386,7 +363,7 @@ public class Util
                 + ctx.getPackageName()
                 + "/Files");
 
-                //+ getGalleryPath());
+        //+ getGalleryPath());
 
         //File mediaStorageDir = getGalleryPath();
 
@@ -394,15 +371,15 @@ public class Util
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 return null;
             }
         }
         // Create a media file name
         String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
         File mediaFile;
-        String mImageName = QRCodeName+"_"+ timeStamp +".bmp";
+        String mImageName = QRCodeName + "_" + timeStamp + ".bmp";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
@@ -420,9 +397,8 @@ public class Util
     }
 
 
-    public String GenerateLocationQRCode(final Context ctx)
-    {
-        String pathName="";
+    public String GenerateLocationQRCode(final Context ctx) {
+        String pathName = "";
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -432,17 +408,16 @@ public class Util
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
-                    String qrCodeFileName="";
+                    String qrCodeFileName = "";
 
-                    for(int i=0; i< array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
 
                         Bitmap bitmap = generateQrCode(o.getString("LocationID"));
-                        if(bitmap != null)
+                        if (bitmap != null)
                             qrCodeFileName = storeImage(ctx
                                     , bitmap, o.getString("LocationName"));
-                  }
+                    }
 
 
                 } catch (JSONException e) {
@@ -454,11 +429,9 @@ public class Util
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
+            public void onErrorResponse(VolleyError error) {
 
             }
         };
@@ -471,7 +444,7 @@ public class Util
         params.put("pCompanyId", user.getCompanyId());
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-        String theURL = URLs.GET_LOCATION_URL+"?" + paramsStr;
+        String theURL = URLs.GET_LOCATION_URL + "?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
@@ -622,18 +595,16 @@ public class Util
     }
 */
 
-    public String GetString(Object str)
-    {
-        if(str == null)
+    public String GetString(Object str) {
+        if (str == null)
             return "";
         return str.toString();
     }
 
-    public int GetSpinnerPosition(String [] idsArray, int param)
-    {
-        int position=0;
+    public int GetSpinnerPosition(String[] idsArray, int param) {
+        int position = 0;
 
-        if(idsArray!=null) {
+        if (idsArray != null) {
             for (int i = 0; i < idsArray.length; i++) {
                 if (idsArray[i].equals(String.valueOf(param))) {
                     position = i;
@@ -645,41 +616,35 @@ public class Util
         return position;
     }
 
-    public String GetPostOfDay(String currentDateTime, List<Duty> dutyList, Boolean isFirst)
-    {
+    public String GetPostOfDay(String currentDateTime, List<Duty> dutyList, Boolean isFirst) {
         String firstPostedAt = "";
         String pattern = "dd-MM-yyyy";
 
         Date dt = null;
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        try
-        {
+        try {
             dt = sdf.parse(currentDateTime);
-          //  dtOrg = sdfOrg.parse(currentDateTime);
+            //  dtOrg = sdfOrg.parse(currentDateTime);
 
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
         Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
 
-        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        String patternOrg = "dd-MM-yyyy HH:mm:ss";
         Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
 
-        List<String> postingsOfDay ;
+        List<String> postingsOfDay;
         postingsOfDay = new ArrayList<>();
 
         // put all postings of one day in one date array
-        for(int i=0; i< dtArray.length; i++)
-        {
+        for (int i = 0; i < dtArray.length; i++) {
 
-            if(dt != null && dt.equals(dtArray[i]))
-            {
-                sdf =  new SimpleDateFormat("HH:mm:ss");
+            if (dt != null && dt.equals(dtArray[i])) {
+                sdf = new SimpleDateFormat("HH:mm:ss");
                 postingsOfDay.add(sdf.format(dtArrayOrg[i]));
-                Log.w("sandeep777","dt " + dt + "dtArray[i] " + dtArrayOrg[i]);
+                Log.w("sandeep777", "dt " + dt + "dtArray[i] " + dtArrayOrg[i]);
             }
         }
 
@@ -687,87 +652,79 @@ public class Util
         if (!isFirst)
             firstPostedAt = "" + postingsOfDay.get(0);
         else
-            firstPostedAt = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+            firstPostedAt = "" + postingsOfDay.get(postingsOfDay.size() - 1);
 
 
         return firstPostedAt;
     }
 
 
-    public String GetLastPostedDateTime(String currentDateTime, List<Duty> dutyList)
-             {
+    public String GetLastPostedDateTime(String currentDateTime, List<Duty> dutyList) {
         String lastPosted = "";
         String pattern = "dd-MM-yyyy HH:mm:ss";
 
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        Date dt= null;
+        Date dt = null;
         Date dtBefore = null;
-         try
-         {
-             dt = sdf.parse(currentDateTime);
-         }
-         catch (ParseException e)
-         {
-             e.printStackTrace();
-         }
+        try {
+            dt = sdf.parse(currentDateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-         Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
+        Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
 
-         // get the datetime before the current date time
-          for(int i=0; i< dtArray.length; i++)
-          {
-                if(dt != null && dt.compareTo(dtArray[i]) == 0 )
-                {
-                    if(dtArray.length == i+1)
-                        dtBefore = dtArray[i];
-                    else
-                        dtBefore = dtArray[i+1];
-                    break;
-                }
-          }
+        // get the datetime before the current date time
+        for (int i = 0; i < dtArray.length; i++) {
+            if (dt != null && dt.compareTo(dtArray[i]) == 0) {
+                if (dtArray.length == i + 1)
+                    dtBefore = dtArray[i];
+                else
+                    dtBefore = dtArray[i + 1];
+                break;
+            }
+        }
         lastPosted = GetDuration(dt, dtBefore);
 
-        return  lastPosted;
+        return lastPosted;
     }
 
 
-   public String GetDuration(Date dt, Date dtBefore)
-   {
-       String lastPosted = "";
+    public String GetDuration(Date dt, Date dtBefore) {
+        String lastPosted = "";
 
-       long diff = 1;
-       if(dt != null && dtBefore!= null)
-           diff = dt.getTime() - dtBefore.getTime() ;
+        long diff = 1;
+        if (dt != null && dtBefore != null)
+            diff = dt.getTime() - dtBefore.getTime();
 
-       long diffSeconds = diff / (1000);
-       double d = diffSeconds / 60 ;
-       long diffMinutes = (long)Math.floor(d);
-       diffSeconds = diffSeconds - (diffMinutes * 60);
+        long diffSeconds = diff / (1000);
+        double d = diffSeconds / 60;
+        long diffMinutes = (long) Math.floor(d);
+        diffSeconds = diffSeconds - (diffMinutes * 60);
 
-       d = diffMinutes / 60;
-       long diffHours = (long)Math.floor(d);
-       diffMinutes = diffMinutes - (diffHours * 60);
+        d = diffMinutes / 60;
+        long diffHours = (long) Math.floor(d);
+        diffMinutes = diffMinutes - (diffHours * 60);
 
-       d = diffHours / 24;
-       long diffDays = (long)Math.floor(d);
-       diffHours = diffHours - (diffDays * 24);
+        d = diffHours / 24;
+        long diffDays = (long) Math.floor(d);
+        diffHours = diffHours - (diffDays * 24);
 
-       lastPosted = "d:" + diffDays + " H:" + diffHours + " M:"+ diffMinutes + " S:"+ diffSeconds;
+        lastPosted = "d:" + diffDays + " H:" + diffHours + " M:" + diffMinutes + " S:" + diffSeconds;
 
-       return  lastPosted;
+        return lastPosted;
 
-   }
+    }
 
-    public Date[] ConvertListToDateArray(List<Duty> theList, String pattern)
-    {
+    public Date[] ConvertListToDateArray(List<Duty> theList, String pattern) {
         Date[] items = new Date[theList.size()];
         //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
         Date dt = null;
         Duty duty = null;
-        for(int i=0; i < theList.size(); i++) {
-            duty =  (Duty)theList.get(i);
+        for (int i = 0; i < theList.size(); i++) {
+            duty = (Duty) theList.get(i);
             try {
                 dt = sdf.parse(duty.getDutyDateTime());
             } catch (ParseException e) {
@@ -778,8 +735,7 @@ public class Util
         return items;
     }
 
-    public void CreateMonthlyReport(String monthYear, String pattern)
-    {
+    public void CreateMonthlyReport(String monthYear, String pattern) {
 
         String mnth = "JUN";
         String yr = "20";
@@ -792,9 +748,8 @@ public class Util
         Date dt = null;
 
         // create valid days of a month
-        for(int i=1; i < 32; i++)
-        {
-            dtStr = i+"/"+mnth+"/"+yr;
+        for (int i = 1; i < 32; i++) {
+            dtStr = i + "/" + mnth + "/" + yr;
             try {
                 dt = sdf.parse(dtStr);
             } catch (ParseException e) {
@@ -804,132 +759,116 @@ public class Util
         }
     }
 
-    public String GetDayPosting(Duty duty, List<Duty> dutyList, int postType)
-    {
+    public String GetDayPosting(Duty duty, List<Duty> dutyList, int postType) {
 
         String firstPostedAt = "";
 
         Date dt = null;
-        SimpleDateFormat sdf =  new SimpleDateFormat("HH:mm:ss");
-        try
-        {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        try {
             dt = sdf.parse(duty.getDutyDateTime());
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if(dt != null)
-             //&& duty.getPostType() == postType)
+        if (dt != null)
+            //&& duty.getPostType() == postType)
             firstPostedAt = sdf.format(dt);
 
-        if(duty.getPostType() == postType)
+        if (duty.getPostType() == postType)
             firstPostedAt = duty.getDutyDateTime();
 
         return firstPostedAt;
     }
 
-        public String GetDayPostingOld(Duty duty, List<Duty> dutyList, int postType)
-    {
+    public String GetDayPostingOld(Duty duty, List<Duty> dutyList, int postType) {
 
         String firstPostedAt = "";
         String pattern = "dd-MM-yyyy";
 
         Date dt = null;
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        try
-        {
+        try {
             dt = sdf.parse(duty.getDutyDateTime());
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
         Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
 
-        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        String patternOrg = "dd-MM-yyyy HH:mm:ss";
         Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
 
-        List<String> postingsOfDay ;
+        List<String> postingsOfDay;
         postingsOfDay = new ArrayList<>();
 
         // put all postings of one day in one date array
-        for(int i=0; i< dtArray.length; i++)
-        {
+        for (int i = 0; i < dtArray.length; i++) {
 
 
-            if(dt != null && dt.equals(dtArray[i])
-                && duty.getPostType() == postType)
-            {
+            if (dt != null && dt.equals(dtArray[i])
+                    && duty.getPostType() == postType) {
 
-                sdf =  new SimpleDateFormat("HH:mm:ss");
+                sdf = new SimpleDateFormat("HH:mm:ss");
                 postingsOfDay.add(sdf.format(dtArrayOrg[i]));
             }
 
             Log.w("Sandeep777  22 ", sdf.format(dtArrayOrg[i]));
         }
 
-        if(postingsOfDay.size() >= 1 )
-            firstPostedAt = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+        if (postingsOfDay.size() >= 1)
+            firstPostedAt = "" + postingsOfDay.get(postingsOfDay.size() - 1);
 
         // if post type is DAY IN then show blank
-       if(duty.getPostType() == ATTENDANCE_DAY_IN)
-           firstPostedAt = "";
+        if (duty.getPostType() == ATTENDANCE_DAY_IN)
+            firstPostedAt = "";
 
-        return firstPostedAt ;
+        return firstPostedAt;
     }
 
-    public String GetDayIN(Duty duty, List<Duty> dutyList)
-    {
+    public String GetDayIN(Duty duty, List<Duty> dutyList) {
         String firstDayIN = "";
         String pattern = "dd-MM-yyyy";
 
         Date dt = null;
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        try
-        {
+        try {
             dt = sdf.parse(duty.getDutyDateTime());
 
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
         Date[] dtArray = ConvertListToDateArray(dutyList, pattern);
 
-        String patternOrg =  "dd-MM-yyyy HH:mm:ss";
+        String patternOrg = "dd-MM-yyyy HH:mm:ss";
         Date[] dtArrayOrg = ConvertListToDateArray(dutyList, patternOrg);
 
-        List<String> postingsOfDay ;
+        List<String> postingsOfDay;
         postingsOfDay = new ArrayList<>();
 
         // put all postings of one day in one date array
 
         // get first DayIN post in the day
-        for(int i=0; i< dtArray.length; i++)
-        {
-            if(dt != null && dt.equals(dtArray[i]))
-                         //&& duty.getPostType() == ATTENDANCE_DAY_IN)
+        for (int i = 0; i < dtArray.length; i++) {
+            if (dt != null && dt.equals(dtArray[i]))
+            //&& duty.getPostType() == ATTENDANCE_DAY_IN)
             {
                 //sdf =  new SimpleDateFormat("HH:mm:ss");
-                sdf =  new SimpleDateFormat(patternOrg);
+                sdf = new SimpleDateFormat(patternOrg);
                 postingsOfDay.add(sdf.format(dtArrayOrg[i]));
             }
         }
 
-        if(postingsOfDay.size() >= 1 )
-            firstDayIN = "" +  postingsOfDay.get(postingsOfDay.size()-1);
+        if (postingsOfDay.size() >= 1)
+            firstDayIN = "" + postingsOfDay.get(postingsOfDay.size() - 1);
 
         return firstDayIN;
     }
 
 
     public void UpdateAttendanceType(final Context ctx
-            , int attendanceType, final String theURL)
-    {
+            , int attendanceType, final String theURL) {
         // update attendance status to tblStaff (PostType)
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -937,20 +876,19 @@ public class Util
             public void onResponse(String response) {
                 //progressDialog.dismiss();
                 //{"a": [{"IsDeleted": "yes"}]}
-                Log.w("Sandeep65",response);
+                Log.w("Sandeep65", response);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     JSONArray array = jsonObject.getJSONArray("a");
 
                     String deleted = "no";
-                    for(int i=0; i< array.length(); i++)
-                    {
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject o = array.getJSONObject(i);
                         deleted = o.getString("IsUpdateds");
                     }
 
-                    if(deleted.equals("yes"))
+                    if (deleted.equals("yes"))
                         Toast.makeText(ctx, "Records Updated Successfully"
                                 , Toast.LENGTH_LONG).show();
                     else {
@@ -966,13 +904,11 @@ public class Util
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener()
-        {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
-            public void onErrorResponse(VolleyError error)
-            {
-                Toast.makeText(ctx,  error.getMessage()
-                        , Toast.LENGTH_LONG ).show();
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx, error.getMessage()
+                        , Toast.LENGTH_LONG).show();
             }
         };
 
@@ -988,7 +924,7 @@ public class Util
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
-        String delURL = theURL +"?" + paramsStr;
+        String delURL = theURL + "?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, delURL
                 , responseListener, errorListener);
@@ -1003,20 +939,16 @@ public class Util
         Date dt = null;
         //String pattern = "dd-MM-yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        try
-        {
+        try {
             dt = sdf.parse(dtStr);
 
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  dt;
+        return dt;
     }
 
-    public String GetDayHours(String InTime, String OutTime)
-    {
+    public String GetDayHours(String InTime, String OutTime) {
         String lastPosted = "";
 
         Date dt, dtBefore = null;
@@ -1025,31 +957,31 @@ public class Util
         dtBefore = StrToDate(InTime, "dd-MM-yyyy HH:mm:ss");
 
         long diff = 1;
-        if(dt != null && dtBefore!= null)
-            diff = dt.getTime() - dtBefore.getTime() ;
+        if (dt != null && dtBefore != null)
+            diff = dt.getTime() - dtBefore.getTime();
 
         long diffSeconds = diff / (1000);
-        double d = diffSeconds / 60 ;
-        long diffMinutes = (long)Math.floor(d);
+        double d = diffSeconds / 60;
+        long diffMinutes = (long) Math.floor(d);
         diffSeconds = diffSeconds - (diffMinutes * 60);
 
         d = diffMinutes / 60;
-        long diffHours = (long)Math.floor(d);
+        long diffHours = (long) Math.floor(d);
         diffMinutes = diffMinutes - (diffHours * 60);
 
         d = diffHours / 24;
-        long diffDays = (long)Math.floor(d);
+        long diffDays = (long) Math.floor(d);
         diffHours = diffHours - (diffDays * 24);
 
-        lastPosted = "d:" + diffDays + " H:" + diffHours + " M:"+ diffMinutes + " S:"+ diffSeconds;
+        lastPosted = "d:" + diffDays + " H:" + diffHours + " M:" + diffMinutes + " S:" + diffSeconds;
 
-        return  lastPosted;
+        return lastPosted;
 
     }
 
 
     public String GenerateTimeSheet(Context ctx, String fileName
-            , Integer mnth, List<TimeSheet> timeSheetList)    {
+            , Integer mnth, List<TimeSheet> timeSheetList) {
 
         String path;
         File dir;
@@ -1087,57 +1019,93 @@ public class Util
         c.setCellStyle(cs);
 
         c = row.createCell(1);
-        c.setCellValue("Emp Name");
+        c.setCellValue("Staff ID");
         c.setCellStyle(cs);
 
-        for(int i=1; i < 32; i++)
-        {
-            c = row.createCell(i+1);
-            c.setCellValue(i+"-" + mnth + "-2020" );
+        c = row.createCell(2);
+        c.setCellValue("Staff Name");
+        c.setCellStyle(cs);
+
+        c = row.createCell(3);
+        c.setCellValue("Designation");
+        c.setCellStyle(cs);
+
+        c = row.createCell(4);
+        c.setCellValue("Staff Hierarchy");
+        c.setCellStyle(cs);
+
+        for (int i = 4; i < 33; i++) {
+            c = row.createCell(i + 1);
+            c.setCellValue(i + "-" + mnth + "-2020");
             c.setCellStyle(cs);
         }
 
         sheet1.setColumnWidth(0, (15 * 100));
         sheet1.setColumnWidth(1, (15 * 100));
         sheet1.setColumnWidth(2, (15 * 100));
-
-    // Get all staff in a column
-    // Get attendance of one staff for the given month
+        sheet1.setColumnWidth(3, (15 * 100));
+        sheet1.setColumnWidth(4, (15 * 100));
+        // Get all staff in a column
+        // Get attendance of one staff for the given month
 
         int colNo = 0;
         int rw = 1;
         String cellValue = "";
 
-        TimeSheet timeSheet ;
+        TimeSheet timeSheet;
 
-        for(int i = 0; i< timeSheetList.size(); i++)
-        {
+        for (int i = 0; i < timeSheetList.size(); i++) {
             row = sheet1.createRow(rw);
             timeSheet = timeSheetList.get(i);
             Log.w("Sandeep9922", " " + timeSheet.getStaffId());
-            for(int col=0;col<35;col++){
-                if(col==0) // Staff Name
+            for (int col = 0; col < 35; col++) {
+                if (col == 0) // Staff Name
                 {
-                    cellValue = "Staff Id - " + timeSheet.getStaffId();
+                    cellValue =  timeSheet.getStaffId();
+                                    }
+                else if(col == 1)
+                {
+                    cellValue =  timeSheet.getStaffName();
+                    colNo +=1;
+                }
+                else if(col == 2)
+                {
+                    cellValue =  timeSheet.getDesignation();
+                    colNo +=1;
+                }
+                else if(col == 3)
+                {
+                    cellValue =  timeSheet.getHierarchy();
+                    colNo +=1;
+                }
+                else if (col == 4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getHrs(), "HRS");
+                    //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_lat(), "LAT");
+                    //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_long(), "LONG");
 
-                }
-                else if(col==1)
-                {
-                    cellValue = timeSheet.getDay1_INTIME();
+                    colNo +=1;
 
-                }
-                else if(col==19)
-                {
-                    cellValue = timeSheet.getDay18_INTIME();
+                } else if (col == 5) {
+                    //cellValue = timeSheet.getDay18_INTIME();
 
-                }
-                else if(col==27)
-                {
-                    cellValue = timeSheet.getDay26_INTIME();
-                }
-                else
-                    cellValue = timeSheet.getDAY1_lat();
-                    //cellValue = String.valueOf(val);
+                    colNo +=1;
+
+                } else if (col == 26) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getOUTTIME(),timeSheet.getDAY26().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getOUTTIME(),timeSheet.getDAY26().getHrs(), "HRS");
+
+                    //cellValue += "\nLsttitude: " + timeSheet.getDAY26_lat();
+                    //cellValue += "\nLongitude: " + timeSheet.getDAY26_long();
+
+                    colNo +=1;
+
+                } else
+                    cellValue = "";
+                //cellValue = String.valueOf(val);
                 c = row.createCell(col);
                 c.setCellValue(cellValue);
                 c.setCellStyle(cellStyle);
@@ -1152,12 +1120,9 @@ public class Util
         //File file = new File(Environment.getRootDirectory()
         //+ "/Sandeep/" + File.separator + fileName);
 
-
         //File mediaStorageDir = new File(
-          //      Environment.getExternalStorageDirectory().getAbsolutePath()+"/Sandeep/");
+        //      Environment.getExternalStorageDirectory().getAbsolutePath()+"/Sandeep/");
         //File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
-
-
 
         dir = new File(path);
         if (!dir.exists()) {
@@ -1245,101 +1210,473 @@ public class Util
 
 
     public void GetStaffTimeSheet(final Context ctx) throws ExecutionException, InterruptedException {
-            final List<TimeSheet> timeSheetList= new ArrayList<>();
-            User usr = SharedPrefManager.getInstance(ctx.getApplicationContext()).getUser();
+        final List<TimeSheet> timeSheetList = new ArrayList<>();
+        User usr = SharedPrefManager.getInstance(ctx.getApplicationContext()).getUser();
 
-            final String staffId = usr.getStaffId();
-            final  String CompanyId = usr.getCompanyId();
-            final String DesignationId = usr.getDesignationId();
+        final String staffId = usr.getStaffId();
+        final String CompanyId = usr.getCompanyId();
+        final String DesignationId = usr.getDesignationId();
 
            /* final ProgressDialog progressDialog = new ProgressDialog(ctx);
             progressDialog.setMessage("loading data...");
             progressDialog.show();
 */
-            Response.Listener<String> responseListener = new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    //progressDialog.dismiss();
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //progressDialog.dismiss();
 
-                    // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
-                    Log.w("Sandeep44444",response);
-
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONArray array = jsonObject.getJSONArray("a");
-
-                        TimeSheet timesheet_fromDB ;
-                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
-                        //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
-                        String imageURL = "";
-                        for(int i=0; i< array.length(); i++)
-                        {
-                            JSONObject o = array.getJSONObject(i);
-
-                            timesheet_fromDB =   new TimeSheet(
-                                    o.getString("StaffID")
-                                    , o.getString("DAY1_INTIME")
-                                    , o.getString("DAY1_OUTTIME")
-                                    , o.getString("DAY1_hrs")
-                                    , o.getString("DAY1_INTIME_longitude")
-                                    , o.getString("DAY1_INTIME_longitude")
-
-                                    , o.getString("DAY18_INTIME")
-                                    , o.getString("DAY18_OUTTIME")
-                                    , o.getString("DAY18_hrs")
-                                    , o.getString("DAY18_INTIME_longitude")
-                                    , o.getString("DAY18_INTIME_longitude")
-
-                                    , o.getString("DAY26_INTIME")
-                                    , o.getString("DAY26_OUTTIME")
-                                    , o.getString("DAY26_hrs")
-                                    , o.getString("DAY26_INTIME_longitude")
-                                    , o.getString("DAY26_INTIME_longitude")
+                // {'a':[{'StudentMasterID':'50215','StudentName':'ARJUN','dey':'7','mnth':'3'}]}
+                Log.w("Sandeep44444", response);
 
 
-                            );
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    JSONArray array = jsonObject.getJSONArray("a");
+
+                    TimeSheet timesheet_fromDB;
+                    final DEY dey1;
+                    final DEY dey2;
+                    //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg
+                    //http://103.233.24.31:8080/getimage?fileName=bpslogo.jpg&pIsLogo=1
+                    String imageURL = "";
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject o = array.getJSONObject(i);
+
+                        timesheet_fromDB = new TimeSheet(
+                                o.getString("StaffID")
+                                , o.getString("StaffName")
+                                , o.getString("DName")
+                                , o.getString("HNo"),
+
+                                new DEY(o.getString("DAY1_INTIME")
+                                       , o.getString("DAY1_OUTTIME")
+                                       , o.getString("DAY1_hrs")
+                                       , o.getString("DAY1_INTIME_latitude")
+                                       , o.getString("DAY1_OUTTIME_latitude")
+                                       , o.getString("DAY1_INTIME_longitude")
+                                       , o.getString("DAY1_OUTTIME_longitude")
+                                       , o.getString("DAY1_INTIME_location")
+                                       , o.getString("DAY1_OUTTIME_location")
+
+                               ),
+
+                               new DEY(o.getString("DAY26_INTIME")
+                                , o.getString("DAY26_OUTTIME")
+                                , o.getString("DAY26_hrs")
+                                , o.getString("DAY26_INTIME_latitude")
+                                , o.getString("DAY26_OUTTIME_latitude")
+                                , o.getString("DAY26_INTIME_longitude")
+                                , o.getString("DAY26_OUTTIME_longitude")
+                                , o.getString("DAY26_INTIME_location")
+                                , o.getString("DAY26_OUTTIME_location")
+
+                        )
+
+                        /*
+                                , o.getString("DAY2_INTIME")
+                                , o.getString("DAY2_OUTTIME")
+                                , o.getString("DAY2_hrs")
+                                , o.getString("DAY2_INTIME_latitude")
+                                , o.getString("DAY2_OUTTIME_latitude")
+                                , o.getString("DAY2_INTIME_longitude")
+                                , o.getString("DAY2_OUTTIME_longitude")
+                                , o.getString("DAY2_INTIME_location")
+                                , o.getString("DAY2_OUTTIME_location")
+
+                                , o.getString("DAY3_INTIME")
+                                , o.getString("DAY3_OUTTIME")
+                                , o.getString("DAY3_hrs")
+                                , o.getString("DAY3_INTIME_latitude")
+                                , o.getString("DAY3_OUTTIME_latitude")
+                                , o.getString("DAY3_INTIME_longitude")
+                                , o.getString("DAY3_OUTTIME_longitude")
+                                , o.getString("DAY3_INTIME_location")
+                                , o.getString("DAY3_OUTTIME_location")
 
 
-                            timeSheetList.add(timesheet_fromDB);
+                                , o.getString("DAY4_INTIME")
+                                , o.getString("DAY4_OUTTIME")
+                                , o.getString("DAY4_hrs")
+                                , o.getString("DAY4_INTIME_latitude")
+                                , o.getString("DAY4_OUTTIME_latitude")
+                                , o.getString("DAY4_INTIME_longitude")
+                                , o.getString("DAY4_OUTTIME_longitude")
+                                , o.getString("DAY4_INTIME_location")
+                                , o.getString("DAY4_OUTTIME_location")
 
-                            // Create timesheet.xls file
-                            GenerateTimeSheet(ctx, "timesheet.xls"
-                                    , 10,  timeSheetList);
+                             , o.getString("DAY5_INTIME")
+                                , o.getString("DAY5_OUTTIME")
+                                , o.getString("DAY5_hrs")
+                                , o.getString("DAY5_INTIME_latitude")
+                                , o.getString("DAY5_OUTTIME_latitude")
+                                , o.getString("DAY5_INTIME_longitude")
+                                , o.getString("DAY5_OUTTIME_longitude")
+                                , o.getString("DAY5_INTIME_location")
+                                , o.getString("DAY5_OUTTIME_location")
 
-                        }
+                                , o.getString("DAY6_INTIME")
+                                , o.getString("DAY6_OUTTIME")
+                                , o.getString("DAY6_hrs")
+                                , o.getString("DAY6_INTIME_latitude")
+                                , o.getString("DAY6_OUTTIME_latitude")
+                                , o.getString("DAY6_INTIME_longitude")
+                                , o.getString("DAY6_OUTTIME_longitude")
+                                , o.getString("DAY6_INTIME_location")
+                                , o.getString("DAY6_OUTTIME_location")
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                                , o.getString("DAY7_INTIME")
+                                , o.getString("DAY7_OUTTIME")
+                                , o.getString("DAY7_hrs")
+                                , o.getString("DAY7_INTIME_latitude")
+                                , o.getString("DAY7_OUTTIME_latitude")
+                                , o.getString("DAY7_INTIME_longitude")
+                                , o.getString("DAY7_OUTTIME_longitude")
+                                , o.getString("DAY7_INTIME_location")
+                                , o.getString("DAY7_OUTTIME_location")
+
+                                , o.getString("DAY8_INTIME")
+                                , o.getString("DAY8_OUTTIME")
+                                , o.getString("DAY8_hrs")
+                                , o.getString("DAY8_INTIME_latitude")
+                                , o.getString("DAY8_OUTTIME_latitude")
+                                , o.getString("DAY8_INTIME_longitude")
+                                , o.getString("DAY8_OUTTIME_longitude")
+                                , o.getString("DAY8_INTIME_location")
+                                , o.getString("DAY8_OUTTIME_location")
+
+                                , o.getString("DAY9_INTIME")
+                                , o.getString("DAY9_OUTTIME")
+                                , o.getString("DAY9_hrs")
+                                , o.getString("DAY9_INTIME_latitude")
+                                , o.getString("DAY9_OUTTIME_latitude")
+                                , o.getString("DAY9_INTIME_longitude")
+                                , o.getString("DAY9_OUTTIME_longitude")
+                                , o.getString("DAY9_INTIME_location")
+                                , o.getString("DAY9_OUTTIME_location")
+
+                                , o.getString("DAY10_INTIME")
+                                , o.getString("DAY10_OUTTIME")
+                                , o.getString("DAY10_hrs")
+                                , o.getString("DAY10_INTIME_latitude")
+                                , o.getString("DAY10_OUTTIME_latitude")
+                                , o.getString("DAY10_INTIME_longitude")
+                                , o.getString("DAY10_OUTTIME_longitude")
+                                , o.getString("DAY10_INTIME_location")
+                                , o.getString("DAY10_OUTTIME_location")
+
+                                , o.getString("DAY11_INTIME")
+                                , o.getString("DAY11_OUTTIME")
+                                , o.getString("DAY11_hrs")
+                                , o.getString("DAY11_INTIME_latitude")
+                                , o.getString("DAY11_OUTTIME_latitude")
+                                , o.getString("DAY11_INTIME_longitude")
+                                , o.getString("DAY11_OUTTIME_longitude")
+                                , o.getString("DAY11_INTIME_location")
+                                , o.getString("DAY11_OUTTIME_location")
+
+                                , o.getString("DAY12_INTIME")
+                                , o.getString("DAY12_OUTTIME")
+                                , o.getString("DAY12_hrs")
+                                , o.getString("DAY12_INTIME_latitude")
+                                , o.getString("DAY12_OUTTIME_latitude")
+                                , o.getString("DAY12_INTIME_longitude")
+                                , o.getString("DAY12_OUTTIME_longitude")
+                                , o.getString("DAY12_INTIME_location")
+                                , o.getString("DAY12_OUTTIME_location")
+
+                                , o.getString("DAY13_INTIME")
+                                , o.getString("DAY13_OUTTIME")
+                                , o.getString("DAY13_hrs")
+                                , o.getString("DAY13_INTIME_latitude")
+                                , o.getString("DAY13_OUTTIME_latitude")
+                                , o.getString("DAY13_INTIME_longitude")
+                                , o.getString("DAY13_OUTTIME_longitude")
+                                , o.getString("DAY13_INTIME_location")
+                                , o.getString("DAY13_OUTTIME_location")
+
+                                , o.getString("DAY14_INTIME")
+                                , o.getString("DAY14_OUTTIME")
+                                , o.getString("DAY14_hrs")
+                                , o.getString("DAY14_INTIME_latitude")
+                                , o.getString("DAY14_OUTTIME_latitude")
+                                , o.getString("DAY14_INTIME_longitude")
+                                , o.getString("DAY14_OUTTIME_longitude")
+                                , o.getString("DAY14_INTIME_location")
+                                , o.getString("DAY14_OUTTIME_location")
+
+                                , o.getString("DAY15_INTIME")
+                                , o.getString("DAY15_OUTTIME")
+                                , o.getString("DAY15_hrs")
+                                , o.getString("DAY15_INTIME_latitude")
+                                , o.getString("DAY15_OUTTIME_latitude")
+                                , o.getString("DAY15_INTIME_longitude")
+                                , o.getString("DAY15_OUTTIME_longitude")
+                                , o.getString("DAY15_INTIME_location")
+                                , o.getString("DAY15_OUTTIME_location")
+
+                                , o.getString("DAY16_INTIME")
+                                , o.getString("DAY16_OUTTIME")
+                                , o.getString("DAY16_hrs")
+                                , o.getString("DAY16_INTIME_latitude")
+                                , o.getString("DAY16_OUTTIME_latitude")
+                                , o.getString("DAY16_INTIME_longitude")
+                                , o.getString("DAY16_OUTTIME_longitude")
+                                , o.getString("DAY16_INTIME_location")
+                                , o.getString("DAY16_OUTTIME_location")
+
+                                , o.getString("DAY17_INTIME")
+                                , o.getString("DAY17_OUTTIME")
+                                , o.getString("DAY17_hrs")
+                                , o.getString("DAY17_INTIME_latitude")
+                                , o.getString("DAY17_OUTTIME_latitude")
+                                , o.getString("DAY17_INTIME_longitude")
+                                , o.getString("DAY17_OUTTIME_longitude")
+                                , o.getString("DAY17_INTIME_location")
+                                , o.getString("DAY17_OUTTIME_location")
+
+                                , o.getString("DAY18_INTIME")
+                                , o.getString("DAY18_OUTTIME")
+                                , o.getString("DAY18_hrs")
+                                , o.getString("DAY18_INTIME_latitude")
+                                , o.getString("DAY18_OUTTIME_latitude")
+                                , o.getString("DAY18_INTIME_longitude")
+                                , o.getString("DAY18_OUTTIME_longitude")
+                                , o.getString("DAY18_INTIME_location")
+                                , o.getString("DAY18_OUTTIME_location")
+
+                                , o.getString("DAY19_INTIME")
+                                , o.getString("DAY19_OUTTIME")
+                                , o.getString("DAY19_hrs")
+                                , o.getString("DAY19_INTIME_latitude")
+                                , o.getString("DAY19_OUTTIME_latitude")
+                                , o.getString("DAY19_INTIME_longitude")
+                                , o.getString("DAY19_OUTTIME_longitude")
+                                , o.getString("DAY19_INTIME_location")
+                                , o.getString("DAY19_OUTTIME_location")
+
+                                , o.getString("DAY20_INTIME")
+                                , o.getString("DAY20_OUTTIME")
+                                , o.getString("DAY20_hrs")
+                                , o.getString("DAY20_INTIME_latitude")
+                                , o.getString("DAY20_OUTTIME_latitude")
+                                , o.getString("DAY20_INTIME_longitude")
+                                , o.getString("DAY20_OUTTIME_longitude")
+                                , o.getString("DAY20_INTIME_location")
+                                , o.getString("DAY20_OUTTIME_location")
+
+                                , o.getString("DAY21_INTIME")
+                                , o.getString("DAY21_OUTTIME")
+                                , o.getString("DAY21_hrs")
+                                , o.getString("DAY21_INTIME_latitude")
+                                , o.getString("DAY21_OUTTIME_latitude")
+                                , o.getString("DAY21_INTIME_longitude")
+                                , o.getString("DAY21_OUTTIME_longitude")
+                                , o.getString("DAY21_INTIME_location")
+                                , o.getString("DAY21_OUTTIME_location")
+
+                                , o.getString("DAY22_INTIME")
+                                , o.getString("DAY22_OUTTIME")
+                                , o.getString("DAY22_hrs")
+                                , o.getString("DAY22_INTIME_latitude")
+                                , o.getString("DAY22_OUTTIME_latitude")
+                                , o.getString("DAY22_INTIME_longitude")
+                                , o.getString("DAY22_OUTTIME_longitude")
+                                , o.getString("DAY22_INTIME_location")
+                                , o.getString("DAY22_OUTTIME_location")
+
+
+                                , o.getString("DAY23_INTIME")
+                                , o.getString("DAY23_OUTTIME")
+                                , o.getString("DAY23_hrs")
+                                , o.getString("DAY23_INTIME_latitude")
+                                , o.getString("DAY23_OUTTIME_latitude")
+                                , o.getString("DAY23_INTIME_longitude")
+                                , o.getString("DAY23_OUTTIME_longitude")
+                                , o.getString("DAY23_INTIME_location")
+                                , o.getString("DAY23_OUTTIME_location")
+
+                                , o.getString("DAY24_INTIME")
+                                , o.getString("DAY24_OUTTIME")
+                                , o.getString("DAY24_hrs")
+                                , o.getString("DAY24_INTIME_latitude")
+                                , o.getString("DAY24_OUTTIME_latitude")
+                                , o.getString("DAY24_INTIME_longitude")
+                                , o.getString("DAY24_OUTTIME_longitude")
+                                , o.getString("DAY24_INTIME_location")
+                                , o.getString("DAY24_OUTTIME_location")
+
+                                , o.getString("DAY25_INTIME")
+                                , o.getString("DAY25_OUTTIME")
+                                , o.getString("DAY25_hrs")
+                                , o.getString("DAY25_INTIME_latitude")
+                                , o.getString("DAY25_OUTTIME_latitude")
+                                , o.getString("DAY25_INTIME_longitude")
+                                , o.getString("DAY25_OUTTIME_longitude")
+                                , o.getString("DAY25_INTIME_location")
+                                , o.getString("DAY25_OUTTIME_location")
+
+
+                                , o.getString("DAY26_INTIME")
+                                , o.getString("DAY26_OUTTIME")
+                                , o.getString("DAY26_hrs")
+                                , o.getString("DAY26_INTIME_latitude")
+                                , o.getString("DAY26_OUTTIME_latitude")
+                                , o.getString("DAY26_INTIME_longitude")
+                                , o.getString("DAY26_OUTTIME_longitude")
+                                , o.getString("DAY26_INTIME_location")
+                                , o.getString("DAY26_OUTTIME_location")
+
+                                , o.getString("DAY27_INTIME")
+                                , o.getString("DAY27_OUTTIME")
+                                , o.getString("DAY27_hrs")
+                                , o.getString("DAY27_INTIME_latitude")
+                                , o.getString("DAY27_OUTTIME_latitude")
+                                , o.getString("DAY27_INTIME_longitude")
+                                , o.getString("DAY27_OUTTIME_longitude")
+                                , o.getString("DAY27_INTIME_location")
+                                , o.getString("DAY27_OUTTIME_location")
+
+                                , o.getString("DAY28_INTIME")
+                                , o.getString("DAY28_OUTTIME")
+                                , o.getString("DAY28_hrs")
+                                , o.getString("DAY28_INTIME_latitude")
+                                , o.getString("DAY28_OUTTIME_latitude")
+                                , o.getString("DAY28_INTIME_longitude")
+                                , o.getString("DAY28_OUTTIME_longitude")
+                                , o.getString("DAY28_INTIME_location")
+                                , o.getString("DAY28_OUTTIME_location")
+
+                                , o.getString("DAY29_INTIME")
+                                , o.getString("DAY29_OUTTIME")
+                                , o.getString("DAY29_hrs")
+                                , o.getString("DAY29_INTIME_latitude")
+                                , o.getString("DAY29_OUTTIME_latitude")
+                                , o.getString("DAY29_INTIME_longitude")
+                                , o.getString("DAY29_OUTTIME_longitude")
+                                , o.getString("DAY29_INTIME_location")
+                                , o.getString("DAY29_OUTTIME_location")
+
+                                , o.getString("DAY30_INTIME")
+                                , o.getString("DAY30_OUTTIME")
+                                , o.getString("DAY30_hrs")
+                                , o.getString("DAY30_INTIME_latitude")
+                                , o.getString("DAY30_OUTTIME_latitude")
+                                , o.getString("DAY30_INTIME_longitude")
+                                , o.getString("DAY30_OUTTIME_longitude")
+                                , o.getString("DAY30_INTIME_location")
+                                , o.getString("DAY30_OUTTIME_location")
+
+                                , o.getString("DAY31_INTIME")
+                                , o.getString("DAY31_OUTTIME")
+                                , o.getString("DAY31_hrs")
+                                , o.getString("DAY31_INTIME_latitude")
+                                , o.getString("DAY31_OUTTIME_latitude")
+                                , o.getString("DAY31_INTIME_longitude")
+                                , o.getString("DAY31_OUTTIME_longitude")
+                                , o.getString("DAY31_INTIME_location")
+                                , o.getString("DAY31_OUTTIME_location")
+*/
+
+                        );
+                        timeSheetList.add(timesheet_fromDB);
+
+                        // Create timesheet.xls file
+                        GenerateTimeSheet(ctx, "timesheet.xls"
+                                , 10, timeSheetList);
+
                     }
 
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            };
 
-            Response.ErrorListener errorListener = new Response.ErrorListener()
-            {
-                @Override
-                public void onErrorResponse(VolleyError error)
-                {
-                    Toast.makeText(ctx.getApplicationContext(),  error.getMessage()
-                            , Toast.LENGTH_LONG ).show();
-                }
-            };
+            }
+        };
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("pCompanyId", CompanyId);
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(ctx.getApplicationContext(), error.getMessage()
+                        , Toast.LENGTH_LONG).show();
+            }
+        };
 
-            RequestHandler rh = new RequestHandler();
-            String paramsStr = rh.getPostDataString(params);
-            String theURL = URLs.GET_TIMESHEET_URL +"?" + paramsStr;
+        HashMap<String, String> params = new HashMap<>();
+        params.put("pCompanyId", CompanyId);
+        params.put("pMonthNo", "10");
+        params.put("pYearNo", "20");
+
+        RequestHandler rh = new RequestHandler();
+        String paramsStr = rh.getPostDataString(params);
+        String theURL = URLs.GET_TIMESHEET_URL + "?" + paramsStr;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, theURL
                 , responseListener, errorListener);
         RequestQueue requestQueue = Volley.newRequestQueue(ctx);
         requestQueue.add(stringRequest);
 
+    }
 
 
+    public String FormatCellValue(String intime, String cellValue, String InOutHrsLat) {
+        String formattedValue = "";
+        // if no intime
+        if (intime == "00:00:00")
+        {
+            return "Absent";
+        } else {
+            if (InOutHrsLat == "IN") {
+                formattedValue =  " IN Time: " + cellValue;
+            }
+            else if(InOutHrsLat == "OUT")
+            {
+                if (cellValue == "00:00:00")
+                {
+                    return "-";
+                }
+                else
+                {
+                    formattedValue =  " OUT Time: " + cellValue;
+                }
+            }
+            else if(InOutHrsLat == "HRS" )
+            {
+                if (cellValue == "-1")
+                {
+                    return "-";
+                }
+                else
+                {
+                    formattedValue =  " Hours IN: "+ cellValue;
+                }
+            }
+
+            else if(InOutHrsLat == "LAT" )
+            {
+                if (cellValue == "-1")
+                {
+                    return "-";
+                }
+                else
+                {
+                    formattedValue =  " Latitude: "+ cellValue;
+                }
+            }
+
+            else if(InOutHrsLat == "LONG" )
+            {
+                if (cellValue == "-1")
+                {
+                    return "-";
+                }
+                else
+                {
+                    formattedValue =  " Longitude: "+ cellValue;
+                }
+            }
+            return formattedValue;
+        }
     }
 
 }
