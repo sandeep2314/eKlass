@@ -981,7 +981,7 @@ public class Util {
 
 
     public String GenerateTimeSheet(Context ctx, String fileName
-            , Integer mnth, List<TimeSheet> timeSheetList) {
+            , Integer mnth, Integer yr, List<TimeSheet> timeSheetList) {
 
         String path;
         File dir;
@@ -1034,8 +1034,8 @@ public class Util {
         c.setCellValue("Staff Hierarchy");
         c.setCellStyle(cs);
 
-        for (int i = 4; i < 33; i++) {
-            c = row.createCell(i + 1);
+        for (int i = 1; i < 35; i++) {
+            c = row.createCell(i + 4);
             c.setCellValue(i + "-" + mnth + "-2020");
             c.setCellStyle(cs);
         }
@@ -1059,26 +1059,30 @@ public class Util {
             timeSheet = timeSheetList.get(i);
             Log.w("Sandeep9922", " " + timeSheet.getStaffId());
             for (int col = 0; col < 35; col++) {
-                if (col == 0) // Staff Name
+                if(col==0)
+                {
+                    cellValue =  String.valueOf(col);
+                }
+                else if (col == 1) // Staff Name
                 {
                     cellValue =  timeSheet.getStaffId();
                                     }
-                else if(col == 1)
+                else if(col == 2)
                 {
                     cellValue =  timeSheet.getStaffName();
                     colNo +=1;
                 }
-                else if(col == 2)
+                else if(col == 3)
                 {
                     cellValue =  timeSheet.getDesignation();
                     colNo +=1;
                 }
-                else if(col == 3)
+                else if(col == 4)
                 {
                     cellValue =  timeSheet.getHierarchy();
                     colNo +=1;
                 }
-                else if (col == 4) {
+                else if (col == 5) {
                     cellValue =  FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME(), "IN");
                     cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getOUTTIME(), "OUT");
                     cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getHrs(), "HRS");
@@ -1087,12 +1091,12 @@ public class Util {
 
                     colNo +=1;
 
-                } else if (col == 5) {
+                } else if (col == 6) {
                     //cellValue = timeSheet.getDay18_INTIME();
 
                     colNo +=1;
 
-                } else if (col == 26) {
+                } else if (col == 26+4) {
 
                     cellValue =  FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME(), "IN");
                     cellValue += FormatCellValue(timeSheet.getDAY26().getOUTTIME(),timeSheet.getDAY26().getOUTTIME(), "OUT");
@@ -1209,7 +1213,7 @@ public class Util {
     /////////////////////////////////////////////////////////////////////////
 
 
-    public void GetStaffTimeSheet(final Context ctx) throws ExecutionException, InterruptedException {
+    public void GetStaffTimeSheet(final Context ctx, final Integer mnth, final Integer yr) throws ExecutionException, InterruptedException {
         final List<TimeSheet> timeSheetList = new ArrayList<>();
         User usr = SharedPrefManager.getInstance(ctx.getApplicationContext()).getUser();
 
@@ -1582,8 +1586,8 @@ public class Util {
                         timeSheetList.add(timesheet_fromDB);
 
                         // Create timesheet.xls file
-                        GenerateTimeSheet(ctx, "timesheet.xls"
-                                , 10, timeSheetList);
+                        GenerateTimeSheet(ctx, "MonthSheet_"+mnth + yr +".xls"
+                                , mnth, yr, timeSheetList);
 
                     }
 
@@ -1604,8 +1608,8 @@ public class Util {
 
         HashMap<String, String> params = new HashMap<>();
         params.put("pCompanyId", CompanyId);
-        params.put("pMonthNo", "10");
-        params.put("pYearNo", "20");
+        params.put("pMonthNo", mnth.toString());
+        params.put("pYearNo", yr.toString());
 
         RequestHandler rh = new RequestHandler();
         String paramsStr = rh.getPostDataString(params);
@@ -1637,7 +1641,7 @@ public class Util {
                 }
                 else
                 {
-                    formattedValue =  " OUT Time: " + cellValue;
+                    formattedValue =  "\nOUT Time: " + cellValue;
                 }
             }
             else if(InOutHrsLat == "HRS" )
@@ -1648,7 +1652,7 @@ public class Util {
                 }
                 else
                 {
-                    formattedValue =  " Hours IN: "+ cellValue;
+                    formattedValue =  "\nHours IN: "+ cellValue;
                 }
             }
 
@@ -1660,7 +1664,7 @@ public class Util {
                 }
                 else
                 {
-                    formattedValue =  " Latitude: "+ cellValue;
+                    formattedValue =  "\nLatitude: "+ cellValue;
                 }
             }
 
@@ -1672,7 +1676,7 @@ public class Util {
                 }
                 else
                 {
-                    formattedValue =  " Longitude: "+ cellValue;
+                    formattedValue =  "\nLongitude: "+ cellValue;
                 }
             }
             return formattedValue;
