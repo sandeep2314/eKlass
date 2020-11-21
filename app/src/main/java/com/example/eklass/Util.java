@@ -30,10 +30,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.common.util.NumberUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -46,6 +48,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.StringUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1082,10 +1085,10 @@ public class Util {
                     cellValue =  timeSheet.getHierarchy();
                     colNo +=1;
                 }
-                else if (col == 5) {
+                else if (col == 1+4) {
                     cellValue =  FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME(), "IN");
-                    cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getOUTTIME(), "OUT");
-                    cellValue += FormatCellValue(timeSheet.getDAY1().getOUTTIME(),timeSheet.getDAY1().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getHrs(), "HRS");
                     //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_lat(), "LAT");
                     //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_long(), "LONG");
 
@@ -1096,14 +1099,32 @@ public class Util {
 
                     colNo +=1;
 
+                }
+                else if (col == 18+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+
                 } else if (col == 26+4) {
 
                     cellValue =  FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME(), "IN");
-                    cellValue += FormatCellValue(timeSheet.getDAY26().getOUTTIME(),timeSheet.getDAY26().getOUTTIME(), "OUT");
-                    cellValue += FormatCellValue(timeSheet.getDAY26().getOUTTIME(),timeSheet.getDAY26().getHrs(), "HRS");
-
-                    //cellValue += "\nLsttitude: " + timeSheet.getDAY26_lat();
-                    //cellValue += "\nLongitude: " + timeSheet.getDAY26_long();
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getOUTTIME_location(), "OUTTIME_LOC");
 
                     colNo +=1;
 
@@ -1633,29 +1654,34 @@ public class Util {
     public String FormatCellValue(String intime, String cellValue, String InOutHrsLat) {
         String formattedValue = "";
         // if no intime
-        if (intime == "00:00:00")
+        Log.w("INTIME222 ", intime);
+        if (InOutHrsLat == "IN" && (intime.trim().equals("Jan  2 1900 12:00AM".trim()) || intime.equals("-1")))
         {
             return "Absent";
-        } else {
-            if (InOutHrsLat == "IN") {
-                formattedValue =  " IN Time: " + cellValue;
-            }
-            else if(InOutHrsLat == "OUT")
+        }
+        else
+        {
+            if (InOutHrsLat.equals("IN"))
             {
-                if (cellValue == "00:00:00")
+                formattedValue =  "IN Time: " + cellValue;
+            }
+            else if(InOutHrsLat.equals("OUT"))
+            {
+                if (cellValue.trim().equals("Jan  2 1900 12:00AM".trim())|| intime.equals("-1"))
                 {
-                    return "-";
+                    return "";
                 }
                 else
                 {
                     formattedValue =  "\nOUT Time: " + cellValue;
                 }
             }
-            else if(InOutHrsLat == "HRS" )
+            else if(InOutHrsLat.equals("HRS"))
             {
-                if (cellValue == "-1")
+                if (cellValue.equals("-1")
+                        || (  IsNumeric(cellValue) && Integer.parseInt(cellValue) < 0))
                 {
-                    return "-";
+                    return "";
                 }
                 else
                 {
@@ -1663,31 +1689,90 @@ public class Util {
                 }
             }
 
-            else if(InOutHrsLat == "LAT" )
+            else if(InOutHrsLat.equals("INTIME_LAT"))
             {
-                if (cellValue == "-1")
+                if (cellValue.equals("-1"))
                 {
-                    return "-";
+                    return "";
                 }
                 else
                 {
-                    formattedValue =  "\nLatitude: "+ cellValue;
+                    formattedValue =  "\nINTIME Latitude: "+ cellValue;
                 }
             }
 
-            else if(InOutHrsLat == "LONG" )
+            else if(InOutHrsLat.equals("OUTTIME_LAT"))
             {
-                if (cellValue == "-1")
+                if (cellValue.equals("-1"))
                 {
-                    return "-";
+                    return "";
                 }
                 else
                 {
-                    formattedValue =  "\nLongitude: "+ cellValue;
+                    formattedValue =  "\nOUTTIME_Latitude: "+ cellValue;
+                }
+            }
+
+
+            else if(InOutHrsLat.equals("INTIME_LONG"))
+            {
+                if (cellValue.equals("-1"))
+                {
+                    return "";
+                }
+                else
+                {
+                    formattedValue =  "\nINTIME_LONGITUDE: "+ cellValue;
+                }
+            }
+            else if(InOutHrsLat.equals("OUTTIME_LONG"))
+            {
+                if (cellValue.equals("-1"))
+                {
+                    return "";
+                }
+                else
+                {
+                    formattedValue =  "\nOUTTIME_LONGITUDE: "+ cellValue;
+                }
+            }
+            else if(InOutHrsLat.equals("INTIME_LOC"))
+            {
+                if (cellValue.equals("-1"))
+                {
+                    return "";
+                }
+                else
+                {
+                    formattedValue =  "\nINTIME Location: "+ cellValue;
+                }
+            }
+            else if(InOutHrsLat.equals("OUTTIME_LOC"))
+            {
+                if (cellValue.equals("-1"))
+                {
+                    return "";
+                }
+                else
+                {
+                    formattedValue =  "\nOUTTIME Location: "+ cellValue;
                 }
             }
             return formattedValue;
         }
     }
+
+
+    public boolean IsNumeric(String str)  {
+
+        try {
+            Integer.parseInt(str);
+        }
+        catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
 
 }
