@@ -1037,17 +1037,35 @@ public class Util {
         c.setCellValue("Staff Hierarchy");
         c.setCellStyle(cs);
 
-        for (int i = 1; i < 35; i++) {
+
+
+
+
+        for (int i = 1; i < 32; i++) {
             c = row.createCell(i + 4);
-            c.setCellValue(i + "-" + mnth + "-2020");
+            c.setCellValue(i + "-" + mnth + "-20"+yr);
             c.setCellStyle(cs);
         }
 
-        sheet1.setColumnWidth(0, (15 * 100));
-        sheet1.setColumnWidth(1, (15 * 100));
+
+        c = row.createCell(32+4);
+        c.setCellValue("Total Days Present");
+        c.setCellStyle(cs);
+
+        c = row.createCell(33+4);
+        c.setCellValue("Total Hours IN");
+        c.setCellStyle(cs);
+
+
+        sheet1.setColumnWidth(0, (5 * 100));
+        sheet1.setColumnWidth(1, (5 * 100));
         sheet1.setColumnWidth(2, (15 * 100));
         sheet1.setColumnWidth(3, (15 * 100));
-        sheet1.setColumnWidth(4, (15 * 100));
+        sheet1.setColumnWidth(4, (5 * 100));
+
+        sheet1.setColumnWidth(32+4, (5 * 100));
+        sheet1.setColumnWidth(33+4, (5 * 100));
+
         // Get all staff in a column
         // Get attendance of one staff for the given month
 
@@ -1061,7 +1079,7 @@ public class Util {
             row = sheet1.createRow(rw);
             timeSheet = timeSheetList.get(i);
             Log.w("Sandeep9922", " " + timeSheet.getStaffId());
-            for (int col = 0; col < 35; col++) {
+            for (int col = 0; col < 32; col++) {
                 if(col==0)
                 {
                     cellValue =  String.valueOf(i+1);
@@ -1086,22 +1104,238 @@ public class Util {
                     colNo +=1;
                 }
                 else if (col == 1+4) {
+
                     cellValue =  FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME(), "IN");
                     cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getOUTTIME(), "OUT");
                     cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getHrs(), "HRS");
-                    //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_lat(), "LAT");
-                    //cellValue += FormatCellValue(timeSheet.getDay1_INTIME(),timeSheet.getDAY1_long(), "LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY1().getINTIME(),timeSheet.getDAY1().getOUTTIME_location(), "OUTTIME_LOC");
 
                     colNo +=1;
-
-                } else if (col == 6) {
-                    //cellValue = timeSheet.getDay18_INTIME();
-
-                    colNo +=1;
-
                 }
-                else if (col == 18+4) {
+                else if (col == 2+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY2().getINTIME(),timeSheet.getDAY2().getOUTTIME_location(), "OUTTIME_LOC");
 
+                    colNo +=1;
+                }
+                else if (col == 3+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY3().getINTIME(),timeSheet.getDAY3().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 4+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY4().getINTIME(),timeSheet.getDAY4().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 5+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY5().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY5().getINTIME(),timeSheet.getDAY2().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 6+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY6().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY6().getINTIME(),timeSheet.getDAY2().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 7+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY7().getINTIME(),timeSheet.getDAY7().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 8+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY8().getINTIME(),timeSheet.getDAY8().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 9+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY9().getINTIME(),timeSheet.getDAY9().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 10+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY10().getINTIME(),timeSheet.getDAY10().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+                else if (col == 11+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY11().getINTIME(),timeSheet.getDAY11().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 12+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY12().getINTIME(),timeSheet.getDAY12().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 13+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY13().getINTIME(),timeSheet.getDAY13().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 14+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY14().getINTIME(),timeSheet.getDAY14().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 15+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY15().getINTIME(),timeSheet.getDAY15().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+
+                else if (col == 16+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY16().getINTIME(),timeSheet.getDAY16().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 17+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY17().getINTIME(),timeSheet.getDAY17().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+
+                else if (col == 18+4) {
                     cellValue =  FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getINTIME(), "IN");
                     cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME(), "OUT");
                     cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getHrs(), "HRS");
@@ -1113,8 +1347,113 @@ public class Util {
                     cellValue += FormatCellValue(timeSheet.getDAY18().getINTIME(),timeSheet.getDAY18().getOUTTIME_location(), "OUTTIME_LOC");
 
                     colNo +=1;
+                }
 
-                } else if (col == 26+4) {
+
+                else if (col == 19+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY19().getINTIME(),timeSheet.getDAY19().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+
+
+                else if (col == 20+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY20().getINTIME(),timeSheet.getDAY20().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 21+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY21().getINTIME(),timeSheet.getDAY21().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 22+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY22().getINTIME(),timeSheet.getDAY22().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+
+                else if (col == 23+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY23().getINTIME(),timeSheet.getDAY23().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 24+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY24().getINTIME(),timeSheet.getDAY24().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 25+4) {
+                    cellValue =  FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY25().getINTIME(),timeSheet.getDAY25().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+
+
+                else if (col == 26+4) {
 
                     cellValue =  FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getINTIME(), "IN");
                     cellValue += FormatCellValue(timeSheet.getDAY26().getINTIME(),timeSheet.getDAY26().getOUTTIME(), "OUT");
@@ -1128,7 +1467,85 @@ public class Util {
 
                     colNo +=1;
 
-                } else
+                }
+                else if (col == 27+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY27().getINTIME(),timeSheet.getDAY27().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+
+                }
+
+                else if (col == 28+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY28().getINTIME(),timeSheet.getDAY28().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+                }
+
+                else if (col == 29+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY29().getINTIME(),timeSheet.getDAY29().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+
+                }
+
+                else if (col == 30+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY30().getINTIME(),timeSheet.getDAY30().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+
+                }
+                else if (col == 31+4) {
+
+                    cellValue =  FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getINTIME(), "IN");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getOUTTIME(), "OUT");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getHrs(), "HRS");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getINTIME_lat(), "INTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getOUTTIME_lat(), "OUTTIME_LAT");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getINTIME_long(), "INTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getOUTTIME_long(), "OUTTIME_LONG");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getINTIME_location(), "INTIME_LOC");
+                    cellValue += FormatCellValue(timeSheet.getDAY31().getINTIME(),timeSheet.getDAY31().getOUTTIME_location(), "OUTTIME_LOC");
+
+                    colNo +=1;
+
+                }
+                else
                     cellValue = "";
                 //cellValue = String.valueOf(val);
                 c = row.createCell(col);
@@ -1136,7 +1553,7 @@ public class Util {
                 c.setCellStyle(cellStyle);
                 colNo++;
             }
-            sheet1.setColumnWidth(i, (15 * 500));
+            sheet1.setColumnWidth(i, (15 * 100));
             rw++;
         }
 
@@ -1679,7 +2096,7 @@ public class Util {
             else if(InOutHrsLat.equals("HRS"))
             {
                 if (cellValue.equals("-1")
-                        || (  IsNumeric(cellValue) && Integer.parseInt(cellValue) < 0))
+                        || (  IsNumeric(cellValue) && Integer.parseInt(cellValue) < 1))
                 {
                     return "";
                 }
@@ -1760,6 +2177,20 @@ public class Util {
             }
             return formattedValue;
         }
+    }
+
+    class CellValueMahi
+    {
+
+        public String GetCellValue(int colNo, TimeSheet timeSheet)
+        {
+            String cellValue = "";
+            cellValue =  FormatCellValue(timeSheet.getDAY18().getINTIME()
+                    ,timeSheet.getDAY18().getINTIME(), "IN");
+
+            return cellValue;
+        }
+
     }
 
 
