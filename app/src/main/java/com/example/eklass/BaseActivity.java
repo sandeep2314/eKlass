@@ -274,6 +274,10 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity( new Intent(this, ShowDesignationActivity.class));
                 return true;
 
+            case R.id.menuShowMonths:
+                finish();
+                startActivity( new Intent(this, ShowMonthActivity.class));
+                return true;
             case R.id.menuGenerateMonthlyReport:
 
                 String theExcelFile
