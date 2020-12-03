@@ -57,7 +57,7 @@ public class ShowMonthActivity extends BaseActivity
 
         int mnth = Calendar.getInstance().get(Calendar.MONTH);
         int yr = Calendar.getInstance().get(Calendar.YEAR);
-        String maxDate = mnth+"-"+yr;
+        String maxDate = mnth+"-01-"+yr;
         SimpleDateFormat monthDate = new SimpleDateFormat("MMM-yyyy");
         Calendar cal = Calendar.getInstance();
         try {
