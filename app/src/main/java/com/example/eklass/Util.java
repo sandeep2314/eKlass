@@ -1965,7 +1965,7 @@ public class Util {
                                 new DEY(o.getString("DAY26_INTIME")
                                 , o.getString("DAY26_OUTTIME")
                                 , o.getString("DAY26_hrs")
-                                , o.getString("1DAY26_INTIME_latitude")
+                                , o.getString("DAY26_INTIME_latitude")
                                 , o.getString("DAY26_OUTTIME_latitude")
                                 , o.getString("DAY26_INTIME_longitude")
                                 , o.getString("DAY26_OUTTIME_longitude")
