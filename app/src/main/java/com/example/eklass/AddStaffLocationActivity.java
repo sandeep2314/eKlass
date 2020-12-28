@@ -74,8 +74,6 @@ public class AddStaffLocationActivity extends BaseActivity
             //etLocationName.setText(getIntent().getStringExtra("locationName"));
 
             slid = getIntent().getIntExtra("SLId",-1);
-
-
             locationIdUpdate= getIntent().getIntExtra("locationId",0);
             spinner_location.setSelection(locationIdUpdate);
 
@@ -87,8 +85,26 @@ public class AddStaffLocationActivity extends BaseActivity
 
             //selectedManagerId = Integer.parseInt(managerids[position]);
 
-
         }
+
+        TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
+        CircleImageView imageViewProfileHeading, imageViewLogoHeading;
+        imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
+        imageViewProfileHeading=findViewById(R.id.imageProfile_activity_managers_worker);
+
+
+        String pageName = "";
+        if(isUpdate)
+            pageName = "Update Assign Staff To Location";
+        else
+            pageName = "Assign Staff To Location";
+
+        util.SetHeadings(this, pageHeading
+                , pageName
+                , imageViewLogoHeading
+                , imageViewProfileHeading
+                , BaseActivity.themeNo);
+
 
     }
 

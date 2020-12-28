@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class BaseActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setLogo();
@@ -54,7 +56,7 @@ public class BaseActivity extends AppCompatActivity {
 
         if(this.getClass().getSimpleName().equals("ShowStaffActivity"))
             actionBar.setDisplayHomeAsUpEnabled(false);
-
+;
 
     }
 

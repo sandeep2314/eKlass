@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -42,6 +43,7 @@ public class CompanyProfileActivity extends BaseActivity
 {
     public ImageView profileImage;
     public Bitmap bitmap;
+    public TextView tvLogoHeading;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class CompanyProfileActivity extends BaseActivity
         setContentView(R.layout.activity_profile);
 
         profileImage = findViewById(R.id.image_activity_profile);
+
+        tvLogoHeading = findViewById(R.id.tvProfileHeading);
+        tvLogoHeading.setText("Company Logo");
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +195,10 @@ public class CompanyProfileActivity extends BaseActivity
                         , imageUri);
 
                 // displaying selected image to imageview
-                profileImage.setImageBitmap(bitmap);
+                String filePath = util.getRealPathFromURI(this, imageUri);
+
+                profileImage.setRotation(util.GetImageRotation(bitmap, filePath));
+                profileImage.setImageURI(imageUri);
 
                 // uploading the image
 

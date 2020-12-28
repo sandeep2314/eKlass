@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.ContactsContract;
@@ -2203,6 +2207,60 @@ public class Util {
             return false;
         }
         return true;
+    }
+
+
+    public int GetImageRotation(Bitmap bitmap, String filePath)
+    {
+        int rotation = ExifInterface.ORIENTATION_NORMAL;
+
+        try
+        {
+            ExifInterface exifInterface = new ExifInterface(filePath);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+
+
+            Log.w("Sandeep7878", ""+ orientation);
+
+            Matrix matrix = new Matrix();
+
+            if (orientation == ExifInterface.ORIENTATION_ROTATE_90)
+            {
+                rotation = ExifInterface.ORIENTATION_ROTATE_90;
+            }
+            else if (orientation == ExifInterface.ORIENTATION_ROTATE_180)
+            {
+                rotation = ExifInterface.ORIENTATION_ROTATE_180;
+            }
+            else if (orientation == ExifInterface.ORIENTATION_ROTATE_270)
+            {
+                rotation = ExifInterface.ORIENTATION_ROTATE_270;
+            }
+
+
+        }
+        catch (Exception exception)
+        {
+            Log.w("Sandeep7878", exception.toString());
+        }
+        return rotation;
+    }
+
+
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
     }
 
 

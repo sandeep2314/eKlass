@@ -1,10 +1,12 @@
 package com.example.eklass;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,24 @@ public class ShowStaffLocationActivity extends BaseActivity
                 , imageViewLogoHeading
                 , imageViewProfileHeading
                 , BaseActivity.themeNo);
+
+        findViewById(R.id.imageProfile_activity_managers_worker).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            }
+        });
+
+
+        findViewById(R.id.imageLogo_activity_managers_worker).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                startActivity(new Intent(getApplicationContext(), CompanyProfileActivity.class));
+            }
+        });
+
 
         recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);
