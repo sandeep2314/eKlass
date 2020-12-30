@@ -145,9 +145,11 @@ public class Util {
                     RequestOptions options = new RequestOptions()
                             .centerCrop()
                             .placeholder(R.drawable.ic_profile_grey_24dp)
+                            .fitCenter()
                             .error(R.drawable.ic_profile_grey_24dp);
 
                     Glide.with(ctx).load(imageURL).apply(options).into(imageView);
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();

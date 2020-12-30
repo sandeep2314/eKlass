@@ -1,11 +1,14 @@
 package com.example.eklass;
 
 import android.Manifest;
-import android.app.DownloadManager;
+import android.content.Context;
+import android.graphics.Color;
+import android.media.ExifInterface;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -30,11 +34,13 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.apache.poi.hssf.util.HSSFColor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +51,8 @@ public class ProfileActivity extends BaseActivity
     public ImageView profileImage;
     public Bitmap bitmap;
     List<Staff> staffList;
+    public TextView tvImageSize;
+    public long imageSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +60,7 @@ public class ProfileActivity extends BaseActivity
         setContentView(R.layout.activity_profile);
 
         profileImage = findViewById(R.id.image_activity_profile);
+        tvImageSize = findViewById(R.id.tvImageSize);
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,10 +225,27 @@ public class ProfileActivity extends BaseActivity
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver()
                                             , imageUri);
 
-                // displaying selected image to imageview
-                profileImage.setImageBitmap(bitmap);
+                String filePath = util.getRealPathFromURI(this, imageUri);
+                File imageFile = new File(filePath);
+                imageSize = (imageFile.length()/(1024));
+//
+                Log.w("sandeep5656", "image length" + (imageFile.length()/1024));
+//
+                profileImage.setRotation(util.GetImageRotation(bitmap, filePath));
 
-                // uploading the image
+                // displaying selected image to imageview
+                //profileImage.setImageBitmap(bitmap);
+
+                profileImage.setImageURI(imageUri);
+
+                tvImageSize.setText("Picture size is: " + (imageSize)+"KB");
+                tvImageSize.setTextColor(ContextCompat.getColor(this
+                        , R.color.colorDarkGrey));
+
+//                if (imageUri != null) {
+//                    profileImage.setImageBitmap(rotateImage(bitmap, filePath));
+//                }
+//                // uploading the image
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -228,7 +254,8 @@ public class ProfileActivity extends BaseActivity
         }
     }
 
-    public byte[] getFileDataFromDrawable(Bitmap bitmap)
+
+       public byte[] getFileDataFromDrawable(Bitmap bitmap)
     {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
@@ -239,6 +266,17 @@ public class ProfileActivity extends BaseActivity
 
         //getting the tag from the edit text
         //   final String tags = editTextTags.getText().toString().trim();
+
+
+
+        if(imageSize > 500) {
+
+            tvImageSize.setText("Picture size is: "
+                    + (imageSize)+ "KB. Please Select a Picture with less than 500KB size." );
+            tvImageSize.setTextColor(Color.parseColor("Red"));
+            return;
+        }
+
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Uploading picture...");
@@ -286,7 +324,7 @@ public class ProfileActivity extends BaseActivity
                         params.put("pMobileNo", mobileNo);
                         params.put("pIsLogo", "0");
                         return params;
-                    }
+                   }
 
                     /*
                      * Here we are passing image by renaming it with a unique name
