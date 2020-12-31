@@ -23,6 +23,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Request;
@@ -190,6 +191,38 @@ public class Util {
         requestQueue.add(stringRequest);
 
     }
+
+    public void SetCardTheme(Context ctx, CardView card, int themeNo)
+    {
+        if (themeNo == BLACK_THEME)
+        {
+
+            card.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
+
+        }
+        else
+        {
+            card.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorWhite));
+        }
+
+        Log.w("san45", themeNo+"");
+    }
+
+
+    public void SetTVTheme(Context ctx, TextView tv, int themeNo)
+    {
+        if (themeNo == BLACK_THEME)
+        {
+
+            tv.setTextColor(ContextCompat.getColor(ctx, android.R.color.white));
+        }
+        else
+        {
+            tv.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
+        }
+        Log.w("san46", themeNo+"");
+    }
+
 
     public void SetHeadings(Context ctx, TextView tvPageHeading
             , String pageName

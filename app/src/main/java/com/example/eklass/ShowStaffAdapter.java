@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +33,7 @@ public class ShowStaffAdapter
         private Context mCtx;
         private List<Staff> staffList;
         SparseBooleanArray itemStateArray= new SparseBooleanArray();
+        Util util = new Util();
 
         interface OnItemCheckListener
         {
@@ -74,6 +77,12 @@ public class ShowStaffAdapter
         public void onBindViewHolder(@NonNull final ShowStaffViewHolder holder
             , final int position)
         {
+
+
+            util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
+            util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo);
+
+
             // getting the feature of the specified  position
             final Staff staff = staffList.get(position);
             // loading the image
@@ -158,8 +167,6 @@ public class ShowStaffAdapter
                 }
             });
 
-
-
         }
 
         @Override
@@ -170,6 +177,7 @@ public class ShowStaffAdapter
 
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
+            CardView card;
             TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty, tvUpdate;
             CircleImageView imageStaff;
             CheckBox ckbDelete;
@@ -182,6 +190,7 @@ public class ShowStaffAdapter
                 this.imageStaff = itemView.findViewById(R.id.image_layout_dashboard);
                 this.ckbDelete = itemView.findViewById(R.id.ckb_layout_Dashboard);
                 this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+                this.card = itemView.findViewById(R.id.cardViewFeature);
                 //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
 
             }
