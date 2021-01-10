@@ -145,7 +145,7 @@ public class ShowLocationsAdapter
             tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
             this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
-            this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+            this.tvUpdate = itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
 
 
         }

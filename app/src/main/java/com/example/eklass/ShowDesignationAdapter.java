@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ShowDesignationAdapter
     private Context mCtx;
     private List<Designation> designationList;
     SparseBooleanArray itemStateArray= new SparseBooleanArray();
+    Util util = new Util();
 
     interface OnItemCheckListener
     {
@@ -43,6 +45,10 @@ public class ShowDesignationAdapter
     public void onBindViewHolder(@NonNull final ShowDesignationAdapter.DesignationViewHolder holder, final int position) {
         final Designation designation = designationList.get(position);
         // binding the data with the viewholder views
+
+        util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_guardID, BaseActivity.themeNo);
 
         holder.tv_FeatureName.setText(designation.getDName());
         holder.tv_guardID.setText(designation.getHNo().toString());
@@ -122,15 +128,17 @@ public class ShowDesignationAdapter
     {
         TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate;
         CheckBox ckb;
+        CardView card;
 
         public DesignationViewHolder(@NonNull View itemView)
         {
             super(itemView);
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
             this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
-            this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+            this.tvUpdate = itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
             this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
+            card = itemView.findViewById(R.id.cardViewFeature);
 
 
         }

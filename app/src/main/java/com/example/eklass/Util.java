@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -192,33 +193,46 @@ public class Util {
 
     }
 
-    public void SetCardTheme(Context ctx, CardView card, int themeNo)
-    {
-        if (themeNo == BLACK_THEME)
-        {
+    public void SetCardTheme(Context ctx, CardView card, int themeNo) {
 
-            card.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
+        User user = SharedPrefManager.getInstance(ctx).getUser();
+        themeNo = user.getUserTheme();
 
-        }
-        else
-        {
+        if (themeNo == BLACK_THEME) {
+
+            card.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey2));
+
+        } else {
             card.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorWhite));
         }
 
-        Log.w("san45", themeNo+"");
+        Log.w("san45", themeNo + "");
+    }
+
+    public void SetTVTheme(Context ctx, TextView tv, int themeNo, boolean isBold)
+    {
+        if(isBold)
+            tv.setTypeface(null, Typeface.BOLD);
+        SetTVTheme(ctx, tv, themeNo);
     }
 
 
     public void SetTVTheme(Context ctx, TextView tv, int themeNo)
     {
+
+        User user = SharedPrefManager.getInstance(ctx).getUser();
+        themeNo = user.getUserTheme();
+
         if (themeNo == BLACK_THEME)
         {
 
             tv.setTextColor(ContextCompat.getColor(ctx, android.R.color.white));
+
         }
         else
         {
             tv.setTextColor(ContextCompat.getColor(ctx, R.color.colorDarkGrey));
+
         }
         Log.w("san46", themeNo+"");
     }
@@ -230,6 +244,7 @@ public class Util {
             , ImageView profileImage
             , int themeNo) {
         User user = SharedPrefManager.getInstance(ctx).getUser();
+
 
         String heading = user.getStaffName();
         heading += "\n" + user.getCompanyName();

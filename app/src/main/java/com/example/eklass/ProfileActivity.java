@@ -229,8 +229,6 @@ public class ProfileActivity extends BaseActivity
                 File imageFile = new File(filePath);
                 imageSize = (imageFile.length()/(1024));
 //
-                Log.w("sandeep5656", "image length" + (imageFile.length()/1024));
-//
                 profileImage.setRotation(util.GetImageRotation(bitmap, filePath));
 
                 // displaying selected image to imageview

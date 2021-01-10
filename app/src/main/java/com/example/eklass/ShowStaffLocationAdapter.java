@@ -2,15 +2,18 @@ package com.example.eklass;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -61,11 +64,20 @@ public class ShowStaffLocationAdapter
     public void onBindViewHolder(@NonNull final ShowStaffLocationViewHolder holder, final int position) {
 
         final StaffLocation staffLocation = staffLocationList.get(position);
+
+        util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_StaffDesignation, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_guardID, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_ManagerDesignation, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_locationName, BaseActivity.themeNo);
+
         // binding the data with the viewholder views
-        holder.tv_locationName.setText(staffLocation.getLocationName());
+        holder.tv_locationName.setText("Site: "+staffLocation.getLocationName());
         holder.tv_FeatureName.setText(staffLocation.getWorkerName());
-        holder.tv_guardID.setText(staffLocation.getManagerName()+"["
-                + staffLocation.getManagerDesignation() +"]");
+        holder.tv_StaffDesignation.setText(staffLocation.getWorkerDesignation());
+        holder.tv_guardID.setText("Manager: "+staffLocation.getManagerName());
+        holder.tv_ManagerDesignation.setText("Designation: "+staffLocation.getManagerDesignation());
         //holder.tvUpdate.setMovementMethod(LinkMovementMethod.getInstance());
         RequestOptions options = new RequestOptions()
                 .centerCrop()
@@ -74,7 +86,8 @@ public class ShowStaffLocationAdapter
 
         Glide.with(mCtx).load(staffLocation.getWorkerImage()).apply(options).into(holder.imageWorker);
 
-        holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
+
+        holder.btnUpdateLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(mCtx, "Update Clicked", Toast.LENGTH_LONG).show();
@@ -94,7 +107,10 @@ public class ShowStaffLocationAdapter
             }
         });
 
-        holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
+
+
+
+        holder.btnShowDuty.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
@@ -141,6 +157,9 @@ public class ShowStaffLocationAdapter
             }
         });
 
+        holder.ckb.setVisibility(View.INVISIBLE);
+        holder.btnUpdatePassword.setVisibility(View.INVISIBLE);
+
 
     }
 
@@ -150,9 +169,14 @@ public class ShowStaffLocationAdapter
     }
 
     public class ShowStaffLocationViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_FeatureName, tv_guardID, tv_locationName, tvUpdate, tv_ShowDuty;
+        CardView card;
+        TextView tv_FeatureName, tv_guardID
+                , tv_locationName, tvUpdate
+                , tv_StaffDesignation, tv_ManagerDesignation;
+
         CircleImageView imageWorker;
         CheckBox ckb;
+        Button btnShowDuty, btnUpdateLocation, btnUpdatePassword;
 
         public ShowStaffLocationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -161,9 +185,14 @@ public class ShowStaffLocationAdapter
             tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
             this.ckb = itemView.findViewById(R.id.ckb_layout_Dashboard);
             ckb.setClickable(false);
-            this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+            this.tvUpdate = itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
             imageWorker = itemView.findViewById(R.id.image_layout_dashboard);
-            tv_ShowDuty =  itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
+            card = itemView.findViewById(R.id.cardViewFeature);
+            tv_StaffDesignation = itemView.findViewById(R.id.tvStaffDesignation_layout_dashboard);
+            tv_ManagerDesignation = itemView.findViewById(R.id.tvManagerDesignation_layout_dashboard);
+            btnShowDuty = itemView.findViewById(R.id.btnShowDuty_layout_dashboard);
+            btnUpdateLocation = itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
+            btnUpdatePassword = itemView.findViewById(R.id.btnUpdatePassword_layout_dashboard);
 
         }
     }

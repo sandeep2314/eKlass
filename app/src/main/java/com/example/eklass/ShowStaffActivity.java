@@ -44,7 +44,6 @@ public class ShowStaffActivity extends BaseActivity
       SparseBooleanArray currentSelectedItems = new SparseBooleanArray();
 
 
-
     @Override
         protected void onCreate(@Nullable Bundle savedInstanceState)
         {

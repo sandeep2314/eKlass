@@ -54,10 +54,9 @@ public class BaseActivity extends AppCompatActivity {
         //actionBar.setLogo();
         actionBar.setTitle("SuperVisor");
 
-        if(this.getClass().getSimpleName().equals("ShowStaffActivity"))
+        if(this.getClass().getSimpleName().equals("ShowStaffLocationActivity"))
             actionBar.setDisplayHomeAsUpEnabled(false);
 ;
-
     }
 
     @Override

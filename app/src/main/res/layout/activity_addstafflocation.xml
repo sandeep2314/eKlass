@@ -1,38 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".AddStaffLocationActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="107dp"
+        android:textStyle="bold"
+        android:text="@string/select_location"
+        android:id="@+id/tvLocation_actyivity_addstafflocation"   >
+    </TextView>
+
     <Spinner
         android:id="@+id/spinner_location_activity_addStaffLocation"
-        android:layout_marginTop="70dp"
-        android:popupTheme="@style/Widget.AppCompat.TextView.SpinnerItem"
-        android:layout_width="match_parent"
+        android:layout_below="@id/tvLocation_actyivity_addstafflocation"
+        android:popupBackground="@color/colorDarkGrey"
+        android:layout_margin="@dimen/cardview_default_elevation"
+        android:layout_marginTop="110dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Spinner>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_location_activity_addStaffLocation"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:text="@string/select_staff"
+        android:id="@+id/tvWorker_actyivity_addstafflocation"   >
+
+    </TextView>
 
     <Spinner
         android:id="@+id/spinner_worker_activity_addStaffLocation"
-        android:layout_marginTop="70dp"
-        android:popupTheme="@style/Widget.AppCompat.TextView.SpinnerItem"
-        android:layout_width="match_parent"
+        android:layout_marginTop="23dp"
+        android:layout_margin="@dimen/cardview_default_elevation"
+        android:layout_below="@id/tvWorker_actyivity_addstafflocation"
+        android:popupBackground="@color/colorDarkGrey"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Spinner>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="33dp"
+        android:layout_below="@id/spinner_worker_activity_addStaffLocation"
+        android:textStyle="bold"
+        android:text="@string/select_manager_of_staff"
+        android:id="@+id/tvManager_actyivity_addstafflocation"   >
+
+    </TextView>
 
     <Spinner
         android:id="@+id/spinner_manager_activity_addStaffLocation"
-        android:layout_marginTop="70dp"
-        android:popupTheme="@style/Widget.AppCompat.TextView.SpinnerItem"
-        android:layout_width="match_parent"
+        android:layout_marginTop="37dp"
+        android:popupBackground="@color/colorDarkGrey"
+        android:layout_below="@id/tvManager_actyivity_addstafflocation"
+        android:layout_margin="@dimen/cardview_default_elevation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </Spinner>
+    </RelativeLayout>
 
+    <include layout="@layout/activity_managers_worker"></include>
 
-
-
-</LinearLayout>
+</RelativeLayout>

@@ -2,11 +2,13 @@ package com.example.eklass;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -79,9 +81,11 @@ public class ShowStaffAdapter
         {
 
 
+
             util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
             util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo);
 
+            Log.w("sandeep2323", BaseActivity.themeNo + "");
 
             // getting the feature of the specified  position
             final Staff staff = staffList.get(position);
@@ -95,11 +99,13 @@ public class ShowStaffAdapter
 
             //holder.ckbDelete.setVisibility(View.INVISIBLE);
 
+            holder.btnStaffLocation.setVisibility(View.INVISIBLE);
+
             // binding the data with the viewholder views
             holder.tv_FeatureName.setText(staff.getStaffName());
             holder.tv_guardID.setText(staff.getDesignation());
 
-            holder.tvUpdate.setOnClickListener(new View.OnClickListener() {
+            holder.btnUpdateCredentials.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(v.getContext(), AddStaffActivity.class);
@@ -114,22 +120,6 @@ public class ShowStaffAdapter
                     i.putExtra("IsActive",staff.getIsActive() );
 
                     v.getContext().startActivity(i);
-
-
-                }
-            });
-
-
-            holder.tv_ShowDuty.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(v.getContext(), DutyActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    i.putExtra("guardIDc", staff.getStaffId() );
-                    v.getContext().startActivity(i);
-
                 }
             });
 
@@ -178,19 +168,21 @@ public class ShowStaffAdapter
         public class ShowStaffViewHolder extends RecyclerView.ViewHolder
         {
             CardView card;
-            TextView tv_FeatureName, tv_guardID, tv_locationName, tv_ShowDuty, tvUpdate;
+            TextView tv_FeatureName, tv_guardID, tv_locationName,  tvUpdate;
             CircleImageView imageStaff;
             CheckBox ckbDelete;
+            Button btnUpdateCredentials, btnStaffLocation;
 
             public ShowStaffViewHolder(@NonNull View itemView) {
                 super(itemView);
                 this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
                 this.tv_guardID = itemView.findViewById(R.id.tvGuardID_layout_dashboard);
-                this.tv_ShowDuty = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
                 this.imageStaff = itemView.findViewById(R.id.image_layout_dashboard);
                 this.ckbDelete = itemView.findViewById(R.id.ckb_layout_Dashboard);
-                this.tvUpdate = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
+
                 this.card = itemView.findViewById(R.id.cardViewFeature);
+                btnUpdateCredentials = itemView.findViewById(R.id.btnUpdatePassword_layout_dashboard);
+                btnStaffLocation = itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
                 //this.tv_locationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
 
             }

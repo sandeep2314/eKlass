@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +46,8 @@ public class CompanyProfileActivity extends BaseActivity
     public ImageView profileImage;
     public Bitmap bitmap;
     public TextView tvLogoHeading;
+    public TextView tvImageSize;
+    public long imageSize;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class CompanyProfileActivity extends BaseActivity
         setContentView(R.layout.activity_profile);
 
         profileImage = findViewById(R.id.image_activity_profile);
+        tvImageSize = findViewById(R.id.tvImageSize);
 
         tvLogoHeading = findViewById(R.id.tvProfileHeading);
         tvLogoHeading.setText("Company Logo");
@@ -195,10 +200,18 @@ public class CompanyProfileActivity extends BaseActivity
                         , imageUri);
 
                 // displaying selected image to imageview
+
                 String filePath = util.getRealPathFromURI(this, imageUri);
+                File imageFile = new File(filePath);
+                imageSize = (imageFile.length()/(1024));
 
                 profileImage.setRotation(util.GetImageRotation(bitmap, filePath));
                 profileImage.setImageURI(imageUri);
+
+                tvImageSize.setText("Picture size is: " + (imageSize)+"KB");
+                tvImageSize.setTextColor(ContextCompat.getColor(this
+                        , R.color.colorDarkGrey));
+
 
                 // uploading the image
 
@@ -240,6 +253,15 @@ public class CompanyProfileActivity extends BaseActivity
 
         //getting the tag from the edit text
         //   final String tags = editTextTags.getText().toString().trim();
+
+        if(imageSize > 500) {
+
+            tvImageSize.setText("Picture size is: "
+                    + (imageSize)+ "KB. Please Select a Picture with less than 500KB size." );
+            tvImageSize.setTextColor(Color.parseColor("Red"));
+            return;
+        }
+
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Uploading picture...");
