@@ -55,13 +55,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-       findViewById(R.id.txtRegister).setOnClickListener(new View.OnClickListener() {
+       findViewById(R.id.btnRegister_main).setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                finish();
                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
            }
        });
+
+
+
+
 
     }
 

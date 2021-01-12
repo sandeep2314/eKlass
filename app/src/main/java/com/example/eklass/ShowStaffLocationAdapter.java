@@ -76,8 +76,8 @@ public class ShowStaffLocationAdapter
         holder.tv_locationName.setText("Site: "+staffLocation.getLocationName());
         holder.tv_FeatureName.setText(staffLocation.getWorkerName());
         holder.tv_StaffDesignation.setText(staffLocation.getWorkerDesignation());
-        holder.tv_guardID.setText("Manager: "+staffLocation.getManagerName());
-        holder.tv_ManagerDesignation.setText("Designation: "+staffLocation.getManagerDesignation());
+        holder.tv_guardID.setText("Reports To: "+staffLocation.getManagerName());
+        holder.tv_ManagerDesignation.setText("Job Title: "+staffLocation.getManagerDesignation());
         //holder.tvUpdate.setMovementMethod(LinkMovementMethod.getInstance());
         RequestOptions options = new RequestOptions()
                 .centerCrop()

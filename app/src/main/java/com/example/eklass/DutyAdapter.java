@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -51,7 +54,7 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         Duty duty = dutyList.get(position);
 
         // binding the data with the viewholder views
-        holder.tv_FeatureName.setText(duty.getDutyDateTime());
+
         //holder.tv_LocationName.setText(duty.getLocationName());
 
        /* holder.tv_LocationName.setText("Day IN: "
@@ -62,6 +65,23 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
                 + util.GetDayPosting(duty, dutyList, Util.ATTENDANCE_BETWEEN)
         );*/
 
+        holder.btnUpdateLocation.setVisibility(View.INVISIBLE);
+        holder.btnUpdatePassword.setVisibility(View.INVISIBLE);
+        holder.btnShowDuty.setVisibility(View.INVISIBLE);
+
+        util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
+        util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo, true);
+        util.SetTVTheme(mCtx, holder.tv_guard, BaseActivity.themeNo, false);
+        util.SetTVTheme(mCtx, holder.tv_latitude, BaseActivity.themeNo, false);
+        util.SetTVTheme(mCtx, holder.tv_longitude, BaseActivity.themeNo, false);
+        util.SetTVTheme(mCtx, holder.tv_LocationName, BaseActivity.themeNo, false);
+        util.SetTVTheme(mCtx, holder.tv_posted, BaseActivity.themeNo, false);
+
+        holder.tv_DayIN.setTextColor(ContextCompat.getColor(mCtx, R.color.colorGreen));
+        holder.tv_DAYOUT.setTextColor(ContextCompat.getColor(mCtx, R.color.colorRed));
+        holder.tv_DAYBETWEEN.setTextColor(ContextCompat.getColor(mCtx, R.color.colorWhite));
+
+
         String dayINTime = duty.getInTime();
         String dayOUTTime =  duty.getOutTime();
 
@@ -71,14 +91,17 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
             || duty.getPostType() != Util.ATTENDANCE_DAY_OUT)
             dayOUTTime = "";
 
-        holder.tv_DayIN.setText("Day IN: " + dayINTime);
-        holder.tv_DAYOUT.setText("Day OUT: " + dayOUTTime);
-        holder.tv_DAYBETWEEN.setText("Hours IN: " + duty.getWorkingHrs());
-
+        holder.tv_FeatureName.setText(duty.getDutyDateTime());
         holder.tv_guard.setText("Posted After: "
                 + util.GetLastPostedDateTime(duty.getDutyDateTime(), dutyList));
 
+
+        holder.tv_DayIN.setText("Day IN: " + dayINTime);
+        holder.tv_DAYOUT.setText("Day OUT: " + dayOUTTime);
+        holder.tv_DAYBETWEEN.setText("Hours IN: " + duty.getWorkingHrs());
         holder.tv_LocationName.setText("Location: " + duty.getLocationName());
+
+
         holder.tv_latitude.setText("Latitude: " + duty.getLatitude());
         holder.tv_longitude.setText("Longitude: " + duty.getLongitude());
 
@@ -90,11 +113,23 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
 
         String attendanceType = "";
          if(duty.getPostType() == Util.ATTENDANCE_DAY_IN)
+         {
              attendanceType = "DAY_IN";
+             holder.tv_AttendanceType.setTextColor(ContextCompat.getColor(mCtx
+                     , R.color.colorBlueGreen));
+         }
          else if(duty.getPostType() == Util.ATTENDANCE_DAY_OUT)
+         {
              attendanceType = "DAY_OUT";
+             holder.tv_AttendanceType.setTextColor(ContextCompat.getColor(mCtx
+                     , R.color.colorRed));
+         }
          else if(duty.getPostType() == Util.ATTENDANCE_BETWEEN)
+         {
              attendanceType = "BETWEEN";
+             holder.tv_AttendanceType.setTextColor(ContextCompat.getColor(mCtx
+                     , R.color.colorWhite));
+         }
 
         holder.tv_posted.setText("Post Method: " + postMethod);
 
@@ -103,7 +138,18 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         int marginLeft  = 50;
         int marginBottom  = 120;
 
-        RelativeLayout.LayoutParams parameter =  (RelativeLayout.LayoutParams) holder.tv_DayIN.getLayoutParams();
+
+
+        RelativeLayout.LayoutParams parameter =  (RelativeLayout.LayoutParams) holder.tv_FeatureName.getLayoutParams();
+        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        parameter.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        holder.tv_FeatureName.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_guard.getLayoutParams();
+        parameter.setMargins(marginLeft, marginBottom, parameter.rightMargin, parameter.bottomMargin);
+        holder.tv_guard.setLayoutParams(parameter);
+
+        parameter =  (RelativeLayout.LayoutParams) holder.tv_DayIN.getLayoutParams();
         parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
         holder.tv_DayIN.setLayoutParams(parameter);
 
@@ -119,13 +165,6 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
         holder.tv_LocationName.setLayoutParams(parameter);
 
-        parameter =  (RelativeLayout.LayoutParams) holder.tv_guard.getLayoutParams();
-        parameter.setMargins(marginLeft, marginBottom, parameter.rightMargin, parameter.bottomMargin);
-        holder.tv_guard.setLayoutParams(parameter);
-
-        parameter =  (RelativeLayout.LayoutParams) holder.tv_FeatureName.getLayoutParams();
-        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, marginBottom);
-        holder.tv_FeatureName.setLayoutParams(parameter);
 
         parameter =  (RelativeLayout.LayoutParams) holder.tv_latitude.getLayoutParams();
         parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
@@ -143,11 +182,7 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
         holder.tv_AttendanceType.setLayoutParams(parameter);
 
-
         holder.ckbDelete.setVisibility(View.INVISIBLE);
-        holder.tv_update.setVisibility(View.INVISIBLE);
-        holder.tv_ShowDutySymbol.setVisibility(View.INVISIBLE);
-
     }
 
     @Override
@@ -161,20 +196,19 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
     public class DutyViewHolder extends RecyclerView.ViewHolder
     {
         TextView tv_FeatureName
-                , tv_update, tv_guard
+                ,  tv_guard
                  , tv_latitude, tv_longitude, tv_posted, tv_AttendanceType
                 , tv_DayIN, tv_DAYOUT, tv_DAYBETWEEN
-                , tv_ShowDutySymbol, tv_LocationName;
+                , tv_LocationName;
         CheckBox ckbDelete;
+        CardView card;
+        Button btnUpdateLocation, btnUpdatePassword, btnShowDuty;
 
         public DutyViewHolder(@NonNull View itemView) {
             super(itemView);
             this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
             tv_guard =  itemView.findViewById(R.id.tvGuardID_layout_dashboard);
-            tv_update = itemView.findViewById(R.id.tvUpdate_layout_dashboard);
-            tv_ShowDutySymbol = itemView.findViewById(R.id.tvShowDuty_layout_dashboard);
             tv_LocationName = itemView.findViewById(R.id.tvLocationName_layout_dashboard);
-
             tv_DayIN = itemView.findViewById(R.id.tvDayIN_layout_dashboard);
             tv_DAYOUT = itemView.findViewById(R.id.tvDayOUT_layout_dashboard);
             tv_DAYBETWEEN = itemView.findViewById(R.id.tvDayBETWEEN_layout_dashboard);
@@ -183,8 +217,13 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
             tv_longitude = itemView.findViewById(R.id.tvLongitude_layout_dashboard);
             tv_posted = itemView.findViewById(R.id.tvPostedMethod_layout_dashboard);
             tv_AttendanceType = itemView.findViewById(R.id.tvAttendanceType_layout_dashboard);
-
             ckbDelete =  itemView.findViewById(R.id.ckb_layout_Dashboard);
+            card= itemView.findViewById(R.id.cardViewFeature);
+
+            btnUpdateLocation =  itemView.findViewById(R.id.btnUpdateLocation_layout_dashboard);
+            btnUpdatePassword =  itemView.findViewById(R.id.btnUpdatePassword_layout_dashboard);
+            btnShowDuty =  itemView.findViewById(R.id.btnShowDuty_layout_dashboard);
+
         }
     }
 
