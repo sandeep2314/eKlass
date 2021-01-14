@@ -1,6 +1,8 @@
 package com.example.eklass;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,7 +30,6 @@ public class ShowMonthActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_managers_worker);
 
-
         TextView pageHeading  = findViewById(R.id.tvHeader_activity_managers_workers);
         CircleImageView imageViewProfileHeading, imageViewLogoHeading;
         imageViewLogoHeading=findViewById(R.id.imageLogo_activity_managers_worker);
@@ -39,6 +40,9 @@ public class ShowMonthActivity extends BaseActivity
                 , imageViewLogoHeading
                 , imageViewProfileHeading
                 , BaseActivity.themeNo);
+
+        //imageViewLogoHeading.setOnClickListener();
+
 
         recyclerView =  findViewById(R.id.rvManagerWorker);
         recyclerView.setHasFixedSize(true);
@@ -70,10 +74,7 @@ public class ShowMonthActivity extends BaseActivity
             monthList.add(month_name1);
             cal.add(Calendar.MONTH, -1);
         }
-
-
      showMonthAdapter = new ShowMonthAdapter(getApplicationContext(), monthList);
      recyclerView.setAdapter(showMonthAdapter);
-
     }
 }

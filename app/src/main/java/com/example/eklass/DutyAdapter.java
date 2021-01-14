@@ -77,9 +77,10 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         util.SetTVTheme(mCtx, holder.tv_LocationName, BaseActivity.themeNo, false);
         util.SetTVTheme(mCtx, holder.tv_posted, BaseActivity.themeNo, false);
 
+        holder.tv_FeatureName.setTextColor(ContextCompat.getColor(mCtx, R.color.colorClockBlue));
         holder.tv_DayIN.setTextColor(ContextCompat.getColor(mCtx, R.color.colorGreen));
         holder.tv_DAYOUT.setTextColor(ContextCompat.getColor(mCtx, R.color.colorRed));
-        holder.tv_DAYBETWEEN.setTextColor(ContextCompat.getColor(mCtx, R.color.colorWhite));
+        holder.tv_DAYBETWEEN.setTextColor(ContextCompat.getColor(mCtx, R.color.colorClockBlue));
 
 
         String dayINTime = duty.getInTime();
@@ -128,7 +129,7 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
          {
              attendanceType = "BETWEEN";
              holder.tv_AttendanceType.setTextColor(ContextCompat.getColor(mCtx
-                     , R.color.colorWhite));
+                     , R.color.colorLogoBlue));
          }
 
         holder.tv_posted.setText("Post Method: " + postMethod);
@@ -138,10 +139,8 @@ public class DutyAdapter extends RecyclerView.Adapter<DutyAdapter.DutyViewHolder
         int marginLeft  = 50;
         int marginBottom  = 120;
 
-
-
         RelativeLayout.LayoutParams parameter =  (RelativeLayout.LayoutParams) holder.tv_FeatureName.getLayoutParams();
-        parameter.setMargins(marginLeft, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
+        parameter.setMargins(25, parameter.topMargin, parameter.rightMargin, parameter.bottomMargin);
         parameter.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
         holder.tv_FeatureName.setLayoutParams(parameter);
 

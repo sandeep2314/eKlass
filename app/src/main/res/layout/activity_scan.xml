@@ -7,16 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/activity_managers_worker"></include>
+
     <LinearLayout
         android:layout_centerVertical="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <RadioGroup
             android:id="@+id/radioGroup_IsScan_activity_scan"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="130dp"
+            android:layout_marginBottom="30dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -24,73 +26,87 @@
             <RadioButton
                 android:id="@+id/radioBtn_IsScanYes_activity_scan"
                 android:checked="true"
-                android:text="Post Attendance By Scan"
+                android:textStyle="bold"
+                android:text="Mark Attendance By QR Scan"
+                android:textColor="@color/colorDarkGrey"
+                android:layout_marginBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
             </RadioButton>
 
             <RadioButton
                 android:id="@+id/radioBtn_IsScanNo_activity_scan"
-                android:text="Post Attendance By Manual"
+                android:text="Mark Attendance By Manual"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/colorDarkGrey"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
+               android:layout_height="wrap_content">
             </RadioButton>
-
         </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/select_location"
+            android:id="@+id/tvLocation_actyivity_scan"   >
+        </TextView>
 
         <Spinner
             android:id="@+id/spinner_location_activity_scan"
+            android:layout_margin="@dimen/cardview_default_elevation"
+            style="@style/Theme.AppCompat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </Spinner>
 
         <TextView
-            android:text="Name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </TextView>
-
-        <TextView
             android:id="@+id/txtName_activity_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-        </TextView>
-
-         <TextView
-            android:text="Latitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </TextView>
 
         <TextView
             android:id="@+id/txtLatitude_activity_scan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </TextView>
-
-        <TextView
-            android:text="Longitude"
+            android:textColor="@color/colorDarkGrey"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </TextView>
 
         <TextView
             android:id="@+id/txtLongitude_activity_scan"
-            android:textAppearance="@style/Base.CardView"
+            android:textColor="@color/colorDarkGrey"
+            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         </TextView>
 
-
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnIn_activity_scan"
+        android:text="DAY IN"
+        android:layout_marginBottom="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Button>
+
+    <Button
+        android:id="@+id/btnOut_activity_scan"
+        android:text="DAY OUT"
+        android:layout_marginBottom="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Button>
+
+    <Button
         android:id="@+id/btnScan_activity_scan"
-        android:text="Post Attendance"
-        android:layout_marginBottom="60dp"
+        android:text="IN-BETWEEN"
+         android:layout_marginBottom="40dp"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

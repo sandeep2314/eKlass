@@ -51,6 +51,7 @@
                 android:id="@+id/tvGuardID_layout_dashboard"
                 android:layout_marginTop="110dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -59,6 +60,7 @@
                 android:id="@+id/tvManagerDesignation_layout_dashboard"
                 android:layout_marginTop="130dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -69,6 +71,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="90dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -77,6 +80,7 @@
                 android:id="@+id/tvDayOUT_layout_dashboard"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="110dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -87,6 +91,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="130dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -95,6 +100,7 @@
                 android:id="@+id/tvLocationName_layout_dashboard"
                 android:layout_marginTop="150dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -104,6 +110,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="170dp"
+                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
             </TextView>
@@ -112,6 +119,7 @@
                 android:id="@+id/tvLongitude_layout_dashboard"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="190dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -121,6 +129,7 @@
                 android:id="@+id/tvPostedMethod_layout_dashboard"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="230dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
@@ -131,6 +140,7 @@
                 android:id="@+id/tvAttendanceType_layout_dashboard"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="250dp"
                 android:textColor="@color/colorGreen"
                 android:layout_width="wrap_content"
@@ -142,6 +152,7 @@
                 android:id="@+id/ckb_layout_Dashboard"
                 android:layout_marginTop="190dp"
                 android:layout_alignParentStart="true"
+                android:layout_marginStart="10dp"
                 android:text="@string/select"
                 android:textColor="@color/colorRed"
                 android:layout_width="wrap_content"

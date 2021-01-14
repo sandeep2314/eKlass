@@ -36,9 +36,10 @@
 
     <item
         android:id="@+id/menuDuty"
-        android:title="Show Duty"
+        android:title="Mark Attendance"
         app:showAsAction="never">
     </item>
+
     <item
         android:id="@+id/menuAddStaff"
         android:title="Add Staff"
@@ -50,7 +51,6 @@
         android:title="Show All Staff"
         app:showAsAction="never">
     </item>
-
 
     <item
         android:id="@+id/menuShowAssignedStaff"
@@ -85,11 +85,19 @@
         android:title="Add Designation"
         app:showAsAction="never">
     </item>
+
+    <item
+        android:id="@+id/menuShowMonths"
+        android:title="Show Months"
+        app:showAsAction="never">
+    </item>
+
     <item
         android:id="@+id/menuShowDesignations"
         android:title="Show Designations"
         app:showAsAction="never">
     </item>
+
 
     <item
         android:id="@+id/menuChangeCompany"

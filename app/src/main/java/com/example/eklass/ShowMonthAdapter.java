@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class ShowMonthAdapter  extends RecyclerView.Adapter<ShowMonthAdapter.Sho
 {
     private Context mCtx;
     private List<String> monthList;
+    Util util = new Util();
 
     public ShowMonthAdapter.ShowMonthViewHolder onCreateViewHolder(@NonNull ViewGroup parent
             , int viewType)
@@ -26,7 +29,8 @@ public class ShowMonthAdapter  extends RecyclerView.Adapter<ShowMonthAdapter.Sho
 
         // inflating and returning our View Holder
         LayoutInflater layoutInflater = LayoutInflater.from(mCtx);
-        View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
+        //View view = layoutInflater.inflate(R.layout.layout_dashboard, null);
+        View view = layoutInflater.inflate(R.layout.activity_month, null);
 
         return new ShowMonthAdapter.ShowMonthViewHolder(view);
     }
@@ -34,19 +38,22 @@ public class ShowMonthAdapter  extends RecyclerView.Adapter<ShowMonthAdapter.Sho
     public ShowMonthAdapter(Context mCtx, List<String> monthList) {
         this.mCtx = mCtx;
         this.monthList = monthList;
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull ShowMonthViewHolder holder, int position) {
 
         final String mnth = monthList.get(position);
-        holder.tv_FeatureName.setText(mnth);
 
-        holder.tv_FeatureName.setOnClickListener(new View.OnClickListener() {
+        util.SetTVTheme(mCtx, holder.tv_FeatureName, BaseActivity.themeNo);
+        util.SetCardTheme(mCtx, holder.card, BaseActivity.themeNo);
+
+        holder.btnMonth.setText("Generate Attendance Sheet For " + mnth);
+
+        //holder.tv_FeatureName.setText(mnth);
+        holder.btnMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 // get first 3 names for month and then get year
 
@@ -74,12 +81,10 @@ public class ShowMonthAdapter  extends RecyclerView.Adapter<ShowMonthAdapter.Sho
                     e.printStackTrace();
                 }
 
-                Toast.makeText(mCtx, "Month Selected " + mnthSelectedInt + " "+yr, Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(mCtx, "Attendance Sheet Generated For "
+                        + mnthSelectedInt + " "+yr, Toast.LENGTH_SHORT).show();
             }
         });
-
 
     }
 
@@ -90,9 +95,13 @@ public class ShowMonthAdapter  extends RecyclerView.Adapter<ShowMonthAdapter.Sho
 
     public class ShowMonthViewHolder extends RecyclerView.ViewHolder {
         TextView tv_FeatureName;
+        CardView card;
+        Button btnMonth;
         public ShowMonthViewHolder(View view) {
             super(view);
-            this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_layout_dashboard);
+            this.tv_FeatureName = itemView.findViewById(R.id.tvFeatureName_activity_month);
+            this.card = itemView.findViewById(R.id.cardViewFeature_activity_month);
+            btnMonth = itemView.findViewById(R.id.btnGenerateTimeSheet_activity_month);
         }
     }
 

@@ -110,9 +110,9 @@ public class ScanActivity extends BaseActivity
 
         if(radioButtonIsScanYes.isChecked()) {
             spinner_location.setEnabled(false);
-            btnIn.setText("DAY IN Attendance By Scanning");
-            btnOut.setText("DAY OUT Attendance By Scanning");
-            btnScan.setText("Time Attendance By Scanning");
+            btnIn.setText("DAY-IN By QR Scan");
+            btnOut.setText("DAY-OUT By QR Scan");
+            btnScan.setText("IN-BETWEEN By QR Scan");
 
         }
 
@@ -122,16 +122,16 @@ public class ScanActivity extends BaseActivity
                 if(radioButtonIsScanYes.isChecked())
                 {
                     spinner_location.setEnabled(false);
-                    btnIn.setText("DAY IN Attendance By Scanning");
-                    btnOut.setText("DAY OUT Attendance By Scanning");
-                    btnScan.setText("Time Attendance By Scanning");
+                    btnIn.setText("DAY-IN By QR Scan");
+                    btnOut.setText("DAY-OUT QR Scan");
+                    btnScan.setText("IN-BETWEEN By QR Scan");
                 }
                 else
                 {
                     spinner_location.setEnabled(true);
-                    btnIn.setText("DAY IN Attendance");
-                    btnOut.setText("DAY OUT Attendance ");
-                    btnScan.setText("Time Attendance ");
+                    btnIn.setText("DAY-IN");
+                    btnOut.setText("DAY-OUT");
+                    btnScan.setText("IN-BETWEEN");
                 }
             }
         });
@@ -372,7 +372,9 @@ public class ScanActivity extends BaseActivity
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
 
-                txtLatitude.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                //txtLatitude.setText("Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                txtLatitude.setText("Latitude= "+latitude);
+                txtLongitude.setText("Longitude= "+longitude);
             }
             else if (LocationNetwork !=null)
             {
@@ -382,7 +384,9 @@ public class ScanActivity extends BaseActivity
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
 
-                txtLatitude.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                //txtLatitude.setText("Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                txtLatitude.setText("Latitude= "+latitude);
+                txtLongitude.setText("Longitude= "+longitude);
             }
             else if (LocationPassive !=null)
             {
@@ -392,11 +396,15 @@ public class ScanActivity extends BaseActivity
                 latitude=String.valueOf(lat);
                 longitude=String.valueOf(longi);
 
-                txtLatitude.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                //txtLatitude.setText("Your Location:"+"\n"+"Latitude= "+latitude+"\n"+"Longitude= "+longitude);
+                txtLatitude.setText("Latitude= "+latitude);
+                txtLongitude.setText("Longitude= "+longitude);
             }
             else
             {
                 Toast.makeText(this, "Can't Get Your Location", Toast.LENGTH_SHORT).show();
+                txtLatitude.setText("Can't Get Your Location. Please switch on your mobile GPS");
+                txtLongitude.setText("");
             }
 
             //Thats All Run Your App
